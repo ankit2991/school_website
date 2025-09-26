@@ -76,7 +76,9 @@ function Table({
 
   return (
     <div className={`relative rounded-lg shadow-md border border-slate-300 overflow-hidden ${className} w-full`}>
-      <div className={`max-h-[65vh] sm:max-h-[67vh] overflow-y-auto no-scrollbar ${style}`}>
+      <div className={`overflow-y-auto no-scrollbar ${
+      style || "max-h-[65vh] sm:max-h-[67vh]"
+    }`}>
         {/* <table className="w-full table-fixed border-collapse"> */}
           {/* Table Header */}
           {/* <thead className="sticky top-0 z-10 bg-gradient-to-b from-[#962d1a] via-[#e4321b] to-[#f30202] text-white"> */}

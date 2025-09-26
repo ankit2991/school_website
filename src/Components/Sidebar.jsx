@@ -68,6 +68,8 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
           submenus: [
             { name: "Exam Type", path: "/Exam-Type" },
             { name: "Exam", path: "/Exam" },
+            { name: "Assign Roll No.", path: "/Assign-Roll" },
+            { name: "Exam Schedule", path: "/Schedule" },
           ],
         },
       ],

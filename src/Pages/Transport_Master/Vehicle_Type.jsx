@@ -24,13 +24,14 @@ function Vehicle_Type() {
                 <Heading label={"Vehicle Type Master"} />
                 <Buttons click={() => {setDialogTitle("Add"); setOpen(true)}} label={"Add"} />
             </div>
-            <Dialog open={open} title={dialogTitle} >
+           
+            <Dialog open={open} title={dialogTitle} children={<>
                 <FormInput label={"Vehicle"} placeholder={"Enter Vehicle"}/>
                 <div className="flex justify-end gap-3 mt-5">
                     <Buttons click={() => setOpen(false)} label={"Cancel"}/>
                     <Buttons click={() => setOpen(false)} label={"Save"}/>
-                </div>                
-            </Dialog>
+                </div>    
+              </>}/>
 
             
             <div className='w-full md:w-4xl'>

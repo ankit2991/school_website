@@ -3,8 +3,10 @@ import Heading from '../../Components/Page_Forms/Heading'
 import Buttons from '../../Components/Page_Forms/Buttons'
 import Options from '../../Components/Page_Forms/Options'
 import FormInput from '../../Components/Page_Forms/FormInput'
+import { useNavigate } from 'react-router-dom'
 
 function Exam_Type() {
+    const navigate = useNavigate()
   return (
     <div className="w-full h-full bg-white flex flex-col px-4 py-2">
         <div className="flex justify-between mb-5">

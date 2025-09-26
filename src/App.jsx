@@ -44,6 +44,9 @@ import Subject from './Pages/Manage_Exam/Subject'
 import Grade from './Pages/Manage_Exam/Grade'
 import Exam_Type from './Pages/Manage_Exam/Exam_Type'
 import Exam from './Pages/Manage_Exam/Exam'
+import Assign_Roll_No from './Pages/Manage_Exam/Assign_Roll_No'
+import Exam_Schedule from './Pages/Manage_Exam/Exam_Schedule'
+import Exam_Schedule2 from './Pages/Manage_Exam/Exam_Schedule2'
 
 function App() {
  
@@ -102,6 +105,9 @@ function App() {
           <Route path='/Grade' element={<Grade />}/>
           <Route path='/Exam-Type' element={<Exam_Type />}/>
           <Route path='/Exam' element={<Exam />}/>
+          <Route path='/Assign-Roll' element={<Assign_Roll_No />}/>
+          <Route path='/Schedule' element={<Exam_Schedule />}/>
+          <Route path='/Exam-Schedule' element={<Exam_Schedule2 />}/>
         </Route>
       </Routes>
     </BrowserRouter> 

@@ -58,8 +58,8 @@ function Enquiry() {
             <Buttons label={"Edit"} click={() => console.log("Edit:", row)} style="hidden sm:inline" />
             <Buttons label={"Print"} click={() => console.log("Print:", row)} style="hidden sm:inline" />
             {/* Mobile icons */}
-            <button className="sm:hidden text-lg pt-2.5" onClick={() => console.log("Edit:", row)} >✏️</button>
-            <button className="sm:hidden text-xl pt-2.5" onClick={() => console.log("Print:", row)} >🖨️</button>
+            <button className="sm:hidden text-lg" onClick={() => console.log("Edit:", row)} >✏️</button>
+            <button className="sm:hidden text-xl" onClick={() => console.log("Print:", row)} >🖨️</button>
           </>
         )}/>
       </div>

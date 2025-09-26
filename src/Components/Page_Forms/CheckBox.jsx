@@ -2,6 +2,7 @@ import React from 'react'
 
 function CheckBox({label, labelstyle,  name,
   checked = false,
+  checkstyle,
   onChange,
   disabled = false,
   className = "",
@@ -32,7 +33,7 @@ function CheckBox({label, labelstyle,  name,
         checked={checked}
         onChange={onChange}
         disabled={disabled}
-        className="w-4 h-4 accent-red-600 rounded border-gray-400 cursor-pointer disabled:cursor-not-allowed"
+        className={`w-4 h-4 accent-red-600 rounded border-gray-400 cursor-pointer disabled:cursor-not-allowed ${checkstyle}`}
       />
       {label && <span className={`text-gray-700 text-sm ${labelClass}`}>{label}</span>}
     </label>
