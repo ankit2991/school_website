@@ -24,6 +24,29 @@ function Assign_Roll_No() {
         { id: 3, enroll: "003", name: "Goutam Gandhi", fname: "Vaibhan Gandhi", mobile: "1234567890", roll: "3" },
         { id: 4, enroll: "004", name: "Vishal Mishra", fname: "Shorya Mishra", mobile: "1234567890", roll: "4" },
         { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
+        { id: 5, enroll: "005", name: "Ajay Dev", fname: "Prem Dev", mobile: "1234567890", roll: "5" },
         { id: 6, enroll: "005", name: "Priya Iyer", fname: "Sreyas Iyer", mobile: "1234567890", roll: "6" },
     ];
   return (
@@ -40,7 +63,8 @@ function Assign_Roll_No() {
             <Buttons click={() => navigate("")} label={"Search"} />
         </div>
         <div className="flex items-center mb-5">
-            <Table columns={columns} data={data}/>
+            {/* <Table columns={columns} data={data} /> */}
+            <Table columns={columns} data={data} style={"max-h-[35vh] sm:max-h-[57vh]"} actions={(row) => (<CheckBox name={""} checked={agree} onChange={(e) => setAgree(e.target.checked)}/>)}/>
         </div>
         <div className="flex justify-between sm:justify-end space-x-0 sm:space-x-10 pt-2 ">
             <Buttons label={"Cancel"}/>

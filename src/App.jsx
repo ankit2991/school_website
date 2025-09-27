@@ -47,6 +47,7 @@ import Exam from './Pages/Manage_Exam/Exam'
 import Assign_Roll_No from './Pages/Manage_Exam/Assign_Roll_No'
 import Exam_Schedule from './Pages/Manage_Exam/Exam_Schedule'
 import Exam_Schedule2 from './Pages/Manage_Exam/Exam_Schedule2'
+import Student_Summary2 from './Pages/Student_Master/Student_Summary2'
 
 function App() {
  
@@ -64,6 +65,7 @@ function App() {
           <Route path='/Sibling' element={<Add_Sibling />}/>
           <Route path='/AddSibling' element={<Add_Sibling2 />}/>
           <Route path='/Summary' element={<Student_Summary />}/>
+          <Route path='/Student-Summary' element={<Student_Summary2 />}/>
 
           {/* {Account Master} */}
           <Route path='/Addmission' element={<Addmission_Fee_Receipt />}/>

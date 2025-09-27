@@ -46,144 +46,216 @@
 
 // export default Student_Summary
 
+
+
+
+
+
 import React, { useState } from "react";
 import FormInput from "../../Components/Page_Forms/FormInput";
 import Buttons from "../../Components/Page_Forms/Buttons";
 import Heading2 from "../../Components/Page_Forms/Heading2";
-import Dialog from "../../Components/Page_Forms/Dialog";
 import Options from "../../Components/Page_Forms/Options";
 import Heading from "../../Components/Page_Forms/Heading";
 import Table from "../../Components/Page_Forms/Table";
+import { useNavigate } from "react-router-dom";
 
 function Student_Summary() {
-  const [srNo, setSrNo] = useState("");       // track Sr. No input
-  const [showDetails, setShowDetails] = useState(false); // control visibility
-  const [error, setError] = useState("");     // validation error
-  const [open, setOpen] = useState(false);  
+  const navigate = useNavigate()
+  const [classValue, setClassValue] = useState("");
+  const [searchBy, setSearchBy] = useState("");
+  const [enterValue, setEnterValue] = useState("");
+  const [errors, setErrors] = useState({});
+  const [filteredData, setFilteredData] = useState([]);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [showDetails, setShowDetails] = useState(false);
 
-  const handleSearch = () => {
-    if (srNo.trim() === "") {
-      setError("Please enter Sr. No.");   // show error
-      setShowDetails(false);              // hide details
-    } else {
-      setError("");                       // clear error
-      setShowDetails(true);               // show details
-    }
-  };
+  const data = [
+    { id: 1, serial: "01", name: "Ajay", fname: "Rman Thakur", mname: "Seema Thakur", class: "Nur", fno: "1234567890" },
+    { id: 2, serial: "02", name: "Ajay", fname: "Rman", mname: "Divya", class: "Nur", fno: "1234567540" },
+    { id: 3, serial: "03", name: "Viren", fname: "Devanh Bhalla", mname: "Aradhya Bhalla.", class: "Nur", fno: "1234567890" },
+    
+  ];
+
   const columns = [
-    { header: "Serial Number", shortHeader: "Serial No.", accessor: "serial" },
-    { header: "Name ",  shortHeader: "Name", accessor: "name" },
-    { header: "Father Name ",  shortHeader: "Father Name", accessor: "fname" },
-    { header: "Mother Name ",  shortHeader: "Mother Name", accessor: "mname" },
+    { header: "Serial No.", shortHeader: "Serial No.", accessor: "serial" },
+    { header: "Name", shortHeader: "Name", accessor: "name" },
+    { header: "Father Name", shortHeader: "Father Name", accessor: "fname" },
+    { header: "Mother Name", shortHeader: "Mother Name", accessor: "mname" },
     { header: "Class", shortHeader: "Class", accessor: "class" },
-    { header: "Father Mobile Number", shortHeader: "Father No.", accessor: "fno" },
-    ]
+    { header: "Father No.", shortHeader: "Father No.", accessor: "fno" },
+  ];
 
-    const data = [
-        { id: 2, serial: "01", name: "Ajay",  fname:"Rman Thakur", mname:"Seema Thakur", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-        { id: 3, serial: "02", name: "Viren",  fname:"Devanh Bhalla", mname:"Aradhya Bhalla.", class:"Nur", fno:"1234567890", },
-       
-    ];
+//   const handleSearch = () => {
+//   const newErrors = {};
+//   if (!classValue) newErrors.classValue = "Please select a class.";
+//   if (!searchBy) newErrors.searchBy = "Please select search option.";
+//   if (!enterValue.trim()) newErrors.enterValue = "Please enter a value.";
+//   setErrors(newErrors);
+
+//   if (Object.keys(newErrors).length === 0) {
+//     const search = enterValue.toLowerCase().trim();
+
+//     let filtered = data.filter((item) => {
+//       switch (searchBy.toLowerCase()) {
+//         case "serial number":
+//           return item.serial.toLowerCase().includes(search);
+//         case "name":
+//           // Partial match on any word in name
+//           return item.name
+//             .toLowerCase()
+//             .split(" ")
+//             .some((word) => word.includes(search));
+//         case "father name":
+//           // Partial match on any word in father name
+//           return item.fname
+//             .toLowerCase()
+//             .split(" ")
+//             .some((word) => word.includes(search));
+//         case "mobile number":
+//           return item.fno.includes(search);
+//         default:
+//           return false;
+//       }
+//     });
+
+//     if (filtered.length === 1) {
+//       setSelectedRow(filtered[0]);
+//       setShowDetails(true);
+//       setFilteredData([]);
+//     } else if (filtered.length > 1) {
+//       setFilteredData(filtered);
+//       setShowDetails(false);
+//       setSelectedRow(null);
+//     } else {
+//       setFilteredData([]);
+//       setShowDetails(false);
+//       setSelectedRow(null);
+//     }
+//   }
+// };
+
+const handleSearch = () => {
+  const newErrors = {};
+  if (!classValue) newErrors.classValue = "Please select a class.";
+  if (!searchBy) newErrors.searchBy = "Please select search option.";
+  if (!enterValue.trim()) newErrors.enterValue = "Please enter a value.";
+  setErrors(newErrors);
+
+  if (Object.keys(newErrors).length === 0) {
+    const search = enterValue.toLowerCase().trim();
+
+    let filtered = data.filter((item) => {
+      switch (searchBy.toLowerCase()) {
+        case "serial number":
+          return item.serial.toLowerCase().includes(search);
+        case "name":
+          return item.name.toLowerCase().includes(search);
+        case "father name":
+          return item.fname.toLowerCase().includes(search);
+        case "mobile number":
+          return item.fno.includes(search);
+        default:
+          return false;
+      }
+    });
+
+    if (filtered.length === 1) {
+      // ✅ Direct navigation with single result
+      navigate("/Student-Summary2", { state: { student: filtered[0] } });
+    } else if (filtered.length > 1) {
+      // ✅ Show table for multiple matches
+      setFilteredData(filtered);
+      setSelectedRow(null);
+    } else {
+      // ✅ No match → navigate directly with empty student
+      navigate("/Student-Summary2", { state: { student: null } });
+    }
+  }
+};
+
+const handleSelect = () => {
+  if (selectedRow) {
+    // ✅ Navigate with selected row
+    navigate("/Student-Summary2", { state: { student: selectedRow } });
+  }
+};
+
+
+
+  // const handleSelect = () => {
+  //   if (selectedRow) {
+  //     setShowDetails(true);
+  //     navigate("/Student-Summary")
+  //   }
+  // };
 
   return (
     <div className="w-full h-full px-4 py-2 bg-white flex flex-col">
-      <Heading label={"Student Summary"} style={"mb-5"}/>
-      {/* Sr. No. Input */}
-      <div>
-        <FormInput inputStyle="w-full sm:w-md" label={"Sr. No."} placeholder={"Enter Serial Number"} value={srNo} onChange={(e) => setSrNo(e.target.value)}/>
-        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      <Heading label={"Student Summary"} style={"mb-5"} />
+
+      {/* Filters */}
+      <div className="grid grid-rows-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-2">
+        {/* Class */}
+        <div>
+          <Options
+            label={"Class"}
+            optionMsg="Select Class"
+            options={["Nur", "K.G.", "Prep"]}
+            value={classValue}
+            onChange={(e) => setClassValue(e.target.value)}
+          />
+          {errors.classValue && <p className="text-red-500 text-sm mt-1">{errors.classValue}</p>}
+        </div>
+
+        {/* Search By */}
+        <div>
+          <Options
+            label={"Search By"}
+            optionMsg="Select Option"
+            options={["Serial Number", "Name", "Father Name", "Mobile Number"]}
+            value={searchBy}
+            onChange={(e) => setSearchBy(e.target.value)}
+          />
+          {errors.searchBy && <p className="text-red-500 text-sm mt-1">{errors.searchBy}</p>}
+        </div>
+
+        {/* Enter */}
+        <div>
+          <FormInput
+            label={"Enter"}
+            placeholder={"Enter"}
+            value={enterValue}
+            onChange={(e) => setEnterValue(e.target.value)}
+          />
+          {errors.enterValue && <p className="text-red-500 text-sm mt-1">{errors.enterValue}</p>}
+        </div>
       </div>
 
       {/* Search Button */}
       <div className="flex justify-end py-5">
-         <Buttons click={() => setOpen(true)} label={"Search"} />
+        <Buttons click={handleSearch} label={"Search"} />
       </div>
-            <Dialog open={open} title={"Student List"} dialogstyle={"sm:mx-5 h-[660px] sm:h-[710px]"} children={<>
-                <div className="grid grid-rows-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-5">
-                  <Options label={"Class"} name={""} optionMsg="Select Class" options={["Nur", "K.G.", "Prep"]}/>
-                  <Options label={"Search By"} name={""} optionMsg="Select Option" options={["Serial Number", "Name", "Father Name", "Mobile Number"]}/>
-                  <FormInput label={"Enter"} placeholder={"Enter"} />
-                </div>
-                <div className="flex justify-end py-5">
-                  <Buttons click={() => setOpen(false)} label={"Search"} />                    
-                </div>
-                <div className='w-full grid grid-cols-1 gap-6 p-3 bg-[#fcf8e5] border-1 border-gray-400 shadow-lg rounded-md '>
-                  <Table columns={columns} data={data} style={"max-h-[38vh] sm:max-h-[42vh]"}/>
-                </div>
-                <div className="flex justify-end mt-5">
-                  <Buttons click={() => setOpen(false)} label={"Select"} />                    
-                </div>
-              </>}/>
 
-      {/* Show details only if searched */}
-      {showDetails && (
+      {/* Filtered Table */}
+      {filteredData.length > 0 && (
         <>
-          <Heading2 label={"Student Details"} />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4 mb-4">
-            <FormInput label={"Student ID"} placeholder={"Enter Student ID"} />
-            <FormInput label={"Student Name"} placeholder={"Enter Student Name"} />
-            <FormInput label={"Father Name"} placeholder={"Enter Father Name"} />
-            <FormInput label={"Mother Name"} placeholder={"Enter Mother Name"} />
-            <FormInput label={"Date Of Birth"} type="date" placeholder={"Select Date Of Birth"} />
-            <FormInput label={"Mobile Number"} placeholder={"Enter Mobile Number"} />
-            <FormInput label={"Caste"} placeholder={"Enter Caste"} />
-            <FormInput label={"Student Type"} placeholder={"Enter Student Type"} />
-            <FormInput label={"Admission Date"} type="date" placeholder={"Date"} />
-            <FormInput label={"Class"} placeholder={"Enter Class"} />
-            <FormInput label={"Gender"} placeholder={"Enter Gender"} />
-            <FormInput label={"Aadhar Card Number"} placeholder={"Enter Aadhar Card Number"} />
-          </div>
+          <Table
+            columns={columns}
+            data={filteredData}
+            selectable={true}                // ✅ make rows selectable
+            selectedRow={selectedRow}        // ✅ pass selected row
+            onRowSelect={setSelectedRow}     // ✅ update when row clicked
+            style={"max-h-[33vh] sm:max-h-[50vh]"}
+          />
 
-          <div className="gap-y-4">
-            <FormInput label={"Address"} placeholder={"Enter Address"} inputStyle="mb-4" />
-            <FormInput label={"Remark"} placeholder={"Enter Remark"} inputStyle="mb-4" />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4 mb-4">
-            <FormInput label={"Fee Calculation Date"} type="date" placeholder={"Enter Fee Calculation Date"} />
-            <FormInput label={"Total Fees"} placeholder={"Enter Total Fees"} />
-            <FormInput label={"Paid Fees"} placeholder={"Enter Paid Fees"} />
-            <FormInput label={"Transport Calculation Date"} type="date" placeholder={"Enter Fee Calculation Date"} />
-            <FormInput label={"Total Fees"} placeholder={"Enter Total Fees"} />
-            <FormInput label={"Paid Fees"} placeholder={"Enter Paid Fees"} />
+          <div className="flex justify-end py-3">
+            <Buttons click={handleSelect} label={"Select"} />
           </div>
         </>
       )}
+
+      
     </div>
   );
 }
