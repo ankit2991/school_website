@@ -54,7 +54,6 @@
 import React, { useState } from "react";
 import FormInput from "../../Components/Page_Forms/FormInput";
 import Buttons from "../../Components/Page_Forms/Buttons";
-import Heading2 from "../../Components/Page_Forms/Heading2";
 import Options from "../../Components/Page_Forms/Options";
 import Heading from "../../Components/Page_Forms/Heading";
 import Table from "../../Components/Page_Forms/Table";
@@ -74,6 +73,8 @@ function Student_Summary() {
     { id: 1, serial: "01", name: "Ajay", fname: "Rman Thakur", mname: "Seema Thakur", class: "Nur", fno: "1234567890" },
     { id: 2, serial: "02", name: "Ajay", fname: "Rman", mname: "Divya", class: "Nur", fno: "1234567540" },
     { id: 3, serial: "03", name: "Viren", fname: "Devanh Bhalla", mname: "Aradhya Bhalla.", class: "Nur", fno: "1234567890" },
+    { id: 3, serial: "04", name: "Viren", fname: "Devanh Bhalla", mname: "Aradhya Bhalla.", class: "Nur", fno: "1234567890" },
+    { id: 3, serial: "05", name: "Viren", fname: "Devanh Bhalla", mname: "Aradhya Bhalla.", class: "Nur", fno: "1234567890" },
     
   ];
 
@@ -85,57 +86,8 @@ function Student_Summary() {
     { header: "Class", shortHeader: "Class", accessor: "class" },
     { header: "Father No.", shortHeader: "Father No.", accessor: "fno" },
   ];
-
-//   const handleSearch = () => {
-//   const newErrors = {};
-//   if (!classValue) newErrors.classValue = "Please select a class.";
-//   if (!searchBy) newErrors.searchBy = "Please select search option.";
-//   if (!enterValue.trim()) newErrors.enterValue = "Please enter a value.";
-//   setErrors(newErrors);
-
-//   if (Object.keys(newErrors).length === 0) {
-//     const search = enterValue.toLowerCase().trim();
-
-//     let filtered = data.filter((item) => {
-//       switch (searchBy.toLowerCase()) {
-//         case "serial number":
-//           return item.serial.toLowerCase().includes(search);
-//         case "name":
-//           // Partial match on any word in name
-//           return item.name
-//             .toLowerCase()
-//             .split(" ")
-//             .some((word) => word.includes(search));
-//         case "father name":
-//           // Partial match on any word in father name
-//           return item.fname
-//             .toLowerCase()
-//             .split(" ")
-//             .some((word) => word.includes(search));
-//         case "mobile number":
-//           return item.fno.includes(search);
-//         default:
-//           return false;
-//       }
-//     });
-
-//     if (filtered.length === 1) {
-//       setSelectedRow(filtered[0]);
-//       setShowDetails(true);
-//       setFilteredData([]);
-//     } else if (filtered.length > 1) {
-//       setFilteredData(filtered);
-//       setShowDetails(false);
-//       setSelectedRow(null);
-//     } else {
-//       setFilteredData([]);
-//       setShowDetails(false);
-//       setSelectedRow(null);
-//     }
-//   }
-// };
-
-const handleSearch = () => {
+  
+  const handleSearch = () => {
   const newErrors = {};
   if (!classValue) newErrors.classValue = "Please select a class.";
   if (!searchBy) newErrors.searchBy = "Please select search option.";
@@ -162,14 +114,14 @@ const handleSearch = () => {
 
     if (filtered.length === 1) {
       // ✅ Direct navigation with single result
-      navigate("/Student-Summary2", { state: { student: filtered[0] } });
+      navigate("/Student-Summary", { state: { student: filtered[0] } });
     } else if (filtered.length > 1) {
       // ✅ Show table for multiple matches
       setFilteredData(filtered);
       setSelectedRow(null);
     } else {
       // ✅ No match → navigate directly with empty student
-      navigate("/Student-Summary2", { state: { student: null } });
+      navigate("/Student-Summary", { state: { student: null } });
     }
   }
 };
@@ -177,7 +129,7 @@ const handleSearch = () => {
 const handleSelect = () => {
   if (selectedRow) {
     // ✅ Navigate with selected row
-    navigate("/Student-Summary2", { state: { student: selectedRow } });
+    navigate("/Student-Summary", { state: { student: selectedRow } });
   }
 };
 
@@ -224,7 +176,7 @@ const handleSelect = () => {
         <div>
           <FormInput
             label={"Enter"}
-            placeholder={"Enter"}
+            placeholder={"Enter name, father name, etc."}
             value={enterValue}
             onChange={(e) => setEnterValue(e.target.value)}
           />

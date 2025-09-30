@@ -13,8 +13,8 @@ function Addmission_Fee_Receipt2() {
   const columns = [
     { header: "Month Name",  shortHeader: "Month", accessor: "month" },
     { header: "Category Name", shortHeader: "Category", accessor: "category" },
-    { header: "Amount", accessor: "amount" },
-    { header: "Paid Amount", accessor: "paid" },
+    { header: "Amount", shortHeader: "Amount", accessor: "amount" },
+    { header: "Paid Amount", shortHeader: "Paid Amount", accessor: "paid" },
     
   ]
   const data = [
@@ -31,7 +31,37 @@ function Addmission_Fee_Receipt2() {
     { header: "Category Name", shortHeader: "Category", accessor: "category" },
     { header: "Month Name",  shortHeader: "Month", accessor: "month" },
     { header: "Receipt No.",  shortHeader: "Receipt", accessor: "receipt" },
-    { header: "Amount", accessor: "amount" },
+    { header: "Amount", shortHeader: "Amount", accessor: "amount" },
+    { header: "Date",  shortHeader: "Date", accessor: "date" },
+    { header: "Category Name", shortHeader: "Category", accessor: "category" },
+    { header: "Month Name",  shortHeader: "Month", accessor: "month" },
+    { header: "Receipt No.",  shortHeader: "Receipt", accessor: "receipt" },
+    { header: "Amount", shortHeader: "Amount", accessor: "amount" },
+    { header: "Date",  shortHeader: "Date", accessor: "date" },
+    { header: "Category Name", shortHeader: "Category", accessor: "category" },
+    { header: "Month Name",  shortHeader: "Month", accessor: "month" },
+    { header: "Receipt No.",  shortHeader: "Receipt", accessor: "receipt" },
+    { header: "Amount", shortHeader: "Amount", accessor: "amount" },
+    { header: "Date",  shortHeader: "Date", accessor: "date" },
+    { header: "Category Name", shortHeader: "Category", accessor: "category" },
+    { header: "Month Name",  shortHeader: "Month", accessor: "month" },
+    { header: "Receipt No.",  shortHeader: "Receipt", accessor: "receipt" },
+    { header: "Amount", shortHeader: "Amount", accessor: "amount" },
+    { header: "Date",  shortHeader: "Date", accessor: "date" },
+    { header: "Category Name", shortHeader: "Category", accessor: "category" },
+    { header: "Month Name",  shortHeader: "Month", accessor: "month" },
+    { header: "Receipt No.",  shortHeader: "Receipt", accessor: "receipt" },
+    { header: "Amount", shortHeader: "Amount", accessor: "amount" },
+    { header: "Date",  shortHeader: "Date", accessor: "date" },
+    { header: "Category Name", shortHeader: "Category", accessor: "category" },
+    { header: "Month Name",  shortHeader: "Month", accessor: "month" },
+    { header: "Receipt No.",  shortHeader: "Receipt", accessor: "receipt" },
+    { header: "Amount", shortHeader: "Amount", accessor: "amount" },
+    { header: "Date",  shortHeader: "Date", accessor: "date" },
+    { header: "Category Name", shortHeader: "Category", accessor: "category" },
+    { header: "Month Name",  shortHeader: "Month", accessor: "month" },
+    { header: "Receipt No.",  shortHeader: "Receipt", accessor: "receipt" },
+    { header: "Amount", shortHeader: "Amount", accessor: "amount" },
     
   ]
   const data2 = [
@@ -52,7 +82,7 @@ function Addmission_Fee_Receipt2() {
         <FormInput label={"Father Name"} placeholder={"Enter Father Name"}/>
         <FormInput label={"Mother Name"} placeholder={"Enter Mother Name"}/>
         <FormInput label={"Session"} placeholder={" Enter Session"}/>
-        <FormInput label={"Receipt Number"} placeholder={" Enter Session"}/>
+        <FormInput label={"Receipt Number"} placeholder={" Enter Receipt Number"}/>
         <FormInput label={"Receipt Date"} type='date'/>
       </div>
       <div className="w-full gap-6 mb-5 grid grid-cols-1 ">

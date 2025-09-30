@@ -70,8 +70,25 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
             { name: "Exam", path: "/Exam" },
             { name: "Assign Roll No.", path: "/Assign-Roll" },
             { name: "Exam Schedule", path: "/Schedule" },
+            { name: "Exam Details", path: "/Student-details" },
           ],
         },
+        { name: "Student Attendance", path: "/Student-Attendance" },
+
+      ],
+    },
+    {
+      name: "Transfer Certificate",
+      icon: <MdReport className="inline-block w-5 h-5 mr-2 -mt-1" />,
+      submenus: [
+        { name: "Transfer Certificate (T.C.)", path: "/TC" },
+      ],
+    },
+    {
+      name: "Utility",
+      icon: <MdReport className="inline-block w-5 h-5 mr-2 -mt-1" />,
+      submenus: [
+        { name: "Event SMS", path: "/SMS" },
       ],
     },
     {

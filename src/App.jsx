@@ -48,6 +48,11 @@ import Assign_Roll_No from './Pages/Manage_Exam/Assign_Roll_No'
 import Exam_Schedule from './Pages/Manage_Exam/Exam_Schedule'
 import Exam_Schedule2 from './Pages/Manage_Exam/Exam_Schedule2'
 import Student_Summary2 from './Pages/Student_Master/Student_Summary2'
+import Student_Details from './Pages/Student_Master/Student_Details'
+import Student_Attendance from './Pages/Student_Master/Student_Attendance'
+import TC from './Pages/TC/TC'
+import TC2 from './Pages/TC/TC2'
+import Event_SMS from './Pages/Utility/Event_SMS'
 
 function App() {
  
@@ -66,6 +71,7 @@ function App() {
           <Route path='/AddSibling' element={<Add_Sibling2 />}/>
           <Route path='/Summary' element={<Student_Summary />}/>
           <Route path='/Student-Summary' element={<Student_Summary2 />}/>
+          <Route path='/Student-details' element={<Student_Details />}/>
 
           {/* {Account Master} */}
           <Route path='/Addmission' element={<Addmission_Fee_Receipt />}/>
@@ -110,6 +116,14 @@ function App() {
           <Route path='/Assign-Roll' element={<Assign_Roll_No />}/>
           <Route path='/Schedule' element={<Exam_Schedule />}/>
           <Route path='/Exam-Schedule' element={<Exam_Schedule2 />}/>
+          <Route path='/Student-Attendance' element={<Student_Attendance />}/>
+
+          {/* TC */}
+          <Route path='/TC' element={<TC />}/>
+          <Route path='/TC2' element={<TC2 />}/>
+
+          {/* Utility */}
+          <Route path='/SMS' element={<Event_SMS />}/>
         </Route>
       </Routes>
     </BrowserRouter> 
