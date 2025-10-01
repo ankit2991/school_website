@@ -9,9 +9,9 @@ import Buttons from '../../Components/Page_Forms/Buttons'
 function TC2() {
     const [agree, setAgree] = useState(false)
     const [paymentMode, setPaymentMode] = useState("");
-     const [rowDetailOpen, setRowDetailOpen] = useState(false); // ✅ track overlay open/close
+    const [rowDetailOpen, setRowDetailOpen] = useState(false); // ✅ track overlay open/close
     const columns = [
-        { header: "Class",  shortHeader: "Date", accessor: "date" },
+        { header: "Class",  shortHeader: "Class", accessor: "class" },
         { header: "Addmission Date",  shortHeader: "Addmission", accessor: "adate" },
         { header: "Passing Date",  shortHeader: "Passing ", accessor: "pdate" },
         { header: "No of School Meeting", shortHeader: "School Meeting", accessor: "meeting" },

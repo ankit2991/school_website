@@ -1,14 +1,14 @@
 import React from 'react'
-import Heading from '../../Components/Page_Forms/Heading'
-import Buttons from '../../Components/Page_Forms/Buttons'
-import FormInput from '../../Components/Page_Forms/FormInput'
+import Heading from '../../Components/Page_Forms/Heading';
+import Buttons from '../../Components/Page_Forms/Buttons';
 import { useNavigate } from 'react-router-dom';
 import Options from '../../Components/Page_Forms/Options';
+import FormInput from '../../Components/Page_Forms/FormInput';
 import Table from '../../Components/Page_Forms/Table';
 
-function TC() {
+function User_Creation() {
     const navigate = useNavigate()
-     const columns = [        
+    const columns = [
         { header: "Enrollment Number",  shortHeader: "Enrollment No.", accessor: "enroll" },
         { header: "Name",  shortHeader: "Name", accessor: "name" },
     ]
@@ -20,25 +20,22 @@ function TC() {
         { id: 5, enroll:"554", name:"Devandu upadhya", },
     ];
 
-   return (
-        <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+    return (
+        <div className='w-full h-full bg-white  px-4 py-2 flex flex-col'>
             <div className="flex justify-between mb-5">
-                <Heading label={"Transfer Certificate (T.C.)"} />
-                <Buttons click={() => navigate("/TC2")} label={"Add"} />                                  
+                <Heading label={"User Master"} />
+                <Buttons click={() => navigate("/User-Creation")} label={"Add"} />                    
             </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 mb-5 w-full">
-                <Options label={"Class"} name={""} optionMsg="Select Class" options={["Nur", "K.G.", "Prep"]}/>
-                <Options label={"Student Name"} name={""} optionMsg="Select Student Name" options={["Priya Iyer", "Arush Bhola", "Varun Yadav"]}/>
-                <FormInput label={"Sr. No."} placeholder={"Enter Serial No. "} />
-                <FormInput label={"Father Name"} placeholder={"Enter Father Name "} />
-                <FormInput label={"Mother Name"} placeholder={"Enter Mother Name "} />
-            </div>           
 
-            <div className="flex justify-end">
-                <Buttons click={() => navigate("/TC2")} label={"Search"} />                    
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5 w-full">
+                <Options label={"Branch"} name={""} optionMsg="Select Branch" options={["Kesharam Memorial Manakchand Public School Kesharam Memorial Manakchand Public School", "KMMPS",]}/>
+                <FormInput label={"Name"} placeholder={"Enter Name"}/>
             </div>
             
+            <div className="flex justify-end">
+                <Buttons click={() => navigate("")} label={"Search"} />                    
+            </div>
+
             <div className="mt-5">
                 <Table columns={columns} data={data} actions={(row) => (
                     <>
@@ -50,9 +47,9 @@ function TC() {
                     </>
                 )}/>
             </div>
-           
+
         </div>
     )
 }
 
-export default TC
+export default User_Creation

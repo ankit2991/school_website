@@ -89,14 +89,21 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
       icon: <MdReport className="inline-block w-5 h-5 mr-2 -mt-1" />,
       submenus: [
         { name: "Event SMS", path: "/SMS" },
+        { name: "User Creation", path: "/Creation" },
+        { name: "User SMS", path: "/User-SMS" },
       ],
     },
     {
       name: "Reports",
       icon: <MdReport className="inline-block w-5 h-5 mr-2 -mt-1" />,
       submenus: [
-        { name: "Student Report", path: "/StuReport" },
-        { name: "Fee Report", path: "/FeeReport" },
+        {name: "Student", 
+          submenus: [
+            { name: "Student Details", path: "/Details" },
+            { name: "Sibling Details", path: "/Sibling-Details" },
+            { name: "Fee Details", path: "/Fee-Details" },
+          ],
+        },
       ],
     },
     {

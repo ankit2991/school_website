@@ -53,6 +53,13 @@ import Student_Attendance from './Pages/Student_Master/Student_Attendance'
 import TC from './Pages/TC/TC'
 import TC2 from './Pages/TC/TC2'
 import Event_SMS from './Pages/Utility/Event_SMS'
+import User_Creation from './Pages/Utility/User_Creation'
+import User_Creation2 from './Pages/Utility/User_Creation2'
+import User_SMS from './Pages/Utility/User_SMS'
+import Students_Details from './Pages/Reports/Student/Students_Details'
+import Sibling_Details from './Pages/Reports/Student/Sibling_Details'
+import Fee_Detail from './Pages/Reports/Student/Fee_Details'
+import Fee_Details from './Pages/Reports/Student/Fee_Details'
 
 function App() {
  
@@ -124,6 +131,14 @@ function App() {
 
           {/* Utility */}
           <Route path='/SMS' element={<Event_SMS />}/>
+          <Route path='/Creation' element={<User_Creation />}/>
+          <Route path='/User-Creation' element={<User_Creation2 />}/>
+          <Route path='/User-SMS' element={<User_SMS />}/>
+          
+          {/* Reports */}
+          <Route path='/Details' element={<Students_Details />}/>
+          <Route path='/Sibling-Details' element={<Sibling_Details />}/>
+          <Route path='/Fee-Details' element={<Fee_Details />}/>
         </Route>
       </Routes>
     </BrowserRouter> 
