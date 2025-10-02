@@ -60,6 +60,13 @@ import Students_Details from './Pages/Reports/Student/Students_Details'
 import Sibling_Details from './Pages/Reports/Student/Sibling_Details'
 import Fee_Detail from './Pages/Reports/Student/Fee_Details'
 import Fee_Details from './Pages/Reports/Student/Fee_Details'
+import Transport_Fee_Details from './Pages/Reports/Student/Transport_Fee_Details'
+import Transport_Details from './Pages/Reports/Student/Transport_Details'
+import Hostel_Stud_Details from './Pages/Reports/Student/Hostel_Stud_Details'
+import Hostel_fee_Details from './Pages/Reports/Student/Hostel_fee_Details'
+import Student_TC_Details from './Pages/Reports/Student/Student_TC_Details'
+import Enquiry_Details from './Pages/Reports/Student/Enquiry_Details'
+import Caste_Wise_Report from './Pages/Reports/Student/Caste_Wise_Report'
 
 function App() {
  
@@ -139,6 +146,13 @@ function App() {
           <Route path='/Details' element={<Students_Details />}/>
           <Route path='/Sibling-Details' element={<Sibling_Details />}/>
           <Route path='/Fee-Details' element={<Fee_Details />}/>
+          <Route path='/Transport-Details' element={<Transport_Details />}/>
+          <Route path='/Transport-Fee-Details' element={<Transport_Fee_Details />}/>
+          <Route path='/Hostel-Stud-Details' element={<Hostel_Stud_Details />}/>
+          <Route path='/Hostel-Fee-Details' element={<Hostel_fee_Details />}/>
+          <Route path='/Student-TC-Details' element={<Student_TC_Details />}/>
+          <Route path='/Enquiry-Details' element={<Enquiry_Details />}/>
+          <Route path='/Caste-Wise-Report' element={<Caste_Wise_Report />}/>
         </Route>
       </Routes>
     </BrowserRouter> 

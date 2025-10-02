@@ -100,8 +100,15 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
         {name: "Student", 
           submenus: [
             { name: "Student Details", path: "/Details" },
-            { name: "Sibling Details", path: "/Sibling-Details" },
-            { name: "Fee Details", path: "/Fee-Details" },
+            { name: "Student Sibling Details", path: "/Sibling-Details" },
+            { name: "Student Fee Details", path: "/Fee-Details" },
+            { name: "Student Transport Details", path: "/Transport-Details" },
+            { name: "Transport Fee Details", path: "/Transport-Fee-Details" },
+            { name: "Hostel Student Details", path: "/Hostel-Stud-Details" },
+            { name: "Hostel Fee Details", path: "/Hostel-Fee-Details" },
+            { name: "Student TC Details", path: "/Student-TC-Details" },
+            { name: "Enquiry Details", path: "/Enquiry-Details" },
+            { name: "Caste Wise Report", path: "/Caste-Wise-Report" },
           ],
         },
       ],
@@ -174,7 +181,7 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
     <div
       className={`${
         sidebarToggle ? "translate-x-0" : "translate-x-full shadow-none"
-      } w-64 block h-full fixed right-0 bg-[#f7edcfda] shadow-2xl rounded-l-3xl transform transition-all duration-700 ease-in-out px-4 py-2`}
+      } w-64 block h-full fixed right-0 bg-[#f7edcfda] shadow-2xl rounded-l-3xl transform transition-all duration-700 ease-in-out px-4 py-2 overflow-y-auto no-scrollbar`}
     >
       <ul className="mt-3 text-[#a7230b] font-bold">
         {menu.map((item, i) => (

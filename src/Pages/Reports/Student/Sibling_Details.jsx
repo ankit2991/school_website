@@ -5,8 +5,10 @@ import FormInput from '../../../Components/Page_Forms/FormInput'
 import CheckBox from '../../../Components/Page_Forms/CheckBox'
 import Buttons from '../../../Components/Page_Forms/Buttons'
 import Table from '../../../Components/Page_Forms/Table'
+import { useNavigate } from 'react-router-dom'
 
 function Sibling_Details() {
+  const navigate = useNavigate()
     const [rowDetailOpen, setRowDetailOpen] = useState(false); // ✅ track overlay open/close
     const columns = [
     { header: "Serial No.", shortHeader: "Serial No.", accessor: "serial" },
