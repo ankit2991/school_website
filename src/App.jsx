@@ -67,6 +67,12 @@ import Hostel_fee_Details from './Pages/Reports/Student/Hostel_fee_Details'
 import Student_TC_Details from './Pages/Reports/Student/Student_TC_Details'
 import Enquiry_Details from './Pages/Reports/Student/Enquiry_Details'
 import Caste_Wise_Report from './Pages/Reports/Student/Caste_Wise_Report'
+import Student_Age_Wise from './Pages/Reports/Student/Student_Age_Wise'
+import Student_Attend_Report from './Pages/Reports/Student/Student_Attend_Report'
+import Student_Fee_Detail_Ledger_Wise from './Pages/Reports/Student/Student_Fee_Detail_Ledger_Wise'
+import Day_Details from './Pages/Reports/Day Transaction/Day_Details'
+import Day_Book from './Pages/Reports/Day Transaction/Day_Book'
+import Day_Summary_Book from './Pages/Reports/Day Transaction/Day_Summary_Book'
 
 function App() {
  
@@ -153,6 +159,12 @@ function App() {
           <Route path='/Student-TC-Details' element={<Student_TC_Details />}/>
           <Route path='/Enquiry-Details' element={<Enquiry_Details />}/>
           <Route path='/Caste-Wise-Report' element={<Caste_Wise_Report />}/>
+          <Route path='/Student-Age-Wise' element={<Student_Age_Wise />}/>
+          <Route path='/Student-Attend-Report' element={<Student_Attend_Report />}/>
+          <Route path='/Student-Fee-Detail-Ledger-Wise' element={<Student_Fee_Detail_Ledger_Wise />}/>
+          <Route path='/Day-Details' element={<Day_Details />}/>
+          <Route path='/Day-Book' element={<Day_Book />}/>
+          <Route path='/Day-Summary-Book' element={<Day_Summary_Book />}/>
         </Route>
       </Routes>
     </BrowserRouter> 

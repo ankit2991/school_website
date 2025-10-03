@@ -109,6 +109,17 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
             { name: "Student TC Details", path: "/Student-TC-Details" },
             { name: "Enquiry Details", path: "/Enquiry-Details" },
             { name: "Caste Wise Report", path: "/Caste-Wise-Report" },
+            { name: "Student Age Wise", path: "/Student-Age-Wise" },
+            { name: "Student Attendance Report", path: "/Student-Attend-Report" },
+            { name: "Student Fee Detail Ledger Wise", path: "/Student-Fee-Detail-Ledger-Wise" },
+          ],
+        },
+
+        {name: "Day Transaction", 
+          submenus: [
+            { name: "Day Details", path: "/Day-Details" },
+            { name: "Day Book", path: "/Day-Book" },
+            { name: "Day Summary Book", path: "/Day-Summary-Book" },
           ],
         },
       ],
