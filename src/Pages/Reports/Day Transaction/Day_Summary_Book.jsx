@@ -32,7 +32,7 @@ function Day_Summary_Book() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 mb-5 w-full">
                 <FormInput label={"From"} type="date" />
                 <FormInput label={"To"} type="date" />
-                <div className="flex lg:mt-8">
+                <div className="flex sm:mt-8">
                     <CheckBox label={"Consolated"}labelClass='text-[20px]' name={""} checked={agree} onChange={(e) => setAgree(e.target.checked)} />
                 </div>
             </div>

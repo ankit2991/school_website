@@ -5,8 +5,10 @@ import Options from "../../../Components/Page_Forms/Options";
 import FormInput from "../../../Components/Page_Forms/FormInput";
 import Table from "../../../Components/Page_Forms/Table"; // ✅ Import your Table component
 import CheckBox from "../../../Components/Page_Forms/CheckBox"; // if needed
+import { useNavigate } from "react-router-dom";
 
 function Day_Book() {
+      const navigate = useNavigate()
   const [agree, setAgree] = useState(false);
   const [rowDetailOpen, setRowDetailOpen] = useState(false);
 
@@ -16,14 +18,14 @@ function Day_Book() {
     { header: "CrAccount", accessor: "crAccount" },
     { header: "CrAmount", accessor: "crAmount", align: "right" },
     { header: "RNo", accessor: "rno" },
-    { header: "DrAccount", accessor: "crAccount" },
+    { header: "DrAccount", accessor: "drAccount" },
     { header: "DrAmount", accessor: "drAmount", align: "right" },
   ];
 
   // --- Cash in Hand Data ---
   const cashData = [
-    { vno: "434", crAccount: "TUITION FEE[ Jitender ]", crAmount: "800", rno: "439", crAccount: "PREVIOUS DAY BALANCE", drAmount: "210961", },
-    { vno: "435", crAccount: "TUITION FEE[ JANAK ]", crAmount: "4500", rno: "439", crAccount: "DAY RECEIPT", drAmount: "5300", },    
+    { vno: "434", crAccount: "TUITION FEE[ Jitender ]", crAmount: "800", rno: "439", drAccount: "PREVIOUS DAY BALANCE", drAmount: "210961", },
+    { vno: "435", crAccount: "TUITION FEE[ JANAK ]", crAmount: "4500", rno: "439", drAccount: "DAY RECEIPT", drAmount: "5300", },    
   ];
 
   const columnsJournal = [

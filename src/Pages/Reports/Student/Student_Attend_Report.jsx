@@ -176,7 +176,8 @@ function Student_Attend_Report() {
                 <Options label={"Class"} optionMsg="Select Class" options={["Nur", "K.G.", "Prep"]} onChange={(e) => setSelectedClass(e.target.value)} />
                 <Options label={"Month"} optionMsg="Select Month" options={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]}
                     onChange={(e) => setSelectedMonth(e.target.value)}
-                /><Options label={"Year"} optionMsg="Select Year" options={["2022", "2023", "2024", "2025"]} onChange={(e) => setSelectedYear(e.target.value)}/>
+                />
+                <Options label={"Year"} optionMsg="Select Year" options={["2022", "2023", "2024", "2025"]} onChange={(e) => setSelectedYear(e.target.value)}/>
             </div>
             
             <div className="flex justify-end mb-5">

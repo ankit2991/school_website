@@ -73,6 +73,18 @@ import Student_Fee_Detail_Ledger_Wise from './Pages/Reports/Student/Student_Fee_
 import Day_Details from './Pages/Reports/Day Transaction/Day_Details'
 import Day_Book from './Pages/Reports/Day Transaction/Day_Book'
 import Day_Summary_Book from './Pages/Reports/Day Transaction/Day_Summary_Book'
+import Due_Report from './Pages/Reports/Transaction/Due_Report'
+import Transport_Due_Report from './Pages/Reports/Transaction/Transport_Due_Report'
+import Hostel_Due_Fees from './Pages/Reports/Transaction/Hostel_Due_Fees'
+import Other_Fee_Due_Report from './Pages/Reports/Transaction/Other_Fee_Due_Report'
+import Student_Ledger_Details from './Pages/Reports/Transaction/Student_Ledger_Details'
+import Ledger_Details from './Pages/Reports/Transaction/Ledger_Details'
+import Profit_And_Loss from './Pages/Reports/Transaction/Profit_And_Loss'
+import Total_Outstanding_Report from './Pages/Reports/Transaction/Total_Outstanding_Report'
+import Exam_Report from './Pages/Reports/Exam/Exam_Report'
+import Marksheet from './Pages/Reports/Exam/Marksheet'
+import Exam_Admit_Card from './Pages/Reports/Exam/Exam_Admit_Card'
+import Exam_Hole_Report from './Pages/Reports/Exam/Exam_Hole_Report'
 
 function App() {
  
@@ -149,22 +161,38 @@ function App() {
           <Route path='/User-SMS' element={<User_SMS />}/>
           
           {/* Reports */}
-          <Route path='/Details' element={<Students_Details />}/>
-          <Route path='/Sibling-Details' element={<Sibling_Details />}/>
-          <Route path='/Fee-Details' element={<Fee_Details />}/>
-          <Route path='/Transport-Details' element={<Transport_Details />}/>
-          <Route path='/Transport-Fee-Details' element={<Transport_Fee_Details />}/>
-          <Route path='/Hostel-Stud-Details' element={<Hostel_Stud_Details />}/>
-          <Route path='/Hostel-Fee-Details' element={<Hostel_fee_Details />}/>
-          <Route path='/Student-TC-Details' element={<Student_TC_Details />}/>
-          <Route path='/Enquiry-Details' element={<Enquiry_Details />}/>
-          <Route path='/Caste-Wise-Report' element={<Caste_Wise_Report />}/>
-          <Route path='/Student-Age-Wise' element={<Student_Age_Wise />}/>
-          <Route path='/Student-Attend-Report' element={<Student_Attend_Report />}/>
-          <Route path='/Student-Fee-Detail-Ledger-Wise' element={<Student_Fee_Detail_Ledger_Wise />}/>
-          <Route path='/Day-Details' element={<Day_Details />}/>
-          <Route path='/Day-Book' element={<Day_Book />}/>
-          <Route path='/Day-Summary-Book' element={<Day_Summary_Book />}/>
+            {/* Student */}
+            <Route path='/Details' element={<Students_Details />}/>
+            <Route path='/Sibling-Details' element={<Sibling_Details />}/>
+            <Route path='/Fee-Details' element={<Fee_Details />}/>
+            <Route path='/Transport-Details' element={<Transport_Details />}/>
+            <Route path='/Transport-Fee-Details' element={<Transport_Fee_Details />}/>
+            <Route path='/Hostel-Stud-Details' element={<Hostel_Stud_Details />}/>
+            <Route path='/Hostel-Fee-Details' element={<Hostel_fee_Details />}/>
+            <Route path='/Student-TC-Details' element={<Student_TC_Details />}/>
+            <Route path='/Enquiry-Details' element={<Enquiry_Details />}/>
+            <Route path='/Caste-Wise-Report' element={<Caste_Wise_Report />}/>
+            <Route path='/Student-Age-Wise' element={<Student_Age_Wise />}/>
+            <Route path='/Student-Attend-Report' element={<Student_Attend_Report />}/>
+            <Route path='/Student-Fee-Detail-Ledger-Wise' element={<Student_Fee_Detail_Ledger_Wise />}/>
+            {/* Day Transaction */}
+            <Route path='/Day-Details' element={<Day_Details />}/>
+            <Route path='/Day-Book' element={<Day_Book />}/>
+            <Route path='/Day-Summary-Book' element={<Day_Summary_Book />}/>
+            {/* Transaction */}
+            <Route path='/Due-Report' element={<Due_Report />}/>
+            <Route path='/Transport-Due-Report' element={<Transport_Due_Report />}/>
+            <Route path='/Hostel-Due-Report' element={<Hostel_Due_Fees />}/>
+            <Route path='/Other-Fee-Due-Report' element={<Other_Fee_Due_Report />}/>
+            <Route path='/Student-Ledger-Details' element={<Student_Ledger_Details />}/>
+            <Route path='/Ledger-Details' element={<Ledger_Details />}/>
+            <Route path='/Profit-And-Loss' element={<Profit_And_Loss />}/>
+            <Route path='/Total-Outstanding-Report' element={<Total_Outstanding_Report />}/>
+            {/* Exam */}
+            <Route path='/Exam-Report' element={<Exam_Report />}/>
+            <Route path='/Marksheet' element={<Marksheet />}/>
+            <Route path='/Exam-Admit-Card' element={<Exam_Admit_Card />}/>
+            <Route path='/Exam-Hole-Report' element={<Exam_Hole_Report />}/>
         </Route>
       </Routes>
     </BrowserRouter> 

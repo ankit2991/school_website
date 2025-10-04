@@ -30,7 +30,7 @@ function Hostel_Stud_Details() {
         { id: 1, serial: "01", name: "Ajay", fname: "Rman Thakur",  fno: "1234567890", add: "221, Shanti Nagar, Near Hanuman Mandir, Jaipur, Rajasthan – 302012", class: "Nur", room:"111",jdate: "26-may-2024", amount:"40,000", mark:"" },
         { id: 2, serial: "02", name: "Ajay", fname: "Rman", fno: "1234567540", add: "Flat No. 14, Green Valley Apartments, Sector 21, Gandhinagar, Gujarat – 382021", class: "Nur", room:"111",jdate: "10-Dec-2023", amount:"40,000", mark:"" },
         { id: 3, serial: "03", name: "Viren", fname: "Devanh Bhalla",  fno: "1234567890", add: "3rd Floor, Lakeview Residency, Green Valley Apartments, Sector 21, Gandhinagar Whitefield, Bengaluru, Karnataka – 560066", class: "Nur", room:"111",jdate: "03-feb-2024", amount:"40,000", mark:"" },
-        { id: 4, serial: "04", name: "anuj", fname: "aditya", fno: "1234567890", add: "House No. 77, Palm Avenue, Vyttila, Kochi, Kerala – 682019", fno: "1234567890", class: "Nur", room:"111",jdate: "10-Dec-2025", amount:"40,000", mark:"" },
+        { id: 4, serial: "04", name: "anuj", fname: "aditya", fno: "1234567890", add: "House No. 77, Palm Avenue, Vyttila, Kochi, Kerala – 682019", class: "Nur", room:"111",jdate: "10-Dec-2025", amount:"40,000", mark:"" },
         { id: 5, serial: "05", name: "somya", fname: "Devanh",  fno: "1234567867", add: "Plot No. 9, Palm Avenue, Vyttila, Ocean Pearl Apartments, Juhu, Near Hanuman Mandir, Jaipur, Rose Garden Society, Alkapuri, Vadodara, Gujarat – 390007", class: "Nur",  room:"111",jdate: "01-jan-2024", amount:"40,000", mark:"" },
     ];
     return (
