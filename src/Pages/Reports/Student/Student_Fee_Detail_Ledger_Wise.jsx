@@ -68,9 +68,9 @@ function Student_Fee_Detail_Ledger_Wise() {
 
     return (
         <div className="w-full h-full bg-white flex flex-col px-4 py-2">
-            <div className="flex justify-between mb-5">
-                <Heading label={"Student Attendance Report"} />
-                <Buttons click={""} label={"Print"} />
+            <div className="flex justify-between items-center gap-x-4 mb-5">
+                <Heading label={"Student Fee Details"} style={"text-[22px] sm:text-3xl"} />
+                <Buttons click={() => navigate("")} label={"Print"} style='whitespace-nowrap h-10'/>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-x-6 mb-5 w-full">

@@ -10,10 +10,11 @@ function Cash_In_Hand() {
     
     return (
     <div className="w-full h-full bg-white  px-4 py-2 flex flex-col">
-         <div className="flex justify-between mb-5">
-            <Heading label={"Cash In Hand"} />
-            <Buttons label="Refresh" />
-        </div>
+        <div className="flex justify-between items-center gap-x-4 mb-5">
+            <Heading label={"Cash In Hand"} style={"text-[22px] sm:text-3xl"} />
+            <Buttons click={() => navigate("/")} label={"Refresh"} style='whitespace-nowrap h-10'/>
+      </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5 w-full">
             <FormInput label="Date"type="date" />
             <Options label={"Branch"} name={""} optionMsg="Select Branch" options={["Institute1", "Institute2"]}/>

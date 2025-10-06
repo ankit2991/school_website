@@ -142,6 +142,24 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
             { name: "Exam Hole Report", path: "/Exam-Hole-Report" },
           ],
         },
+        {name: "MISC", 
+          submenus: [
+            { name: "Id Card", path: "/Id-Card" },
+            { name: "Certificate", path: "/Certificate" },
+            { name: "Bank Challan", path: "/Bank-Challan" },
+           
+          ],
+        },
+      ],
+    },
+    {
+      name: "Perm's",
+      icon: <FaUserGraduate className="inline-block w-5 h-5 mr-2 -mt-1" />,
+      submenus: [
+        { name: "Add Institute", path: "/Add-Institute" },
+        { name: "Add Session", path: "/Add-Session" },
+        { name: "Add Class", path: "/Add-Class" },
+        { name: "Subject Allocation", path: "/Subject-Allocation" },
       ],
     },
     {

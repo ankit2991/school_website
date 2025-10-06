@@ -9,10 +9,11 @@ function Subject() {
     const navigate = useNavigate()
   return (
     <div className="w-full h-full bg-white flex flex-col px-4 py-2">
-        <div className="flex justify-between mb-5">
-            <Heading label={"Subject Master"} />
-            <Buttons click={() => navigate("")} label={"Add"} />
+        <div className="flex justify-between items-center gap-x-4 mb-5">
+            <Heading label={"Subject Master"} style={"text-[22px] sm:text-3xl"} />
+            <Buttons click={() => navigate("")} label={"Add"} style='whitespace-nowrap h-10'/>                    
         </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2  gap-6 mb-5 w-full">
             <Options label={"Subject"} name={""} optionMsg="Select Subject" options={["Hindi", "English", "Maths"]}/>
             {/* <FormInput label={"Provider"} placeholder={"Enter Provider"} /> */}

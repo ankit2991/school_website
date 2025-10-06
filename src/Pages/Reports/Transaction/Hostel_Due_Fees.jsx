@@ -55,9 +55,10 @@ function Hostel_Due_Fees() {
     return (
         <div className="w-full h-full bg-white flex flex-col px-4 py-2">
             <div className="flex justify-between items-center gap-x-4 mb-5">
-                <Heading label={"Hostel Due Report"}  />
-                <Buttons click={""} label={"Send SMS"} style='whitespace-nowrap h-10'/>
+                <Heading label={"Hostel Due Report"} style={"text-[22px] sm:text-3xl"} />
+                <Buttons click={() => navigate("")} label={"Send SMS"} style='whitespace-nowrap h-10'/>
             </div>
+            
             {/* Ledger + Dates */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-3 mb-5 w-full ">
                 <Options label={"Class"} optionMsg="Select Class" options={["Nur", "K.G.", "Prep"]} />

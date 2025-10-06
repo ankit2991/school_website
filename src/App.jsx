@@ -49,7 +49,7 @@ import Exam_Schedule from './Pages/Manage_Exam/Exam_Schedule'
 import Exam_Schedule2 from './Pages/Manage_Exam/Exam_Schedule2'
 import Student_Summary2 from './Pages/Student_Master/Student_Summary2'
 import Student_Details from './Pages/Student_Master/Student_Details'
-import Student_Attendance from './Pages/Student_Master/Student_Attendance'
+import Student_Attendance from './Pages/Manage_Exam/Student_Attendance'
 import TC from './Pages/TC/TC'
 import TC2 from './Pages/TC/TC2'
 import Event_SMS from './Pages/Utility/Event_SMS'
@@ -85,6 +85,17 @@ import Exam_Report from './Pages/Reports/Exam/Exam_Report'
 import Marksheet from './Pages/Reports/Exam/Marksheet'
 import Exam_Admit_Card from './Pages/Reports/Exam/Exam_Admit_Card'
 import Exam_Hole_Report from './Pages/Reports/Exam/Exam_Hole_Report'
+import Id_Card from './Pages/Reports/Misc/Id_Card'
+import Certificate from './Pages/Reports/Misc/Certificate'
+import Bank_Challan from './Pages/Reports/Misc/Bank_Challan'
+import Add_Institute from './Pages/Perm\'s/Add_Institute'
+import Add_Institute2 from './Pages/Perm\'s/Add_Institute2'
+import Add_Session from './Pages/Perm\'s/Add_Session'
+import Add_Session2 from './Pages/Perm\'s/Add_Session2'
+import Add_Class from './Pages/Perm\'s/Add_Class'
+import Add_Class2 from './Pages/Perm\'s/Add_Class2'
+import Subject_Allocation from './Pages/Perm\'s/Subject_Allocation'
+import Subject_Allocation2 from './Pages/Perm\'s/Subject_Allocation2'
 
 function App() {
  
@@ -193,6 +204,20 @@ function App() {
             <Route path='/Marksheet' element={<Marksheet />}/>
             <Route path='/Exam-Admit-Card' element={<Exam_Admit_Card />}/>
             <Route path='/Exam-Hole-Report' element={<Exam_Hole_Report />}/>
+            {/* MISC */}
+            <Route path='/Id-Card' element={<Id_Card />}/>
+            <Route path='/Certificate' element={<Certificate />}/>
+            <Route path='/Bank-Challan' element={<Bank_Challan />}/>
+            
+          {/* Perm's */}
+          <Route path='/Add-Institute' element={<Add_Institute />}/>
+          <Route path='/Add-Institute2' element={<Add_Institute2 />}/>
+          <Route path='/Add-Session' element={<Add_Session />}/>
+          <Route path='/Add-Session2' element={<Add_Session2 />}/>
+          <Route path='/Add-Class' element={<Add_Class />}/>
+          <Route path='/Add-Class2' element={<Add_Class2 />}/>
+          <Route path='/Subject-Allocation' element={<Subject_Allocation />}/>
+          <Route path='/Subject-Allocation2' element={<Subject_Allocation2 />}/>
         </Route>
       </Routes>
     </BrowserRouter> 

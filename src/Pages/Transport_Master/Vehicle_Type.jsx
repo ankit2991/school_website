@@ -20,9 +20,9 @@ function Vehicle_Type() {
     ];
     return (
         <div className='w-full h-full bg-white flex flex-col px-4 py-2'>
-            <div className="w-full sm:w-4xl flex justify-between mb-5">
-                <Heading label={"Vehicle Type Master"} />
-                <Buttons click={() => {setDialogTitle("Add"); setOpen(true)}} label={"Add"} />
+            <div className="flex justify-between items-center gap-x-4 mb-5">
+                <Heading label={"Vehicle Type Master"} style={"text-[22px] sm:text-3xl"} />
+                <Buttons click={() => {setDialogTitle("Add"); setOpen(true)}} label={"Add"} style='whitespace-nowrap h-10'/>                    
             </div>
            
             <Dialog open={open} title={dialogTitle} children={<>

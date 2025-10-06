@@ -143,19 +143,13 @@ function Caste_Wise_Report() {
         <div className="w-full h-full bg-white flex flex-col px-4 py-2">
             <div className="flex justify-between mb-5">
                 <Heading label={"Caste Wise Report"} />
-            </div>
-            
-            <div className="grid grid-cols-2 gap-x-6 gap-y-3 mb-5 w-full">
-                <CheckBox 
-                    label={"Boy And Girl"} 
-                    labelClass='text-[20px]' 
-                    name={""}
-                    checked={agree} 
-                    onChange={(e) => setAgree(e.target.checked)}
+            </div>            
+          
+            <div className="flex justify-between items-center gap-x-4 mb-5">
+                <CheckBox label={"Boy And Girl"} labelClass='text-[20px]' name={""} checked={agree} 
+                    onChange={(e) => setAgree(e.target.checked)} labelstyle={"text-[22px] sm:text-3xl"}
                 />
-                <div className="flex justify-end">
-                    <Buttons click={handleSearch} label={"Search"} />                        
-                </div>
+                <Buttons click={handleSearch} label={"Search"} style='whitespace-nowrap h-10'/>
             </div>
 
             {/* ✅ Conditional rendering for tables */}

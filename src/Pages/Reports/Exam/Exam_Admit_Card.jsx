@@ -40,9 +40,9 @@ function Exam_Admit_Card() {
   ];
     return (
         <div className="w-full h-full bg-white flex flex-col px-4 py-2">
-            <div className="flex justify-between mb-5">
-                <Heading label={"Exam Admit Card"} />
-                <Buttons click={() => navigate("")} label={"Print"} />
+            <div className="flex justify-between items-center gap-x-4 mb-5">
+                <Heading label={"Exam Admit Card"} style={"text-[22px] sm:text-3xl"} />
+                <Buttons click={() => navigate("")} label={"Print"} style='whitespace-nowrap h-10'/>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 mb-5 w-full">
