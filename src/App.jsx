@@ -96,6 +96,30 @@ import Add_Class from './Pages/Perm\'s/Add_Class'
 import Add_Class2 from './Pages/Perm\'s/Add_Class2'
 import Subject_Allocation from './Pages/Perm\'s/Subject_Allocation'
 import Subject_Allocation2 from './Pages/Perm\'s/Subject_Allocation2'
+import Add_Bank from './Pages/Perm\'s/Add_Bank'
+import Add_Bank2 from './Pages/Perm\'s/Add_Bank2'
+import Add_Room from './Pages/Perm\'s/Add_Room'
+import Add_Room2 from './Pages/Perm\'s/Add_Room2'
+import Assign_Other_Income from './Pages/Perm\'s/Assign_Other_Income'
+import Add_Ledger from './Pages/Perm\'s/Add_Ledger'
+import Add_Ledger2 from './Pages/Perm\'s/Add_Ledger2'
+import Fee_Parameter from './Pages/Perm\'s/Fee_Parameter'
+import Sms_Templete from './Pages/Perm\'s/Sms_Templete'
+import Sms_Templete2 from './Pages/Perm\'s/Sms_Templete2'
+import Global_Perameters from './Pages/Tools/Global_Perameters'
+import Promote_Student from './Pages/Tools/Promote_Student'
+import Delete_Receipt from './Pages/Tools/Delete_Receipt'
+import Depertment from './Pages/PayRoll/Master/Department'
+import Depertment2 from './Pages/PayRoll/Master/Department2'
+import Department from './Pages/PayRoll/Master/Department'
+import Department2 from './Pages/PayRoll/Master/Department2'
+import Designation from './Pages/PayRoll/Master/Designation'
+import Designation2 from './Pages/PayRoll/Master/Designation2'
+import Allowance_Deducation from './Pages/PayRoll/Master/Allowance_Deducation'
+import Allowance_Deducation2 from './Pages/PayRoll/Master/Allowance_Deducation2'
+import Event_Master from './Pages/PayRoll/Master/Event_Master'
+import Event_Master2 from './Pages/PayRoll/Master/Event_Master2'
+import Shift from './Pages/PayRoll/Master/Shift'
 
 function App() {
  
@@ -218,6 +242,35 @@ function App() {
           <Route path='/Add-Class2' element={<Add_Class2 />}/>
           <Route path='/Subject-Allocation' element={<Subject_Allocation />}/>
           <Route path='/Subject-Allocation2' element={<Subject_Allocation2 />}/>
+          <Route path='/Add-Bank' element={<Add_Bank />}/>
+          <Route path='/Add-Bank2' element={<Add_Bank2 />}/>
+          <Route path='/Add-Room' element={<Add_Room />}/>
+          <Route path='/Add-Room2' element={<Add_Room2 />}/>
+          <Route path='/Assign-Other-Income' element={<Assign_Other_Income />}/>
+          <Route path='/Add-Ledger' element={<Add_Ledger />}/>
+          <Route path='/Add-Ledger2' element={<Add_Ledger2 />}/>
+          <Route path='/Fee-Parameter' element={<Fee_Parameter />}/>
+          <Route path='/SMS-Templete' element={<Sms_Templete />}/>
+          <Route path='/SMS-Templete2' element={<Sms_Templete2 />}/>
+
+          {/* Tools */}
+          <Route path='/Global-Perameters' element={<Global_Perameters />}/>
+          <Route path='/Promote-Student' element={<Promote_Student />}/>
+          <Route path='/Delete-Receipt' element={<Delete_Receipt />}/>
+
+          {/* PayRoll */}
+            {/* Master */}
+            <Route path='/Department' element={<Department />}/>
+            <Route path='/Department2' element={<Department2 />}/>
+            <Route path='/Designation' element={<Designation />}/>
+            <Route path='/Designation2' element={<Designation2 />}/>
+            <Route path='/Allowance-Deducation' element={<Allowance_Deducation />}/>
+            <Route path='/Allowance-Deducation2' element={<Allowance_Deducation2 />}/>
+            <Route path='/Event' element={<Event_Master />}/>
+            <Route path='/Event2' element={<Event_Master2 />}/>
+            <Route path='/Shift' element={<Shift />}/>
+
+
         </Route>
       </Routes>
     </BrowserRouter> 
