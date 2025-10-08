@@ -13,7 +13,7 @@ function Allowance_Deducation2() {
     return (
         <div className="w-full h-full bg-white flex flex-col px-4 py-2">
             <div className="flex justify-between items-center gap-x-4 mb-5">
-                <Heading label={"Designation Master"} style={"text-[22px] sm:text-3xl"} />
+                <Heading label={"Allowance Deducation Master"} style={"text-[22px] sm:text-3xl"} />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-5 w-full">

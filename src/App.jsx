@@ -120,6 +120,15 @@ import Allowance_Deducation2 from './Pages/PayRoll/Master/Allowance_Deducation2'
 import Event_Master from './Pages/PayRoll/Master/Event_Master'
 import Event_Master2 from './Pages/PayRoll/Master/Event_Master2'
 import Shift from './Pages/PayRoll/Master/Shift'
+import Allowance_Parameter from './Pages/PayRoll/Master/Allowance_Parameter'
+import Allowance_Parameter2 from './Pages/PayRoll/Master/Allowance_Parameter2'
+import Shift2 from './Pages/PayRoll/Master/Shift2'
+import Employee from './Pages/PayRoll/Employee/Employee'
+import Employee2 from './Pages/PayRoll/Employee/Employee2'
+import Employee_Salary from './Pages/PayRoll/Employee/Employee_Salary'
+import Employee_Salary2 from './Pages/PayRoll/Employee/Employee_Salary2'
+import Manage_Attendance from './Pages/PayRoll/Employee/Manage_Attendance'
+import Update_Attendance from './Pages/PayRoll/Employee/Update_Attendance'
 
 function App() {
  
@@ -269,6 +278,16 @@ function App() {
             <Route path='/Event' element={<Event_Master />}/>
             <Route path='/Event2' element={<Event_Master2 />}/>
             <Route path='/Shift' element={<Shift />}/>
+            <Route path='/Shift2' element={<Shift2 />}/>
+            <Route path='/Allowance-Parameter' element={<Allowance_Parameter />}/>
+            <Route path='/Allowance-Parameter2' element={<Allowance_Parameter2 />}/>
+            {/* Employee */}
+            <Route path='/Employee' element={<Employee />}/>
+            <Route path='/Employee2' element={<Employee2 />}/>
+            <Route path='/Employee-Salary' element={<Employee_Salary />}/>
+            <Route path='/Employee-Salary2' element={<Employee_Salary2 />}/>
+            <Route path='/Manage-Attendance' element={<Manage_Attendance />}/>
+            <Route path='/Update-Attendance' element={<Update_Attendance />}/>
 
 
         </Route>

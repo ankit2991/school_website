@@ -1,4 +1,3 @@
-
 import React from 'react'
 import Heading from '../../../Components/Page_Forms/Heading';
 import Buttons from '../../../Components/Page_Forms/Buttons';
@@ -7,29 +6,30 @@ import FormInput from '../../../Components/Page_Forms/FormInput';
 import Table from '../../../Components/Page_Forms/Table';
 
 
-function Shift() {
+function Employee_Salary() {
     const navigate = useNavigate()
     const columns = [
         { header: "Name", shortHeader: "Name", accessor: "name" },
+        { header: "Effect Date", shortHeader: "Effect Date", accessor: "date" },
     ]
     const data = [
-        { id: 1,  name: "Morning", },
-        { id: 2,  name: "Evening", },    
+        { id: 1, name: "Harsh", date:"01-Oct-2023", },
+        { id: 2, name: "Purav", date:"02-Jun-2022", },    
     ];
 
     return (
         <div className="w-full h-full bg-white flex flex-col px-4 py-2">
             <div className="flex justify-between items-center gap-x-4 mb-5">
-                <Heading label={"Shift Master"} style={"text-[22px] sm:text-3xl"} />
-                <Buttons click={() => navigate("/Shift2")} label={"Add"} style='whitespace-nowrap h-10'/>                    
+                <Heading label={"Employee Basic Salary Master"} style={"text-[22px] sm:text-3xl"} />
+                <Buttons click={() => navigate("/Employee-Salary2")} label={"Add"} style='whitespace-nowrap h-10'/>                    
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5 w-full">
-                <FormInput label={"Shift"} placeholder={"Enter Shift Name"} />
+                <FormInput label={"Employee Name"} placeholder={"Enter Employee Name"} />
             </div>
             
             <div className="flex justify-end">
-                <Buttons click={() => navigate("/Shift2")} label={"Search"} />                    
+                <Buttons click={() => navigate("/Employee-Salary2")} label={"Search"} />                    
             </div>
             
             <div className="mt-5">
@@ -47,4 +47,4 @@ function Shift() {
     )
 }
 
-export default Shift
+export default Employee_Salary
