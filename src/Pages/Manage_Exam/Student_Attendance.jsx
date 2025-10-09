@@ -10,8 +10,8 @@ import FaceUploader from "../../Components/Page_Forms/FaceUploader";
 import CheckBox from "../../Components/Page_Forms/CheckBox";
 
 function Student_Attendance() {
-     const  [agree, setAgree] = useState(false)
-     const  [sure, setSure] = useState(false)
+  const  [agree, setAgree] = useState(false)
+  const  [sure, setSure] = useState(false)
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -101,7 +101,7 @@ function Student_Attendance() {
           <FormInput label={"Attendance Number"} placeholder={"Enter Attendance No."} />
           <CheckBox label={"Copy to all Student"} labelClass='text-[20px] md:mt-8' checkstyle={"md:mt-8"} name={""} 
             checked={sure} onChange={(e) => setSure(e.target.checked)}
-        />
+          />
         </div>
        
         )}

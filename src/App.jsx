@@ -40,16 +40,18 @@ import Hostel_Provider from './Pages/Hostel_Master/Hostel_Provider'
 import Hostel_Provider2 from './Pages/Hostel_Master/Hostel_Provider2'
 import Assign_Hostel from './Pages/Hostel_Master/Assign_Hostel'
 import Assign_Hostel2 from './Pages/Hostel_Master/Assign_Hostel2'
-import Subject from './Pages/Manage_Exam/Subject'
-import Grade from './Pages/Manage_Exam/Grade'
-import Exam_Type from './Pages/Manage_Exam/Exam_Type'
-import Exam from './Pages/Manage_Exam/Exam'
-import Assign_Roll_No from './Pages/Manage_Exam/Assign_Roll_No'
-import Exam_Schedule from './Pages/Manage_Exam/Exam_Schedule'
-import Exam_Schedule2 from './Pages/Manage_Exam/Exam_Schedule2'
-import Student_Summary2 from './Pages/Student_Master/Student_Summary2'
-import Student_Details from './Pages/Student_Master/Student_Details'
+import Subject from './Pages/Manage_Exam/Subject/Subject'
+import Grade from './Pages/Manage_Exam/Subject/Grade'
+import Exam_Type from './Pages/Manage_Exam/Exam/Exam_Type'
+import Exam from './Pages/Manage_Exam/Exam/Exam'
+import Assign_Roll_No from './Pages/Manage_Exam/Exam/Assign_Roll_No'
+import Exam_Schedule from './Pages/Manage_Exam/Exam/Exam_Schedule'
+import Exam_Schedule2 from './Pages/Manage_Exam/Exam/Exam_Schedule2'
+import Assign_Exam_Hole from './Pages/Manage_Exam/Exam/Assign_Exam_Hole'
 import Student_Attendance from './Pages/Manage_Exam/Student_Attendance'
+
+
+import Student_Summary2 from './Pages/Student_Master/Student_Summary2'
 import TC from './Pages/TC/TC'
 import TC2 from './Pages/TC/TC2'
 import Event_SMS from './Pages/Utility/Event_SMS'
@@ -129,6 +131,16 @@ import Employee_Salary from './Pages/PayRoll/Employee/Employee_Salary'
 import Employee_Salary2 from './Pages/PayRoll/Employee/Employee_Salary2'
 import Manage_Attendance from './Pages/PayRoll/Employee/Manage_Attendance'
 import Update_Attendance from './Pages/PayRoll/Employee/Update_Attendance'
+import Get_Machine from './Pages/PayRoll/Employee/Get_Machine'
+import Salary_Process from './Pages/PayRoll/Transaction/Salary_Process'
+import Employee_Detail from './Pages/PayRoll/Report/Employee_Detail'
+import Employee_Attendance_Detail from './Pages/PayRoll/Report/Employee_Attendance_Detail'
+import Month_Wise_Employee_Attendance_Detail from './Pages/PayRoll/Report/Month_Wise_Employee_Attendance_Detail'
+import Employee_Salary_Detail from './Pages/PayRoll/Report/Employee_Salary_Detail'
+import Event_Detail from './Pages/PayRoll/Report/Event_Detail'
+import Marks_Entry from './Pages/Manage_Exam/Marks_Entry'
+import Marks_entry2 from './Pages/Manage_Exam/Marks_entry2'
+
 
 function App() {
  
@@ -147,7 +159,6 @@ function App() {
           <Route path='/AddSibling' element={<Add_Sibling2 />}/>
           <Route path='/Summary' element={<Student_Summary />}/>
           <Route path='/Student-Summary' element={<Student_Summary2 />}/>
-          <Route path='/Student-details' element={<Student_Details />}/>
 
           {/* {Account Master} */}
           <Route path='/Addmission' element={<Addmission_Fee_Receipt />}/>
@@ -185,14 +196,19 @@ function App() {
           <Route path='/Assign-Hostel' element={<Assign_Hostel2 />}/>
 
           {/* {Manage Exam} */}
-          <Route path='/Subject' element={<Subject />}/>
-          <Route path='/Grade' element={<Grade />}/>
-          <Route path='/Exam-Type' element={<Exam_Type />}/>
-          <Route path='/Exam' element={<Exam />}/>
-          <Route path='/Assign-Roll' element={<Assign_Roll_No />}/>
-          <Route path='/Schedule' element={<Exam_Schedule />}/>
-          <Route path='/Exam-Schedule' element={<Exam_Schedule2 />}/>
+          {/* Subject */}
+            <Route path='/Subject' element={<Subject />}/>
+            <Route path='/Grade' element={<Grade />}/>
+          {/* Exam */}
+            <Route path='/Exam-Type' element={<Exam_Type />}/>
+            <Route path='/Exam' element={<Exam />}/>
+            <Route path='/Assign-Roll' element={<Assign_Roll_No />}/>
+            <Route path='/Schedule' element={<Exam_Schedule />}/>
+            <Route path='/Exam-Schedule' element={<Exam_Schedule2 />}/>
+            <Route path='/Assign-Exam-Hole' element={<Assign_Exam_Hole />}/>
           <Route path='/Student-Attendance' element={<Student_Attendance />}/>
+          <Route path='/Marks-Entry' element={<Marks_Entry />}/>
+          <Route path='/Marks-Entry2' element={<Marks_entry2 />}/>
 
           {/* TC */}
           <Route path='/TC' element={<TC />}/>
@@ -288,6 +304,15 @@ function App() {
             <Route path='/Employee-Salary2' element={<Employee_Salary2 />}/>
             <Route path='/Manage-Attendance' element={<Manage_Attendance />}/>
             <Route path='/Update-Attendance' element={<Update_Attendance />}/>
+            <Route path='/Get-Machine' element={<Get_Machine />}/>
+            {/* Transection */}
+            <Route path='/Salary-Process' element={<Salary_Process />}/>
+            {/* Report */}
+            <Route path='/Employee-Detail' element={<Employee_Detail />}/>
+            <Route path='/Employee-Attendance-Detail' element={<Employee_Attendance_Detail />}/>
+            <Route path='/Month-Wise-Employee-Attendance-Detail' element={<Month_Wise_Employee_Attendance_Detail />}/>
+            <Route path='/Employee-Salary-Detail' element={<Employee_Salary_Detail />}/>
+            <Route path='/Event-Detail' element={<Event_Detail />}/>
 
 
         </Route>

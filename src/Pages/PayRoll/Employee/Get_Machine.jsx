@@ -7,6 +7,7 @@ import Heading2 from '../../../Components/Page_Forms/Heading2'
 import FaceUploader from '../../../Components/Page_Forms/FaceUploader'
 import CheckBox from '../../../Components/Page_Forms/CheckBox'
 import { useNavigate } from 'react-router-dom'
+import Table from '../../../Components/Page_Forms/Table'
 
 
 function Get_Machine() {
@@ -26,7 +27,7 @@ function Get_Machine() {
         <div className='w-full h-full flex flex-col px-4 py-2 bg-white'>
             <Heading label={"Receive Data From Attendance Machine"} style={"text-[22px] sm:text-3xl"}/>
             
-            <div className="flex justify-center mb-5">
+            <div className="flex justify-center mt-5 mb-5">
                 <FaceUploader />
             </div>
 

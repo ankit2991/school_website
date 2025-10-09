@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import Heading from '../../Components/Page_Forms/Heading'
-import CheckBox from '../../Components/Page_Forms/CheckBox'
-import FormInput from '../../Components/Page_Forms/FormInput'
-import Options from '../../Components/Page_Forms/Options'
-import Table from '../../Components/Page_Forms/Table'
-import Buttons from '../../Components/Page_Forms/Buttons'
+import Heading from '../../../Components/Page_Forms/Heading';
+import CheckBox from '../../../Components/Page_Forms/CheckBox';
+import Options from '../../../Components/Page_Forms/Options';
+import FormInput from '../../../Components/Page_Forms/FormInput';
+import Table from '../../../Components/Page_Forms/Table';
+import Buttons from '../../../Components/Page_Forms/Buttons';
 
 function Exam_Schedule2() {
     const  [agree, setAgree] = useState(false)

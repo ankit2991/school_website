@@ -1,0 +1,49 @@
+import React, { useState } from 'react'
+import Heading from '../../../Components/Page_Forms/Heading';
+import Buttons from '../../../Components/Page_Forms/Buttons';
+import { useNavigate } from 'react-router-dom';
+import Options from '../../../Components/Page_Forms/Options';
+import FormInput from '../../../Components/Page_Forms/FormInput'
+import Table from '../../../Components/Page_Forms/Table';
+
+function Event_Detail() {
+    const navigate = useNavigate()
+    const [agree, setAgree] = useState(false)
+    const [agree2, setAgree2] = useState(false)
+    const [rowDetailOpen, setRowDetailOpen] = useState(false); // ✅ track overlay open/close
+    const columns = [
+        { header: "Discription", shortHeader: "Discription", accessor: "time" },
+        { header: "Date From", shortHeader: "Date From", accessor: "login" },
+        { header: "Date To", shortHeader: "Date To", accessor: "logout" },
+        { header: "Holiday", shortHeader: "Holiday", accessor: "tot" },
+    ]
+    const data = [
+        { id: 1, time:"01-sep-2025", login:"10:00 A.M.", logout:"07:00 P.M.", tot:"09 Hours", day:"Thrusday" },
+        { id: 2, time:"01-sep-2025", login:"10:00 A.M.", logout:"07:00 P.M.", tot:"09 Hours", day:"Thrusday" },
+    ];
+        return (
+        <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+            <div className="flex justify-between items-center gap-x-4 mb-5">
+                <Heading label={"Employee Salary Detail"} style={"text-[22px] sm:text-3xl"} />
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 mb-5 w-full">
+                <Options label={"Month"} optionMsg="Select Month" options={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]} />
+                <Options label={"Year"} optionMsg="Select Year" options={["2022", "2023", "2024", "2025"]} />
+            </div>
+            
+            <div className="flex justify-end mb-5">
+                <Buttons click={() => navigate("/")} label={"Search"} />
+            </div>
+
+            <Table columns={columns} data={data} onRowSelect={() => {}} disableFloatingRow={false} onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)} />
+
+            <div className="flex justify-between sm:justify-end space-x-0 sm:space-x-10 pt-2 mt-5">
+                <Buttons label={"Clear"}/>
+                <Buttons click={() => navigate("/")} label={"Print"} />
+            </div>
+        </div>
+    )
+}
+
+export default Event_Detail

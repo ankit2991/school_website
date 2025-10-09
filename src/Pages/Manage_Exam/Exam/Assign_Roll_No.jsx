@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import Heading from '../../Components/Page_Forms/Heading'
-import Options from '../../Components/Page_Forms/Options'
-import FormInput from '../../Components/Page_Forms/FormInput'
-import CheckBox from '../../Components/Page_Forms/CheckBox'
-import Buttons from '../../Components/Page_Forms/Buttons'
-import { useNavigate } from 'react-router-dom'
-import Table from '../../Components/Page_Forms/Table'
+import Heading from '../../../Components/Page_Forms/Heading';
+import Options from '../../../Components/Page_Forms/Options';
+import FormInput from '../../../Components/Page_Forms/FormInput';
+import CheckBox from '../../../Components/Page_Forms/CheckBox';
+import Buttons from '../../../Components/Page_Forms/Buttons';
+import { useNavigate } from 'react-router-dom';
+import Table from '../../../Components/Page_Forms/Table';
 
 function Assign_Roll_No() {    
     const navigate = useNavigate()

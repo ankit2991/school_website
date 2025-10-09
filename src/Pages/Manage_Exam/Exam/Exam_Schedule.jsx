@@ -1,10 +1,9 @@
 import React from 'react'
-import Heading from '../../Components/Page_Forms/Heading'
-import Buttons from '../../Components/Page_Forms/Buttons'
+import Heading from '../../../Components/Page_Forms/Heading';
+import Buttons from '../../../Components/Page_Forms/Buttons';
 import { useNavigate } from 'react-router-dom';
-import Options from '../../Components/Page_Forms/Options';
-import FormInput from '../../Components/Page_Forms/FormInput'
-import Table from '../../Components/Page_Forms/Table';
+import Options from '../../../Components/Page_Forms/Options';
+import Table from '../../../Components/Page_Forms/Table';
 
 function Exam_Schedule() {
     const navigate = useNavigate()
