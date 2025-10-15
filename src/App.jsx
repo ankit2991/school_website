@@ -3,6 +3,7 @@ import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from './Components/Layout'
 import Login from './Pages/Login/Login'
+import Selection from './Pages/Login/Selection'
 import Home from './Pages/Home/Home'
 import Enquiry from './Pages/Student_Master/Enquiry'
 import Add_Enquiry from './Pages/Student_Master/Add_Enquiry'
@@ -147,7 +148,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-      < Route index element={<Login/>}/>
+          {/* Login */}
+          < Route index element={<Login />}/>
+          < Route path='/Selection' element={<Selection />}/>
+          
           {/* {Student Master} */}
           <Route path='/' element={<Layout/>}>
           <Route path='/Home' element={<Home />}/>

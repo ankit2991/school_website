@@ -83,7 +83,7 @@ import { useNavigate } from "react-router-dom";
 function Login() {
   const navigate = useNavigate();
   const handlelogin = () => {
-    navigate("/Home");
+    navigate("/Selection");
   };
   const website = () => {
     window.open("https://systranstechnology.com/", "_blank");
