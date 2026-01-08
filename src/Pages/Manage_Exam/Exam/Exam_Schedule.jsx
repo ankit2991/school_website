@@ -16,26 +16,53 @@ function Exam_Schedule() {
   const [selectedClassId, setSelectedClassId] = useState(""); 
   const [tableData, setTableData] = useState([]); 
   const [searched, setSearched] = useState(false); 
+  const [showTable, setShowTable] = useState(false);
+
   const columns = [ { header: "Exam Name", accessor: "Name" }, ]; 
   
   // =================== SEARCH ====================== 
-  const handleSearch = async () => { 
-    if (!selectedClassId) { 
-      alert("Please select class"); 
-      return; 
-    } 
+  // const handleSearch = async () => { 
+  //   if (!selectedClassId) { 
+  //     alert("Please select class"); 
+  //     return; 
+  //   } 
     
-    try { 
-      setSearched(true); 
+  //   try { 
+  //     setSearched(true); 
       
-      const res = await getExamTimeTableList(instId, sessId, selectedClassId); 
-      setTableData(res?.Table || []); 
-    } catch (err) { 
-      console.error(err); 
-    } finally { 
-      setSearched(false); 
-    } 
-  }; 
+  //     const res = await getExamTimeTableList(instId, sessId, selectedClassId); 
+  //     setTableData(res?.Table || []); 
+  //   } catch (err) { 
+  //     console.error(err); 
+  //   } finally { 
+  //     setSearched(false); 
+  //   } 
+  // }; 
+  const handleSearch = async () => {
+  if (!selectedClassId) {
+    alert("Please select class");
+    return;
+  }
+
+  try {
+    setSearched(true);
+    setShowTable(false); // hide before new search
+
+    const res = await getExamTimeTableList(
+      instId,
+      sessId,
+      selectedClassId
+    );
+
+    setTableData(res?.Table || []);
+    setShowTable(true); // show after search
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setSearched(false);
+  }
+};
+
   
   return ( 
     <div className="w-full h-full bg-white px-4 py-2"> 
@@ -61,7 +88,7 @@ function Exam_Schedule() {
           label="Search" click={handleSearch} 
         /> 
       </div> 
-      
+      {showTable && (
       <div className="mt-5"> 
         <Table 
           columns={columns} data={tableData} 
@@ -103,6 +130,7 @@ function Exam_Schedule() {
           )} 
         /> 
       </div> 
+      )}
     </div> 
   ); 
 } 

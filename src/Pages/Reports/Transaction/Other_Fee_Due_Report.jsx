@@ -251,7 +251,7 @@ const handleClear = () => {
 
       <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5">
         <Buttons click={""} label={"Clear"} />
-        <Buttons click={""} label={"Summary Print"} />
+        <Buttons label="Summary Print" click={() => { window.open("/pdf/Summary.pdf", "_blank"); }}  />
       </div>
 
       {/* ✅ Dynamic div for spacing */}

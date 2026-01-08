@@ -217,12 +217,9 @@ function Transport_Due_Report() {
 
       
       <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5"> 
-        <Buttons 
-          click={""} label={"Summary Print"} 
-        /> 
-        <Buttons 
-          click={""} label={"Print"} 
-        /> 
+        
+        <Buttons label="Summary Print" click={() => { window.open("/pdf/4TransportReportViewer.pdf", "_blank"); }}  />
+        <Buttons label="Print" click={() => { window.open("/pdf/4TransportReportViewer.pdf", "_blank"); }}  />
       </div> 
       
       {/* ✅ Dynamic div for spacing */} 

@@ -106,7 +106,10 @@ function Exam_Report() {
     <div className="w-full h-full bg-white flex flex-col px-4 py-2">
       <div className="flex justify-between items-center gap-x-4 mb-5">
         <Heading label={"Exam Report"} />
-        <Buttons click={""} label={"Print"} style='whitespace-nowrap h-10' />
+        <Buttons 
+          label="Print" 
+          click={() => { window.open("/pdf/1EnqReportViewer.pdf", "_blank"); }} 
+         style="whitespace-nowrap h-10" /> 
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-3 mb-5 w-full">
@@ -154,10 +157,6 @@ function Exam_Report() {
         onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)}
       />
 
-      <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5">
-        <Buttons click={""} label={"Summary Print"} />
-        <Buttons click={""} label={"Print"} />
-      </div>
 
       {rowDetailOpen && window.innerWidth < 768 && <div className='h-140'></div>}
     </div>

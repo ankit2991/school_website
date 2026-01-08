@@ -310,6 +310,8 @@ function Student_Attendance() {
   const instId = localStorage.getItem("InstituteID"); 
     const sessId = localStorage.getItem("SessionID"); 
     const [tableData, setTableData] = useState([]); 
+    const [showResult, setShowResult] = useState(false);
+
   const navigate = useNavigate();
 
   const [selectedStudent, setSelectedStudent] = useState(null);
@@ -368,28 +370,61 @@ function Student_Attendance() {
 
 
       // =================== STUDENT ATTENDANCE LIST ====================== 
-      const handleSearch = async () => { 
-        if (!selectedMonthId && !selectedClassId && !selectedExamId) { 
-          alert("Please select class"); 
-          return; 
-        } 
+      // const handleSearch = async () => { 
+      //   if (!selectedMonthId && !selectedClassId && !selectedExamId) { 
+      //     alert("Please select class"); 
+      //     return; 
+      //   } 
         
-        try { 
-          setSearched(true); 
+      //   try { 
+      //     setSearched(true); 
           
-          const res = await getStudentAttList(selectedMonthId, sessId, selectedClassId, selectedExamId); 
+      //     const res = await getStudentAttList(selectedMonthId, sessId, selectedClassId, selectedExamId); 
           
-          if (res?.Table) {              
-            setTableData(res.Table); 
-          } else { 
-            setTableData([]); 
-          } 
-        } catch (error) { 
-          console.error("Student Attendance API Error:", error); 
-        } finally { 
-          setSearched(false); 
-        } 
-      }; 
+      //     if (res?.Table) {              
+      //       setTableData(res.Table); 
+      //     } else { 
+      //       setTableData([]); 
+      //     } 
+      //   } catch (error) { 
+      //     console.error("Student Attendance API Error:", error); 
+      //   } finally { 
+      //     setSearched(false); 
+      //   } 
+      // }; 
+
+      const handleSearch = async () => {
+  if (!selectedMonthId || !selectedClassId || !selectedExamId) {
+    alert("Please select Class, Exam and Month");
+    return;
+  }
+
+  try {
+    setSearched(true);
+    setShowResult(false); // hide before new search
+
+    const res = await getStudentAttList(
+      selectedMonthId,
+      sessId,
+      selectedClassId,
+      selectedExamId
+    );
+
+    if (res?.Table && res.Table.length > 0) {
+      setTableData(res.Table);
+      setShowResult(true); // ✅ SHOW section
+    } else {
+      setTableData([]);
+      setShowResult(false); // ❌ hide if no data
+    }
+  } catch (error) {
+    console.error("Student Attendance API Error:", error);
+    setShowResult(false);
+  } finally {
+    setSearched(false);
+  }
+};
+
 
 
 
@@ -677,29 +712,16 @@ const commitCurrentStudent = () => {
       </div>
 
       {/* --- LARGE SCREENS --- */}
-      <div className="flex flex-col lg:flex-row gap-6 mb-5 w-full">
+      {/* <div className="flex flex-col lg:flex-row gap-6 mb-5 w-full"> */}
         {/* Left Table */}
-        <div className="flex-[2]">
+        {/* <div className="flex-[2]">
           <Table columns={columns} data={tableDisplayData} onRowClick={handleRowClick} />
-        </div>
+        </div> */}
 
         {/* Right Form Section */}
-        <div className="flex-[1]">
+        {/* <div className="flex-[1]">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5 w-full">
-            {/* <FormInput
-              label={"Student Name"}
-              placeholder={"Enter Student Name"}
-            />
-            <FormInput label={"Env. No."} placeholder={"Enter Env. No."} />
-            <FormInput label={"Roll No."} placeholder={"Enter Roll No."} />
-            <FormInput
-              label={"Total Attendance"}
-              placeholder={"Enter Total Attendance"}
-            />
-            <FormInput
-              label={"Attendance Number"}
-              placeholder={"Enter Attendance No."}
-            /> */}
+          
             <FormInput
   label="Student Name"
   placeholder="Enter Student Name"
@@ -719,17 +741,7 @@ const commitCurrentStudent = () => {
 />
 
  <div className="flex flex-col flex-1">
-          {/* <FormInput
-  label="Total Attendance"
-  placeholder="Enter Total Attendance"
-  value={selectedStudent?.TotalAtt || ""}
-  onChange={(e) =>
-    setSelectedStudent((prev) => ({
-      ...prev,
-      TotalAtt: e.target.value,
-    }))
-  }
-/> */}
+ 
 
 <FormInput
   label="Total Attendance"
@@ -752,17 +764,7 @@ const commitCurrentStudent = () => {
             /> 
             </div>
 
-{/* <FormInput
-  label="Attendance Number"
-  placeholder="Enter Attendance No."
-  value={selectedStudent?.NoOfAtt || ""}
-  onChange={(e) =>
-    setSelectedStudent((prev) => ({
-      ...prev,
-      NoOfAtt: e.target.value,
-    }))
-  }
-/> */}
+
 <FormInput
   label="Attendance Number"
   value={selectedStudent?.NoOfAtt || ""}
@@ -777,29 +779,7 @@ const commitCurrentStudent = () => {
           </div>
 
           <div className="flex justify-between space-x-0 sm:space-x-10 pt-2 mt-5">
-            {/* <Buttons
-  label="Previous"
-  click={() => {
-    if (selectedRowIndex === null || selectedRowIndex === 0) return;
-
-    // 🔹 Save current edited data into table
-    setTableData((prev) => {
-      const updated = [...prev];
-      // updated[selectedRowIndex] = selectedStudent;
-      updated[selectedRowIndex] = {
-  ...updated[selectedRowIndex],   // keep old data
-  ...selectedStudent              // overwrite only changed fields
-};
-      return updated;
-    });
-
-    // 🔹 Move to previous row
-    const prevIndex = selectedRowIndex - 1;
-
-    setSelectedStudent({ ...tableData[prevIndex] });
-    setSelectedRowIndex(prevIndex);
-  }}
-/> */}
+          
 
 <Buttons
   label="Previous"
@@ -813,7 +793,7 @@ const commitCurrentStudent = () => {
     setSelectedStudent({ ...tableData[prevIndex] });
     setSelectedRowIndex(prevIndex);
   }}
-/>
+/> */}
 
 
 
@@ -850,6 +830,150 @@ const commitCurrentStudent = () => {
   }}
 /> */}
 
+{/* <Buttons
+  label="Next"
+  click={() => {
+    if (selectedRowIndex === null) return;
+
+    // 🔹 Commit before moving
+    commitCurrentStudent();
+
+    const nextIndex = selectedRowIndex + 1;
+    if (nextIndex < tableData.length) {
+      setSelectedStudent({ ...tableData[nextIndex] });
+      setSelectedRowIndex(nextIndex);
+    }
+  }}
+/>
+
+
+
+
+
+
+          </div>
+        </div>
+      </div> */}
+
+{/*       
+      <CheckBox
+        label={"Send SMS all Student"}
+        labelClass="text-[20px] mt-5"
+        checkstyle={"mt-5"}
+        name={""}
+        checked={agree}
+        onChange={(e) => setAgree(e.target.checked)}
+      />
+
+      <FormInput
+        label={"Message"}
+        placeholder={"Enter Message"}
+        labelStyle="mt-2"
+      />
+
+      <div className="flex justify-between sm:justify-end space-x-0 sm:space-x-10 pt-2 mt-5">
+        <Buttons label={"Cancel"} />
+        
+        <Buttons label={"Save"} click={handleSave} />
+      </div> */}
+
+      {showResult && (
+  <>
+    {/* --- LARGE SCREENS --- */}
+    <div className="flex flex-col lg:flex-row gap-6 mb-5 w-full">
+      {/* Left Table */}
+      <div className="flex-[2]">
+        <Table
+          columns={columns}
+          data={tableDisplayData}
+          onRowClick={handleRowClick}
+        />
+      </div>
+
+      {/* Right Form Section */}
+      <div className="flex-[1]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5 w-full">
+          
+            <FormInput
+  label="Student Name"
+  placeholder="Enter Student Name"
+  value={selectedStudent?.Name || ""}
+/>
+
+<FormInput
+  label="Env. No."
+  placeholder="Enter Env. No."
+  value={selectedStudent?.EnvNo || ""}
+/>
+
+<FormInput
+  label="Roll No."
+  placeholder="Enter Roll No."
+  value={selectedStudent?.RollNo || ""}
+/>
+
+ <div className="flex flex-col flex-1">
+ 
+
+<FormInput
+  label="Total Attendance"
+  value={selectedStudent?.TotalAtt || ""}
+  onChange={(e) => {
+    const value = e.target.value;
+    setSelectedStudent((prev) => ({
+      ...prev,
+      TotalAtt: value,
+    }));
+  }}
+/>
+          <CheckBox
+              label={"Copy to all Student"}
+              labelClass=" mt-2"
+              checkstyle={"mt-2"}
+              name={""}
+              checked={sure}
+              onChange={(e) => handleCopyToAll(e.target.checked)}
+            /> 
+            </div>
+
+
+<FormInput
+  label="Attendance Number"
+  value={selectedStudent?.NoOfAtt || ""}
+  onChange={(e) => {
+    const value = e.target.value;
+    setSelectedStudent((prev) => ({
+      ...prev,
+      NoOfAtt: value,
+    }));
+  }}
+/>
+          </div>
+
+          <div className="flex justify-between space-x-0 sm:space-x-10 pt-2 mt-5">
+          
+
+<Buttons
+  label="Previous"
+  click={() => {
+    if (selectedRowIndex === null || selectedRowIndex === 0) return;
+
+    // 🔹 Commit before moving
+    commitCurrentStudent();
+
+    const prevIndex = selectedRowIndex - 1;
+    setSelectedStudent({ ...tableData[prevIndex] });
+    setSelectedRowIndex(prevIndex);
+  }}
+/>
+
+
+
+
+
+
+     
+
 <Buttons
   label="Next"
   click={() => {
@@ -875,27 +999,28 @@ const commitCurrentStudent = () => {
         </div>
       </div>
 
-      
-      <CheckBox
-        label={"Send SMS all Student"}
-        labelClass="text-[20px] mt-5"
-        checkstyle={"mt-5"}
-        name={""}
-        checked={agree}
-        onChange={(e) => setAgree(e.target.checked)}
-      />
 
-      <FormInput
-        label={"Message"}
-        placeholder={"Enter Message"}
-        labelStyle="mt-2"
-      />
+    <CheckBox
+      label={"Send SMS all Student"}
+      labelClass="text-[20px] mt-5"
+      checkstyle={"mt-5"}
+      checked={agree}
+      onChange={(e) => setAgree(e.target.checked)}
+    />
 
-      <div className="flex justify-between sm:justify-end space-x-0 sm:space-x-10 pt-2 mt-5">
-        <Buttons label={"Cancel"} />
-        {/* <Buttons label={"Save"} /> */}
-        <Buttons label={"Save"} click={handleSave} />
-      </div>
+    <FormInput
+      label={"Message"}
+      placeholder={"Enter Message"}
+      labelStyle="mt-2"
+    />
+
+    <div className="flex justify-between sm:justify-end space-x-0 sm:space-x-10 pt-2 mt-5">
+      <Buttons label={"Cancel"} />
+      <Buttons label={"Save"} click={handleSave} />
+    </div>
+  </>
+)}
+
     </div>
   );
 }

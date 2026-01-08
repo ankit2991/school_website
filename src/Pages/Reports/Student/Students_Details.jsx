@@ -266,11 +266,10 @@ const toggleRow = (id) => {
                label={"Student Details"}
                style={"text-[22px] sm:text-3xl"}
             />
-            <Buttons
-               click={() => navigate("")}
-               label={"Print"}
-               style="whitespace-nowrap h-10"
-            />
+            <Buttons 
+          label="Print" 
+          click={() => { window.open("/pdf/2AddReportViewer.pdf", "_blank"); }} 
+        />
          </div>
 
          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 mb-5 w-full">

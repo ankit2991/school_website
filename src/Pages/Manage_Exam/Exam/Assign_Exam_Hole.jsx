@@ -612,6 +612,8 @@ function Assign_Exam_Hole() {
   const [filteredData, setFilteredData] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState([]);
+  const [showTable, setShowTable] = useState(false);
+
 
   const columns = [ 
     { 
@@ -657,41 +659,92 @@ function Assign_Exam_Hole() {
   }, [selectedStudents, filteredData]); 
   
   // =================STUDENT ROLL LIST ON SEARCH BUTTON ================= 
-  const handleSearch = async () => { 
-    if (!selectedClassId) return; 
+  // const handleSearch = async () => { 
+  //   if (!selectedClassId) return; 
     
-    try { 
-      setSearched(true); 
-      const res = await getStudentRollList(instId, sessId, selectedClassId); 
-      const apiData = res?.Table?.map((item) => ({ 
-        id: item.Id, roll: item.RollNo, serial: item.EnrollmentNo, 
-        name: item.Name, fname: item.FatherName, dob: item.DOB, 
-        fno: item.FMobileNo, 
-      })) || []; 
+  //   try { 
+  //     setSearched(true); 
+  //     const res = await getStudentRollList(instId, sessId, selectedClassId); 
+  //     const apiData = res?.Table?.map((item) => ({ 
+  //       id: item.Id, roll: item.RollNo, serial: item.EnrollmentNo, 
+  //       name: item.Name, fname: item.FatherName, dob: item.DOB, 
+  //       fno: item.FMobileNo, 
+  //     })) || []; 
       
-      setTableData(apiData); 
-      // =================== FILTRATION WORK ====================== 
-      if (!searchText.trim() || !searchBy) { 
-        setFilteredData(apiData); 
-        return; 
-      } 
+  //     setTableData(apiData); 
+  //     // =================== FILTRATION WORK ====================== 
+  //     if (!searchText.trim() || !searchBy) { 
+  //       setFilteredData(apiData); 
+  //       return; 
+  //     } 
       
-      const lower = searchText.toLowerCase(); 
-      const filtered = apiData.filter((row) => { 
-        if (searchBy === "Name") { 
-          return row.name.toLowerCase().includes(lower); 
-        } 
-        if (searchBy === "Serial No.") { 
-          return String(row.serial).includes(searchText); 
-        } 
-        return true; 
-      }); 
+  //     const lower = searchText.toLowerCase(); 
+  //     const filtered = apiData.filter((row) => { 
+  //       if (searchBy === "Name") { 
+  //         return row.name.toLowerCase().includes(lower); 
+  //       } 
+  //       if (searchBy === "Serial No.") { 
+  //         return String(row.serial).includes(searchText); 
+  //       } 
+  //       return true; 
+  //     }); 
       
-      setFilteredData(filtered); 
-    } finally { 
-      setSearched(false); 
-    } 
-  }; 
+  //     setFilteredData(filtered); 
+  //   } finally { 
+  //     setSearched(false); 
+  //   } 
+  // }; 
+
+  const handleSearch = async () => {
+  if (!selectedClassId) return;
+
+  try {
+    setSearched(true);
+    setShowTable(false); // hide table before new search
+
+    const res = await getStudentRollList(
+      instId,
+      sessId,
+      selectedClassId
+    );
+
+    const apiData =
+      res?.Table?.map((item) => ({
+        id: item.Id,
+        roll: item.RollNo,
+        serial: item.EnrollmentNo,
+        name: item.Name,
+        fname: item.FatherName,
+        dob: item.DOB,
+        fno: item.FMobileNo,
+      })) || [];
+
+    setTableData(apiData);
+
+    // ---------- FILTER ----------
+    if (!searchText.trim() || !searchBy) {
+      setFilteredData(apiData);
+    } else {
+      const lower = searchText.toLowerCase();
+      const filtered = apiData.filter((row) => {
+        if (searchBy === "Name") {
+          return row.name.toLowerCase().includes(lower);
+        }
+        if (searchBy === "Serial No.") {
+          return String(row.serial).includes(searchText);
+        }
+        return true;
+      });
+
+      setFilteredData(filtered);
+    }
+
+    setShowTable(true); // ✅ show table AFTER search
+  } finally {
+    setSearched(false);
+  }
+};
+
   
   // =================== ROOM LIST ====================== 
   useEffect(() => { 
@@ -768,6 +821,8 @@ function Assign_Exam_Hole() {
         <Buttons click={handleSearch} label="Search" /> 
       </div> 
       
+      {showTable && (
+        <>
       <Table 
         columns={columns} data={filteredData} 
         selectable={false} disableFloatingRow 
@@ -777,6 +832,8 @@ function Assign_Exam_Hole() {
         <Buttons label={"Clear"} click={handleClear} /> 
         <Buttons label={"Print"} /> 
       </div> 
+      </>
+      )}
       
     </div> 
   ); 

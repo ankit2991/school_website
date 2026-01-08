@@ -130,7 +130,7 @@ function Bank_Challan() {
     <div className="w-full h-full bg-white flex flex-col px-4 py-2">
       <div className="flex justify-between items-center mb-5">
         <Heading label="Bank Challan" style="text-[22px] sm:text-3xl" />
-        <Buttons label="Print Challan" click={() => navigate("")} />
+        <Buttons label="Print Challan" click={() => { window.open("/pdf/challan.pdf", "_blank"); }} />
       </div>
 
       {/* 🔽 FILTERS */}

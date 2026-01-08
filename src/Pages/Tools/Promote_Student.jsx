@@ -142,7 +142,7 @@ function Promote_Student() {
       <div className="flex justify-between items-center gap-x-4 mb-5">
         <Heading label={"Promote Student"} style={"text-[22px] sm:text-3xl"} />
         <Buttons
-          click={() => navigate("")}
+          click={() => { window.open("/pdf/1EnqReportViewer.pdf", "_blank"); }}
           label={"Print"}
           style="whitespace-nowrap h-10"
         />

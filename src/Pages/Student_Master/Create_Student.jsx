@@ -190,7 +190,7 @@ function Create_Student() {
           <Buttons
             label="Print"
             style="hidden sm:inline"
-            click={() => window.print()}
+            click={() => { window.open("/pdf/2AddReportViewer.pdf", "_blank"); }}
           />
 
           {/* Mobile icons */}
@@ -207,7 +207,7 @@ function Create_Student() {
 
           <button
             className="sm:hidden text-xl"
-            onClick={() => window.print()}
+            onClick={() => { window.open("/pdf/2AddReportViewer.pdf", "_blank"); }}
           >
             🖨️
           </button>

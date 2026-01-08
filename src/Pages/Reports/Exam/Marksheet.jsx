@@ -130,7 +130,10 @@ function Marksheet() {
 
             <div className="flex flex-col sm:flex-row sm:justify-between gap-y-6 mb-5">
                 <div className="flex justify-around sm:justify-end space-x-0 sm:space-x-10 pt-2">
-                    <Buttons label={"Print"} />
+                    <Buttons 
+          label="Print" 
+          click={() => { window.open("/pdf/marksheet.pdf", "_blank"); }} 
+         style="whitespace-nowrap h-10" />
                     <Buttons label={"Final Marks Sheet"} />
                 </div>
                 <div className="flex justify-center sm:justify-end space-x-0 sm:space-x-10 pt-2">

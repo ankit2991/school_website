@@ -187,7 +187,7 @@ function Enquiry() {
           <Buttons
             label="Print"
             style="hidden sm:inline"
-            click={() => window.print()}
+            click={() => { window.open("/pdf/1EnqReportViewer.pdf", "_blank"); }}
           />
 
           {/* Mobile icons */}
@@ -202,7 +202,7 @@ function Enquiry() {
 
           <button
             className="sm:hidden text-xl pt-2.5"
-            onClick={() => window.print()}
+            onClick={() => { window.open("/pdf/1EnqReportViewer.pdf", "_blank"); }}
           >
             🖨️
           </button>

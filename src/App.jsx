@@ -145,6 +145,7 @@ import Employee_Salary_Detail from './Pages/PayRoll/Report/Employee_Salary_Detai
 import Event_Detail from './Pages/PayRoll/Report/Event_Detail'
 import Marks_Entry from './Pages/Manage_Exam/Marks_Entry'
 import Marks_entry2 from './Pages/Manage_Exam/Marks_entry2'
+import PDF_Viewer from './Components/Page_Forms/PDF_Viewer'
 
 
 function App() {
@@ -152,6 +153,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        
+        <Route path='/PDF-Viewer' element={<PDF_Viewer />} />
+
+
+
+
           {/* Login */}
           < Route index element={<Login />}/>
           < Route path='/Selection' element={<Selection />}/>

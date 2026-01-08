@@ -31,8 +31,8 @@ function Delete_Receipt() {
     return (
         <div className="w-full h-full bg-white flex flex-col px-4 py-2">
             <div className="flex justify-between items-center gap-x-4 mb-5">
-                <Heading label={"Promote Student"} style={"text-[22px] sm:text-3xl"} />
-                <Buttons click={() => navigate("")} label={"Print"} style='whitespace-nowrap h-10'/>
+                <Heading label={"Delete Receipt"} style={"text-[22px] sm:text-3xl"} />
+                <Buttons click={() => { window.open("/pdf/6ExapenReportViewerpdf.pdf", "_blank"); }} label={"Print"} style='whitespace-nowrap h-10'/>
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-3 mb-5 w-full">

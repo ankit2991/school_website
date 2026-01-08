@@ -216,11 +216,12 @@ function Due_Report() {
       
       <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5"> 
         <Buttons 
-          click={""} label={"Summary Print"} 
+          click={() => { window.open("/pdf/feedue.pdf", "_blank"); }} label={"Summary Print"} 
         /> 
         <Buttons 
-          click={""} label={"Print"} 
-        /> 
+          label="Print" 
+          click={() => { window.open("/pdf/feedue.pdf", "_blank"); }} 
+         style="whitespace-nowrap h-10" /> 
       </div> 
       
       {/* ✅ Dynamic div for spacing */} 

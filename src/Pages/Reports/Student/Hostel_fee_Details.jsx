@@ -221,7 +221,10 @@ function Hostel_fee_Details() {
       <div className="w-full h-full bg-white flex flex-col px-4 py-2">
          <div className="flex justify-between items-center mb-5">
             <Heading label="Hostel Fee Details" />
-            <Buttons label="Print" click={() => navigate("")} />
+            <Buttons 
+          label="Print" 
+          click={() => { window.open("/pdf/5HostelReportViewer.pdf", "_blank"); }} 
+        />
          </div>
 
          <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px_1fr] gap-6 mb-5">
