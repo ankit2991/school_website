@@ -1,136 +1,55 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Heading from "../../../Components/Page_Forms/Heading";
-import Buttons from "../../../Components/Page_Forms/Buttons";
 import Options from "../../../Components/Page_Forms/Options";
 import FormInput from "../../../Components/Page_Forms/FormInput";
+import Buttons from "../../../Components/Page_Forms/Buttons";
 import Table from "../../../Components/Page_Forms/Table";
-import CheckBox from "../../../Components/Page_Forms/CheckBox";
-import { getclass } from "../../../services/api";
+import { getFeesDetails, getHostelReportDetail } from "../../../services/api";
 
 function Hostel_Stud_Details() {
-  const navigate = useNavigate();
-  const [agree, setAgree] = useState(false);
-  const [agree2, setAgree2] = useState(false);
-  const [rowDetailOpen, setRowDetailOpen] = useState(false); // ✅ track overlay open/close
-  const columns = [
-    { header: "Serial No.", shortHeader: "Serial No.", accessor: "serial" },
-    { header: "Name", shortHeader: "Name", accessor: "name" },
-    { header: "Father Name", shortHeader: "Father Name", accessor: "fname" },
-    { header: "Mobile No.", shortHeader: "Mobile No.", accessor: "fno" },
-    {
-      header: "Address",
-      shortHeader: "Address",
-      accessor: "add",
-      cellStyle:
-        "max-w-[160px] truncate sm:whitespace-normal sm:break-words sm:max-w-xs sm:line-clamp-2 md:max-w-md",
-    },
-    { header: "Class", shortHeader: "Class", accessor: "class" },
-    { header: "Room No.", shortHeader: "Room No.", accessor: "room" },
-    { header: "Join Date", shortHeader: "Join Date", accessor: "jdate" },
-    { header: "Amount", shortHeader: "Amount", accessor: "amount" },
-    { header: "Remark", shortHeader: "Remark", accessor: "mark" },
-  ];
-  const data = [
-    {
-      id: 1,
-      serial: "01",
-      name: "Ajay",
-      fname: "Rman Thakur",
-      fno: "1234567890",
-      add: "221, Shanti Nagar, Near Hanuman Mandir, Jaipur, Rajasthan – 302012",
-      class: "Nur",
-      room: "111",
-      jdate: "26-may-2024",
-      amount: "40,000",
-      mark: "",
-    },
-    {
-      id: 2,
-      serial: "02",
-      name: "Ajay",
-      fname: "Rman",
-      fno: "1234567540",
-      add: "Flat No. 14, Green Valley Apartments, Sector 21, Gandhinagar, Gujarat – 382021",
-      class: "Nur",
-      room: "111",
-      jdate: "10-Dec-2023",
-      amount: "40,000",
-      mark: "",
-    },
-    {
-      id: 3,
-      serial: "03",
-      name: "Viren",
-      fname: "Devanh Bhalla",
-      fno: "1234567890",
-      add: "3rd Floor, Lakeview Residency, Green Valley Apartments, Sector 21, Gandhinagar Whitefield, Bengaluru, Karnataka – 560066",
-      class: "Nur",
-      room: "111",
-      jdate: "03-feb-2024",
-      amount: "40,000",
-      mark: "",
-    },
-    {
-      id: 4,
-      serial: "04",
-      name: "anuj",
-      fname: "aditya",
-      fno: "1234567890",
-      add: "House No. 77, Palm Avenue, Vyttila, Kochi, Kerala – 682019",
-      class: "Nur",
-      room: "111",
-      jdate: "10-Dec-2025",
-      amount: "40,000",
-      mark: "",
-    },
-    {
-      id: 5,
-      serial: "05",
-      name: "somya",
-      fname: "Devanh",
-      fno: "1234567867",
-      add: "Plot No. 9, Palm Avenue, Vyttila, Ocean Pearl Apartments, Juhu, Near Hanuman Mandir, Jaipur, Rose Garden Society, Alkapuri, Vadodara, Gujarat – 390007",
-      class: "Nur",
-      room: "111",
-      jdate: "01-jan-2024",
-      amount: "40,000",
-      mark: "",
-    },
-  ];
-
+  /* ---------------- STATE ---------------- */
   const [classList, setClassList] = useState([]);
-  // useEffect(() => {
-  //     const instId = localStorage.getItem("InstituteID");  // ✅ Get dynamic ID
-  //     if (!instId) return;
+  const [selectedClassId, setSelectedClassId] = useState("");
 
-  //     async function fetchClasses() {
-  //         try {
-  //             const res = await getclass(instId);  // ✅ Pass selected Institute ID
-  //             setClassList(res.Table || []);
-  //         } catch (error) {
-  //             console.log("Class API Error:", error);
-  //         }
-  //     }
+  const [searchBy, setSearchBy] = useState("");
+  const [srNo, setSrNo] = useState("");
+  const [name, setName] = useState("");
 
-  //     fetchClasses();
-  // }, []);
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [rowDetailOpen, setRowDetailOpen] = useState(false);
 
+  /* ---------------- TABLE COLUMNS ---------------- */
+  const columns = [
+    { header: "Sr No.", accessor: "serial" },
+    { header: "Name", accessor: "name" },
+    { header: "Father Name", accessor: "fname" },
+    { header: "Mobile No.", accessor: "mobile" },
+    { header: "Class", accessor: "className" },
+    { header: "Room No.", accessor: "roomNo" },
+    { header: "Amount", accessor: "amount" },
+    { header: "Discount", accessor: "discount" },
+    { header: "Previous Due", accessor: "previousDue" },
+    { header: "Join Date", accessor: "joinDate" },
+  ];
+
+  /* ---------------- DATE FORMAT ---------------- */
+  const formatDotNetDate = (dotNetDate) => {
+    if (!dotNetDate) return "-";
+    const ts = Number(dotNetDate.match(/\d+/)?.[0]);
+    return ts ? new Date(ts).toLocaleDateString("en-GB") : "-";
+  };
+
+  /* ---------------- FETCH CLASS LIST ---------------- */
   useEffect(() => {
     const instId = localStorage.getItem("InstituteID");
-    if (!instId) return;
+    const sessionId = localStorage.getItem("SessionID");
 
     async function fetchClasses() {
       try {
-        const res = await getclass(instId);
-        // ✅ check API success
-        if (res?.Table?.[0]?.ResultCode === "R100") {
-          setClassList(res.Table1 || []);
-        } else {
-          setClassList([]);
-        }
-      } catch (error) {
-        console.log("Class API Error:", error);
+        const res = await getFeesDetails(instId, sessionId);
+        setClassList(res?.Table || []);
+      } catch {
         setClassList([]);
       }
     }
@@ -138,57 +57,104 @@ function Hostel_Stud_Details() {
     fetchClasses();
   }, []);
 
+  /* ---------------- SEARCH ---------------- */
+  const handleSearch = async () => {
+    const instId = localStorage.getItem("InstituteID");
+    const sessionId = localStorage.getItem("SessionID");
+
+    try {
+      setLoading(true);
+      setTableData([]);
+
+      const res = await getHostelReportDetail(
+        instId,
+        sessionId,
+        selectedClassId,
+        searchBy === "Sr. No." ? srNo : "",
+        searchBy === "Name" ? name : ""
+      );
+
+      if (Array.isArray(res?.Table)) {
+        setTableData(
+          res.Table.map((r, index) => ({
+            id: r.Id,
+            serial: r.OldSrno || index + 1,
+            name: r.Name,
+            fname: r.FatherName,
+            mobile: r.FMobileNo,
+            className: r.ClassName,
+            roomNo: r.RoomNo,
+            amount: r.Amount,
+            discount: r.HostelDiscount,
+            previousDue: r.HostelPreviousDue,
+            joinDate: formatDotNetDate(r.JoinDate),
+          }))
+        );
+      }
+    } catch (err) {
+      console.error("Hostel API Error:", err);
+      setTableData([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* ---------------- UI ---------------- */
   return (
     <div className="w-full h-full bg-white flex flex-col px-4 py-2">
-      <div className="flex justify-between mb-5">
-        <Heading label={"Hostel Student Details"} />
-        <Buttons click={() => navigate("")} label={"Print"} />
-      </div>
+      <Heading label="Hostel Student Details" />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 mb-5 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-5">
         <Options
-          label={"Class"}
-          name={""}
+          label="Class"
           optionMsg="Select Class"
-          options={classList.map((item) => item.ClassName)}
+          options={classList}
+          valueKey="Id"
+          labelKey="ClassName"
+          onChange={(e) => setSelectedClassId(e.target.value)}
         />
+
         <Options
-          label={"Options"}
-          name={""}
-          optionMsg="Select Option"
-          options={["Name", "SR. No."]}
+          label="Search By"
+          optionMsg="Select"
+          options={["Name", "Sr. No."]}
+          value={searchBy}
+          onChange={(e) => {
+            setSearchBy(e.target.value);
+            setSrNo("");
+            setName("");
+          }}
         />
-        <FormInput label={"Search By"} placeholder={"Enter name, etc."} />
+
+        {searchBy === "Sr. No." && (
+          <FormInput
+            label="Sr No"
+            value={srNo}
+            onChange={(e) => setSrNo(e.target.value)}
+          />
+        )}
+
+        {searchBy === "Name" && (
+          <FormInput
+            label="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        )}
       </div>
 
       <div className="flex justify-end mb-5">
-        <Buttons click={() => navigate("")} label={"Search"} />
+        <Buttons label="Search" click={handleSearch} />
       </div>
 
       <Table
         columns={columns}
-        data={data}
-        onRowSelect={() => {}}
-        disableFloatingRow={false}
-        onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)}
-        actions={(row) => (
-          <CheckBox
-            label={""}
-            name={""}
-            checked={agree}
-            onChange={(e) => setAgree(e.target.checked)}
-          />
-        )}
+        data={tableData}
+        loading={loading}
+        onOverlayToggle={setRowDetailOpen}
       />
 
-      <div className="flex justify-center sm:justify-end space-x-0 sm:space-x-10 mt-5">
-        <Buttons label={"Clear"} />
-      </div>
-
-      {/* ✅ Dynamic div for spacing */}
-      {rowDetailOpen && window.innerWidth < 768 && (
-        <div className="h-140"></div>
-      )}
+      {rowDetailOpen && window.innerWidth < 768 && <div className="h-140" />}
     </div>
   );
 }

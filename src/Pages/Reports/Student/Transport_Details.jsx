@@ -4,185 +4,175 @@ import Options from "../../../Components/Page_Forms/Options";
 import FormInput from "../../../Components/Page_Forms/FormInput";
 import Buttons from "../../../Components/Page_Forms/Buttons";
 import Table from "../../../Components/Page_Forms/Table";
-import { useNavigate } from "react-router-dom";
-import { getclass } from "../../../services/api";
+import { getFeesDetails, getTransportReportFee } from "../../../services/api";
 
 function Transport_Details() {
-  const navigate = useNavigate();
-  const [agree, setAgree] = useState(false);
-  const [agree2, setAgree2] = useState(false);
-  const [rowDetailOpen, setRowDetailOpen] = useState(false); // ✅ track overlay open/close
-  const columns = [
-    { header: "Serial No.", shortHeader: "Serial No.", accessor: "serial" },
-    { header: "Name", shortHeader: "Name", accessor: "name" },
-    { header: "Father Name", shortHeader: "Father Name", accessor: "fname" },
-    { header: "Mobile No.", shortHeader: "Mobile No.", accessor: "fno" },
-    { header: "Class", shortHeader: "Class", accessor: "class" },
-    { header: "Route Name", shortHeader: "Route Name", accessor: "route" },
-    { header: "Vehicle Stop", shortHeader: "Vehicle Stop", accessor: "stop" },
-    { header: "Amount", shortHeader: "Amount", accessor: "amount" },
-    { header: "Vehicle Type", shortHeader: "Vehicle Type", accessor: "type" },
-    { header: "Vehicle No.", shortHeader: "Vehicle No.", accessor: "no" },
-    { header: "Join Date", shortHeader: "Join Date", accessor: "jdate" },
-  ];
-  const data = [
-    {
-      id: 1,
-      serial: "01",
-      name: "Ajay",
-      fname: "Rman Thakur",
-      fno: "1234567890",
-      class: "Nur",
-      route: "Jal Jog Circle",
-      stop: "School",
-      amount: "40,000",
-      type: "Taxi",
-      no: "RJ 19 ED 2534",
-      jdate: "26-may-2024",
-    },
-    {
-      id: 2,
-      serial: "02",
-      name: "Ajay",
-      fname: "Rman",
-      fno: "1234567540",
-      class: "Nur",
-      route: "Shastri Nagar",
-      stop: "School",
-      amount: "40,000",
-      type: "Van",
-      no: "RJ 19 FY 7856",
-      jdate: "10-Dec-2023",
-    },
-    {
-      id: 3,
-      serial: "03",
-      name: "Viren",
-      fname: "Devanh Bhalla",
-      fno: "1234567890",
-      class: "Nur",
-      route: "Sardarpura",
-      stop: "School",
-      amount: "40,000",
-      type: "Tata Magic",
-      no: "RJ 19 SC 9078",
-      jdate: "03-feb-2024",
-    },
-    {
-      id: 4,
-      serial: "04",
-      name: "anuj",
-      fname: "aditya",
-      fno: "1234567890",
-      class: "Nur",
-      route: "Ratanada",
-      stop: "School",
-      amount: "40,000",
-      type: "Bus",
-      no: "RJ 19 RG 3244",
-      jdate: "10-Dec-2025",
-    },
-    {
-      id: 5,
-      serial: "05",
-      name: "somya",
-      fname: "Devanh",
-      fno: "1234567867",
-      class: "Nur",
-      route: "Paota",
-      stop: "School",
-      amount: "40,000",
-      type: "Taxi",
-      no: "RJ 19 HR 8654",
-      jdate: "01-jan-2024",
-    },
-  ];
-
+  /* ---------------- STATE ---------------- */
   const [classList, setClassList] = useState([]);
-  // useEffect(() => {
-  //     const instId = localStorage.getItem("InstituteID");  // ✅ Get dynamic ID
-  //     if (!instId) return;
+  const [vehicleList, setVehicleList] = useState([]);
 
-  //     async function fetchClasses() {
-  //         try {
-  //             const res = await getclass(instId);  // ✅ Pass selected Institute ID
-  //             setClassList(res.Table || []);
-  //         } catch (error) {
-  //             console.log("Class API Error:", error);
-  //         }
-  //     }
-  //     fetchClasses();
-  // }, []);
+  const [selectedClassId, setSelectedClassId] = useState("");
+  const [selectedVehicleId, setSelectedVehicleId] = useState("");
 
+  const [searchBy, setSearchBy] = useState("");
+  const [srNo, setSrNo] = useState("");
+  const [name, setName] = useState("");
+
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [rowDetailOpen, setRowDetailOpen] = useState(false);
+
+  /* ---------------- TABLE COLUMNS ---------------- */
+  const columns = [
+    { header: "Sr No.", accessor: "serial" },
+    { header: "Name", accessor: "name" },
+    { header: "Father Name", accessor: "fname" },
+    { header: "Mobile No.", accessor: "fno" },
+    { header: "Class", accessor: "class" },
+    { header: "Route Name", accessor: "route" },
+    { header: "Vehicle Stop", accessor: "stop" },
+    { header: "Amount", accessor: "amount" },
+    { header: "Vehicle Type", accessor: "type" },
+    { header: "Vehicle No.", accessor: "no" },
+    { header: "Join Date", accessor: "jdate" },
+  ];
+
+  /* ---------------- DATE FORMAT (UI ONLY) ---------------- */
+  const formatDotNetDate = (dotNetDate) => {
+    if (!dotNetDate) return "-";
+    const ts = Number(dotNetDate.match(/\d+/)?.[0]);
+    return ts ? new Date(ts).toLocaleDateString("en-GB") : "-";
+  };
+
+  /* ---------------- FETCH CLASSES & VEHICLES ---------------- */
   useEffect(() => {
     const instId = localStorage.getItem("InstituteID");
-    if (!instId) return;
-    async function fetchClasses() {
+    const sessionId = localStorage.getItem("SessionID");
+
+    async function fetchData() {
       try {
-        const res = await getclass(instId);
-        // ✅ check API success
-        if (res?.Table?.[0]?.ResultCode === "R100") {
-          setClassList(res.Table1 || []);
-        } else {
-          setClassList([]);
-        }
-      } catch (error) {
-        console.log("Class API Error:", error);
+        const res = await getFeesDetails(instId, sessionId);
+        setClassList(res.Table || []);
+        setVehicleList(res.Table3 || []);
+      } catch {
         setClassList([]);
+        setVehicleList([]);
       }
     }
 
-    fetchClasses();
+    fetchData();
   }, []);
 
+  /* ---------------- SEARCH ---------------- */
+  const handleSearch = async () => {
+    const instId = localStorage.getItem("InstituteID");
+    const sessionId = localStorage.getItem("SessionID");
+
+    try {
+      setLoading(true);
+      setTableData([]);
+
+      const res = await getTransportReportFee(
+        instId,
+        sessionId,
+        selectedClassId,
+        selectedVehicleId,
+        searchBy === "Sr. No." ? srNo : "",
+        searchBy === "Name" ? name : ""
+      );
+
+      if (Array.isArray(res?.Table)) {
+        setTableData(
+          res.Table.map((r, index) => ({
+            id: r.Id,
+            serial: r.OldSrno || index + 1,
+            name: r.Name,
+            fname: r.FatherName,
+            fno: r.FMobileNo,
+            class: r.ClassName,
+            route: r.RouteName,
+            stop: r.VehicleStop,
+            amount: r.Amount,
+            type: r.VehicleType,
+            no: r.VehicleNo,
+            jdate: formatDotNetDate(r.JoinDate),
+          }))
+        );
+      }
+    } catch (err) {
+      console.error("Transport API Error:", err);
+      setTableData([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* ---------------- UI ---------------- */
   return (
     <div className="w-full h-full bg-white flex flex-col px-4 py-2">
-      <div className="flex justify-between mb-5">
-        <Heading label={"Transport Details"} />
-      </div>
+      <Heading label="Transport Details" />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-3 mb-5 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-5">
         <Options
-          label={"Class"}
-          name={""}
+          label="Class"
           optionMsg="Select Class"
-          options={classList.map((item) => item.ClassName)}
+          options={classList}
+          valueKey="Id"
+          labelKey="ClassName"
+          onChange={(e) => setSelectedClassId(e.target.value)}
         />
+
         <Options
-          label="Vehicle Number"
-          name=""
-          optionMsg="Select Vehicle No."
-          options={["RJ19 DF 1245", "RJ19 SE 7309", "RJ19 YD 6010"]}
+          label="Vehicle"
+          optionMsg="Select Vehicle"
+          options={vehicleList}
+          valueKey="Id"
+          labelKey="VehicleNo"
+          onChange={(e) => setSelectedVehicleId(e.target.value)}
         />
+
         <Options
           label="Search By"
-          name=""
-          optionMsg="Select name, etc."
+          optionMsg="Select"
           options={["Name", "Sr. No."]}
+          value={searchBy}
+          onChange={(e) => {
+            setSearchBy(e.target.value);
+            setSrNo("");
+            setName("");
+          }}
         />
-        <FormInput label={"From"} placeholder={"Enter Option"} />
+
+        {/* CONDITIONAL INPUT */}
+        {searchBy === "Sr. No." && (
+          <FormInput
+            label="Sr No"
+            value={srNo}
+            onChange={(e) => setSrNo(e.target.value)}
+          />
+        )}
+
+        {searchBy === "Name" && (
+          <FormInput
+            label="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        )}
       </div>
 
       <div className="flex justify-end mb-5">
-        <Buttons click={() => navigate("")} label={"Search"} />
+        <Buttons label="Search" click={handleSearch} />
       </div>
 
       <Table
         columns={columns}
-        data={data}
-        onRowSelect={() => {}}
-        disableFloatingRow={false}
-        onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)}
+        data={tableData}
+        loading={loading}
+        onOverlayToggle={setRowDetailOpen}
       />
 
-      <div className="flex justify-center sm:justify-end space-x-0 sm:space-x-10 mt-5">
-        <Buttons label={"Clear"} />
-      </div>
-
-      {/* ✅ Dynamic div for spacing */}
-      {rowDetailOpen && window.innerWidth < 768 && (
-        <div className="h-140"></div>
-      )}
+      {rowDetailOpen && window.innerWidth < 768 && <div className="h-140" />}
     </div>
   );
 }

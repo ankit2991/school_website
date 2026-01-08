@@ -240,6 +240,7 @@ function Table({
   actions = null,
   className = "",
   style,
+  colStyle,
   selectable = false,
   selectedRow = null,
   onRowSelect = () => {},
@@ -388,7 +389,7 @@ function Table({
                         className="px-3 py-2 text-sm max-[380px]:text-[14px] align-top"
                       >
                         <div
-                          className={`w-full text-center ${
+                          className={`w-full text-center ${colStyle} ${
                             col.cellStyle ? col.cellStyle : "truncate"
                           }`}
                         >

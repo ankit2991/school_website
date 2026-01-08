@@ -1,44 +1,75 @@
-import React, { useState } from 'react'
-import Heading from '../../../Components/Page_Forms/Heading';
-import Buttons from '../../../Components/Page_Forms/Buttons';
-import { useNavigate } from 'react-router-dom';
-import Table from '../../../Components/Page_Forms/Table';
+import React, { useEffect, useState } from 'react'
+import Heading from '../../../Components/Page_Forms/Heading'
+import Buttons from '../../../Components/Page_Forms/Buttons'
+import Table from '../../../Components/Page_Forms/Table'
+import { getExamHallReport } from '../../../services/api'
 
 function Exam_Hole_Report() {
-    const navigate = useNavigate()    
-    const [rowDetailOpen, setRowDetailOpen] = useState(false); // ✅ track overlay open/close
-    const columns = [
-        { header: "Room No.", shortHeader: "Room No.", accessor: "room" },
-        { header: "Total Sheet", shortHeader: "Total Sheet", accessor: "tot" },
-        { header: "Allocate Sheet", shortHeader: "Allocate Sheet", accessor: "allo" },
-        { header: "Pending", shortHeader: "Pending", accessor: "pen" },
-    ];
-    const data = [
-        { id: 1, room:"111", tot:"10", allo:"5", pen:"1" },
-        { id: 2, room:"112", tot:"10", allo:"6", pen:"2" },
-        { id: 3, room:"113", tot:"10", allo:"5", pen:"3" },
-        { id: 4, room:"115", tot:"10", allo:"7", pen:"4" },
-        { id: 5, room:"116", tot:"10", allo:"2", pen:"5" },
-    ];
-    return (
-        <div className="w-full h-full bg-white flex flex-col px-4 py-2">
-            <div className="flex justify-between items-center gap-x-4 mb-5">
-                <Heading label={"Exam Hole Report"}  />
-            </div>
-            <div className="flex justify-between items-center gap-x-4 mb-5">
-                <Buttons click={""} label={"Clear"}/>
-                <Buttons click={""} label={"Search"}/>
-            </div>
 
-            <Table columns={columns} data={data} onRowSelect={() => {}} disableFloatingRow={false} 
-                onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)}
-            />
+  const [rowDetailOpen, setRowDetailOpen] = useState(false)
+  const [data, setData] = useState([])
+  const [loading, setLoading] = useState(false)
 
-            {/* ✅ Dynamic div for spacing */}
-            {rowDetailOpen && window.innerWidth < 768 && <div className='h-140'></div>}
+  const columns = [
+    { header: "Room No.", shortHeader: "Room No.", accessor: "RoomNo" },
+    { header: "Total Sheet", shortHeader: "Total Sheet", accessor: "TotalSheet" },
+    { header: "Allocate Sheet", shortHeader: "Allocate Sheet", accessor: "Allocatesheet" },
+    { header: "Pending", shortHeader: "Pending", accessor: "Pending" },
+  ]
+  
 
-        </div>
-    )
+  // ✅ MOVED OUTSIDE useEffect
+  const fetchReport = async () => {
+    const instId = localStorage.getItem("InstituteID")
+    const sessionId = localStorage.getItem("SessionID")
+
+    if (!instId || !sessionId) return
+
+    try {
+      setLoading(true)
+      const res = await getExamHallReport(instId, sessionId)
+      console.log("Exam Hall Report:", res)
+
+      setData(res?.Table || [])
+    } catch (error) {
+              console.log("Error:",error);
+
+      setData([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // ✅ CALL ON PAGE LOAD
+  useEffect(() => {
+    fetchReport()
+  }, [])
+
+  return (
+    <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+
+      <div className="flex justify-between items-center gap-x-4 mb-5">
+        <Heading label={"Exam Hole Report"} />
+      </div>
+
+      <div className="flex justify-between items-center gap-x-4 mb-5">
+        <Buttons click={() => setData([])} label={"Clear"} />
+        <Buttons click={fetchReport} label={loading ? "Loading..." : "Search"} />
+        
+      </div>
+
+      <Table
+        columns={columns}
+        data={data}
+        onRowSelect={() => {}}
+        disableFloatingRow={false}
+        onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)}
+      />
+
+      {rowDetailOpen && window.innerWidth < 768 && <div className='h-140'></div>}
+
+    </div>
+  )
 }
 
 export default Exam_Hole_Report

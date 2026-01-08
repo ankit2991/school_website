@@ -2227,29 +2227,160 @@ export const getNewReceiptNumber = async () => {
 // ------------------------------------ Student Fees Insert API --------------------------------------
 
 export const studentFeesInsert = async (data) => {
+    const parmCriteria = {
+        InstId: Number(data.instId),
+        SessionId: String(data.sessionId),
+        ClassId: String(data.classId),
+        StId: Number(data.studentId),
+        
+        VhType: "11",
+        PMode: String(data.paymentMode || "1"),
+        BankId: String(data.bankId || "0"),
+        
+        RcNo: String(data.receiptNo),
+        RcDate: String(data.receiptDate),
+        
+        NAmt: String(data.netAmount),
+        TAmt: String(data.totalAmount),
+        DAmt: String(data.discountAmount || 0),
+        FAmt: String(data.fineAmount || 0),
+        
+        ChqNo: "",
+        ChqDate: "",
+        ChqBankId: "",
+        
+        FeeJson: data.feeJson, // already stringified ✔️
+        
+        UserId: 1,
+        ApiAdd: "StudentFeesInsert",
+        CallBy: "MobileApi",
+        AuthKey: "SYS101",
+  };
+  
+  return axios.get(API_URL, {
+      params: {
+          ParmCriteria: JSON.stringify(parmCriteria),
+          ApiAdd: "StudentFeesInsert",
+        },
+  }).then(res => res.data);
+};
+
+
+
+
+
+
+
+
+
+
+// ------------------------------------ FAIZAN --------------------------------------
+// ------------------------------------ MAHOMAD FAIZAN KHAN --------------------------------------
+
+
+
+
+export const getHostelStudents = async (instId, sessionId, classId) => {
+  const params = {
+    ParmCriteria: JSON.stringify({
+      InstId: Number(instId),
+      SessionId: String(sessionId),
+      ClassId: String(classId),
+      ApiAdd: "StudentHostelList",
+      CallBy: "MobileApi",
+      AuthKey: "SYS101",
+    }),
+    ApiAdd: "StudentHostelList",
+  };
+
+  const response = await axios.get(API_URL, { params });
+  return response.data;
+};
+
+
+// ------------------------------------ Class Wise Student List API End -------------------------------
+// ------------------------------------ Vehicle Wise Student List API --------------------------------------
+export const getVehicleWiseStudent = async (instId, sessionId, vehId) => {
+  const params = {
+    ParmCriteria: JSON.stringify({
+      InstId: Number(instId),
+      SessionId: String(sessionId),
+      VehId: String(vehId),
+      ApiAdd: "VehicleWiseStudentList",
+      CallBy: "MobileApi",
+      AuthKey: "SYS101",
+    }),
+    ApiAdd: "VehicleWiseStudentList",
+  };
+
+  const response = await axios.get(API_URL, { params });
+  return response.data;
+};
+// ------------------------------------ Vehicle Wise Student List API End -------------------------------
+
+
+// ------------------------------------ Vehicle Fees Details API --------------------------------------
+export const getTransportFeesDetails = async (instId, sessionId, classId, studentId, vhType = "13", rType = "1") => {
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: Number(instId),
+            SessionId: String(sessionId),
+            ClassId: String(classId),
+            StId: Number(studentId),
+            VhType: String(vhType),
+            RType: String(rType),
+            ApiAdd: "StudentFeesDetails",
+            CallBy: "MobileApi",
+            AuthKey: AUTH_KEY,
+        }),
+        ApiAdd: "StudentFeesDetails",
+    };
+
+    const response = await axios.get(API_URL, { params });
+    return response.data;
+}
+
+export const getHostelFeesDetails = async (instId, sessionId, classId, studentId, vhType = "14", rType = "1") => {
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: Number(instId),
+            SessionId: String(sessionId),
+            ClassId: String(classId),
+            StId: Number(studentId),
+            VhType: String(vhType),
+            RType: String(rType),
+            ApiAdd: "StudentHostelFeesDetails",
+            CallBy: "MobileApi",
+            AuthKey: AUTH_KEY,
+        }),
+        ApiAdd: "StudentHostelFeesDetails",
+    };
+
+    const response = await axios.get(API_URL, { params });
+    return response.data;
+}
+
+export const transportFeesInsert = async (data) => {
   const parmCriteria = {
     InstId: Number(data.instId),
     SessionId: String(data.sessionId),
     ClassId: String(data.classId),
     StId: Number(data.studentId),
-
-    VhType: "11",
-    PMode: String(data.paymentMode || "1"),
-    BankId: String(data.bankId || "0"),
-
+    VhType: "13",
+ 
     RcNo: String(data.receiptNo),
     RcDate: String(data.receiptDate),
-
     NAmt: String(data.netAmount),
     TAmt: String(data.totalAmount),
     DAmt: String(data.discountAmount || 0),
     FAmt: String(data.fineAmount || 0),
+    PMode: Number(data.paymentMode || 0),
+    BankId: Number(data.bankId || 0),
+    ChqNo: data.ChqNo || "",
+    ChqDate: data.ChqDate ? String(data.ChqDate) : "",
+    ChqBankId: Number(data.ChqBankId || 0),
 
-    ChqNo: "",
-    ChqDate: "",
-    ChqBankId: "",
-
-    FeeJson: data.feeJson, // already stringified ✔️
+    FeeJson: data.feeJson, // json data of fee✔️
 
     UserId: 1,
     ApiAdd: "StudentFeesInsert",
@@ -2265,3 +2396,481 @@ export const studentFeesInsert = async (data) => {
   }).then(res => res.data);
 };
 
+export const hostelFeesInsert = async (data) => {
+  const parmCriteria = {
+    InstId: Number(data.instId),
+    SessionId: String(data.sessionId),
+    ClassId: String(data.classId),
+    StId: Number(data.studentId),
+
+    VhType:  Number(data.VhType),
+ 
+    RcNo: String(data.receiptNo),
+    RcDate: String(data.receiptDate),
+    NAmt: String(data.netAmount),
+    TAmt: String(data.totalAmount),
+    DAmt: String(data.discountAmount || 0),
+    FAmt: String(data.fineAmount || 0),
+    PMode: Number(data.paymentMode || 0),
+    BankId: Number(data.bankId || 0),
+    ChqNo: data.ChqNo || "",
+    ChqDate: data.ChqDate ? String(data.ChqDate) : "",
+    ChqBankId: Number(data.ChqBankId || 0),
+
+    FeeJson: data.feeJson, // json data of fee✔️
+
+    UserId: 1,
+    ApiAdd: "StudentFeesInsert",
+    CallBy: "MobileApi",
+    AuthKey: "SYS101",
+  };
+
+  return axios.get(API_URL, {
+    params: {
+      ParmCriteria: JSON.stringify(parmCriteria),
+      ApiAdd: "StudentFeesInsert",
+    },
+  }).then(res => res.data);
+};
+
+export const deleteTransportReceipt = async (rcID) => {
+    const params = {
+        ParmCriteria: JSON.stringify({
+            RcNo: Number(rcID),
+            VhType: "13",
+            ApiAdd: "ReceiptDelete",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }),
+        ApiAdd: "ReceiptDelete",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;
+};
+
+
+
+export const deleteHostelReceipt = async (rcID) => {
+    const params = {
+        ParmCriteria: JSON.stringify({
+            RcNo: Number(rcID),
+            VhType: "14",
+            ApiAdd: "ReceiptDelete",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }),
+        ApiAdd: "ReceiptDelete",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;
+};
+
+
+export const deleteStudentReceipt = async (rcID) => {
+    const params = {
+        ParmCriteria: JSON.stringify({
+            RcNo: Number(rcID),
+            VhType: "11",
+            ApiAdd: "ReceiptDelete",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }),
+        ApiAdd: "ReceiptDelete",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;
+};
+
+
+
+
+
+
+//--------------------REPORT------------------------
+
+export const getStudentReportDetail = async(instId, sessionId, classId,searchType,search ) => {
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: instId,
+            SessionId: sessionId,
+            ClassId: classId || 0,
+            SearchType:searchType || 2,
+            Search: search,
+            ApiAdd: "StudentReport",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }),
+        ApiAdd: "StudentReport",
+    };
+    const response = await axios.get(API_URL, { params });  
+    return response.data;
+
+}
+
+export const getStudentSiblingReport = async(instId, sessionId, studentId ) => {
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: instId,
+            SessionId: sessionId,
+            StId: studentId,
+            ApiAdd: "StudentSiblingReport",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }),
+        ApiAdd: "StudentSiblingReport",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;
+}
+
+
+
+
+export const getStudentReportFee = async(instId, sessionId, classId, studentId, payId, rcNo, formDate, endDate ) => { 
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: instId,
+            SessionId: sessionId,
+            ClassId: classId || "",
+            StId: studentId || "",
+            PayId: payId || "",
+            RcNo: rcNo || "",
+            FormDate: formDate || "",
+            EndDate: endDate || "",
+            VhTypeId:   11,
+            ApiAdd: "StudentFeeReport",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }), 
+        ApiAdd: "StudentFeeReport",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;   
+}
+
+export const getTransportFeeReport = async(instId, sessionId, classId, studentId, payId, rcNo, formDate, endDate ) => { 
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: instId,
+            SessionId: sessionId,
+            ClassId: classId || "",
+            StId: studentId || "",
+            PayId: payId || "",
+            RcNo: rcNo || "",
+            FormDate: formDate || "",
+            EndDate: endDate || "",
+            VhTypeId:   13,
+            ApiAdd: "StudentFeeReport",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }), 
+        ApiAdd: "StudentFeeReport",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;   
+}
+export const getHostelFeeReport = async(instId, sessionId, classId, studentId, payId, rcNo, formDate, endDate ) => { 
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: instId,
+            SessionId: sessionId,
+            ClassId: classId || "",
+            StId: studentId || "",
+            PayId: payId || "",
+            RcNo: rcNo || "",
+            FormDate: formDate || "",
+            EndDate: endDate || "",
+            VhTypeId:   14,
+            ApiAdd: "StudentFeeReport",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }), 
+        ApiAdd: "StudentFeeReport",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;   
+}
+
+
+export const getTransportReportFee = async(instId, sessionId, classId, vhId, srNo, name ) => { 
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: instId,
+            SessionId: sessionId,
+            ClassId: classId || "",
+            VhId: vhId || "",
+            SrNo: srNo || "",
+            Name: name || "",
+            
+          
+            ApiAdd: "StudentTransportReport",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }), 
+        ApiAdd: "StudentTransportReport",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;   
+}
+
+
+
+export const getHostelReportDetail = async(InstId,SessionId,ClassId,SrNo,Name) =>{
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: InstId,
+            SessionId: SessionId,
+            ClassId: ClassId || "",
+            SrNo: SrNo || "",
+            Name: Name || "",
+            ApiAdd: "StudentHostelReport",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }),
+        ApiAdd: "StudentHostelReport",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;
+}
+
+
+export const getEnquiryReportDetail = async(instId, sessionId, classId, searchType, srNo, name ) => {
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: instId,
+            SessionId: sessionId,
+            SearchType: searchType || 3,
+            ClassId: classId || "",
+            SrNo: srNo || "",
+            Name: name || "",
+            ApiAdd: "StudentEnquireReport",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }),
+        ApiAdd: "StudentEnquireReport",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;
+}
+
+export const getEnquiryTypeList = async()=>{
+    const params = {
+        ParmCriteria: JSON.stringify({
+            ApiAdd: "EnquireTypeList",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }),
+        ApiAdd: "EnquireTypeList",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;
+
+}
+
+export const getStudentCasteWiseReport = async(InstId,SessionId,IsOnlyGirl) =>{
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: InstId,
+            SessionId: SessionId,
+            IsOnlyGirl: IsOnlyGirl || 0,
+            ApiAdd: "StudentCastWiseReport",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }),
+        ApiAdd: "StudentCastWiseReport",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;
+}
+
+export const getStudentAgeWiseReport = async(InstId,SessionId,ClassId) =>{
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: InstId,
+            SessionId: SessionId,
+            ClassId: ClassId ,
+            ApiAdd: "StudentAgeWiseReport",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }),
+        ApiAdd: "StudentAgeWiseReport",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;   
+}
+
+
+
+
+//---------------------------------------DayTRANSACTION----------------
+
+//date formate "12/Dec/2026"
+export const getDayBookSummaryReport = async(InstId,SessionId,FromDate,ToDate) =>{
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: InstId,
+            SessionId: SessionId,
+            FromDate: FromDate ,
+            ToDate: ToDate ,
+            ApiAdd: "DayBookSummaryReport",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }),
+        ApiAdd: "DayBookSummaryReport",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;
+}
+
+//date formate "12/Dec/2026"
+export const getDayBookDetailReport = async(InstId,SessionId,FromDate,ToDate,IsTuition) =>{
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: InstId,
+            SessionId: SessionId,
+            FromDate: FromDate ,
+            ToDate: ToDate ,
+            IsTuition: IsTuition || 0,
+            ApiAdd: "DayBookDetailReport",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }),
+        ApiAdd: "DayBookDetailReport",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;
+}
+
+
+//date formate "12/Dec/2026"
+
+export const getDayBookReport = async(InstId,SessionId,TDate) =>{
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: InstId,
+            SessionId: SessionId,
+            TDate: TDate ,
+            ApiAdd: "DayBookReport",
+            CallBy: "MobileApi",
+            AuthKey:AUTH_KEY,
+        }),
+        ApiAdd: "DayBookReport",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;
+}
+
+
+export const getBankChallanReport = async (
+  instId,
+  sessionId,
+  classId,
+  monthId
+) => {
+  const params = {
+    ParmCriteria: JSON.stringify({
+      InstId: instId,
+      SessionId: sessionId,
+      ClassId: classId || "",
+      MonthId: monthId || "",
+      ApiAdd: "BankChallanReport",
+      CallBy: "MobileApi",
+      AuthKey: AUTH_KEY,
+    }),
+    ApiAdd: "BankChallanReport",
+  };
+
+  const response = await axios.get(API_URL, { params });
+  return response.data;
+};
+
+
+
+export const getExamHallReport = async (instId, sessionId) => {
+  const params = {
+    ParmCriteria: JSON.stringify({
+      InstId: instId,
+      SessionId: sessionId,
+      ApiAdd: "ExamHoleReport",
+      CallBy: "MobileApi",
+      AuthKey: AUTH_KEY,
+    }),
+    ApiAdd: "ExamHoleReport",
+  };
+
+  const response = await axios.get(API_URL, { params });
+  return response.data;
+};
+
+
+export const getAdmitCardReport = async (
+  instId,
+  sessionId,
+  classId,
+  examId
+) => {
+  const params = {
+    ParmCriteria: JSON.stringify({
+      InstId: instId,
+      SessionId: sessionId,
+      ClassId: classId || "",
+      ExamId: examId || "",
+      ApiAdd: "AdmitCardReport",
+      CallBy: "MobileApi",
+      AuthKey: AUTH_KEY,
+    }),
+    ApiAdd: "AdmitCardReport",
+  };
+
+  const response = await axios.get(API_URL, { params });
+  return response.data;
+};
+
+
+export const getExamMarksReport = async (
+  instId,
+  sessionId,
+  classId,
+  examId
+) => {
+  const params = {
+    ParmCriteria: JSON.stringify({
+      InstId: instId,
+      SessionId: sessionId,
+      ClassId: classId || "",
+      ExamId: examId || "",
+      ApiAdd: "ExamMarksReport",
+      CallBy: "MobileApi",
+      AuthKey: AUTH_KEY,
+    }),
+    ApiAdd: "ExamMarksReport",
+  };
+
+  const response = await axios.get(API_URL, { params });
+  return response.data;
+};
+
+
+
+export const getMarksReport = async (
+  instId,
+  sessionId,
+  classId,
+  examId
+) => {
+  const params = {
+    ParmCriteria: JSON.stringify({
+      InstId: instId,
+      SessionId: sessionId,
+      ClassId: classId || "",
+      ExamId: examId || "",
+      ApiAdd: "MarksReport",
+      CallBy: "MobileApi",
+      AuthKey: AUTH_KEY,
+    }),
+    ApiAdd: "MarksReport",
+  };
+
+  const response = await axios.get(API_URL, { params });
+  return response.data;
+};

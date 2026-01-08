@@ -1,129 +1,202 @@
 import React, { useEffect, useState } from "react";
 import Heading from "../../../Components/Page_Forms/Heading";
 import Buttons from "../../../Components/Page_Forms/Buttons";
-import { useNavigate } from "react-router-dom";
 import Options from "../../../Components/Page_Forms/Options";
 import FormInput from "../../../Components/Page_Forms/FormInput";
 import Table from "../../../Components/Page_Forms/Table";
-import { getclass } from "../../../services/api";
+import {
+   getclass,
+   getEnquiryReportDetail,
+   getEnquiryTypeList,
+} from "../../../services/api";
 
 function Enquiry_Details() {
-  const navigate = useNavigate();
-  const [agree, setAgree] = useState(false);
-  const [agree2, setAgree2] = useState(false);
-  const [rowDetailOpen, setRowDetailOpen] = useState(false); // ✅ track overlay open/close
-  const columns = [
-    { header: "Enquiry No.", shortHeader: "Enquiry No.", accessor: "en" },
-    { header: "Name", shortHeader: "Name", accessor: "name" },
-    { header: "Father Name", shortHeader: "Father Name", accessor: "fname" },
-    { header: "Mother Name", shortHeader: "Mother Name", accessor: "mname" },
-    { header: "Class", shortHeader: "Class", accessor: "class" },
-    { header: "D.O.B.", shortHeader: "D.O.B.", accessor: "dob" },
-    {
-      header: "Address",
-      shortHeader: "Address",
-      accessor: "add",
-      cellStyle:
-        "max-w-[160px] truncate sm:whitespace-normal sm:break-words sm:max-w-xs sm:line-clamp-2 md:max-w-md",
-    },
-    { header: "Father No.", shortHeader: "Father No", accessor: "fno" },
-  ];
-  const data = [
-    {
-      id: 1,
-      en: "01",
-      name: "Ajay",
-      fname: "Rman Thakur",
-      mname: "Aradhya",
-      class: "Nur",
-      dob: "12-feb-2021",
-      add: "Flat No. 14, Green Valley Apartments, Sector 21, Gandhinagar, Gujarat – 382021",
-      fno: "1234567890",
-    },
-  ];
+   /* ---------------- STATE ---------------- */
+   const [classList, setClassList] = useState([]);
+   const [enquiryTypeList, setEnquiryTypeList] = useState([]);
 
-  const [classList, setClassList] = useState([]);
-  // useEffect(() => {
-  //     const instId = localStorage.getItem("InstituteID");  // ✅ Get dynamic ID
-  //     if (!instId) return;
+   const [selectedClassId, setSelectedClassId] = useState("");
+   const [selectedSearchType, setSelectedSearchType] = useState("");
+   const [srNo, setSrNo] = useState("");
+   const [name, setName] = useState("");
 
-  //     async function fetchClasses() {
-  //         try {
-  //             const res = await getclass(instId);  // ✅ Pass selected Institute ID
-  //             setClassList(res.Table || []);
-  //         } catch (error) {
-  //             console.log("Class API Error:", error);
-  //         }
-  //     }
+   const [tableData, setTableData] = useState([]);
+   const [loading, setLoading] = useState(false);
+   const [rowDetailOpen, setRowDetailOpen] = useState(false);
 
-  //     fetchClasses();
-  // }, []);
+   /* ---------------- TABLE COLUMNS ---------------- */
+   const columns = [
+      { header: "Enquiry No.", shortHeader: "Enquiry No.", accessor: "en" },
+      { header: "Name", shortHeader: "Name", accessor: "name" },
+      { header: "Father Name", shortHeader: "Father Name", accessor: "fname" },
+      { header: "Mother Name", shortHeader: "Mother Name", accessor: "mname" },
+      { header: "Class", shortHeader: "Class", accessor: "className" },
+      { header: "D.O.B.", shortHeader: "D.O.B.", accessor: "dob" },
+      {
+         header: "Address",
+         shortHeader: "Address",
+         accessor: "address",
+         cellStyle:
+            "max-w-[160px] truncate sm:whitespace-normal sm:break-words sm:max-w-xs sm:line-clamp-2 md:max-w-md",
+      },
+      { header: "Father No.", shortHeader: "Father No", accessor: "fno" },
+   ];
 
-  useEffect(() => {
-    const instId = localStorage.getItem("InstituteID");
-    if (!instId) return;
-    async function fetchClasses() {
-      try {
-        const res = await getclass(instId);
-        // ✅ check API success
-        if (res?.Table?.[0]?.ResultCode === "R100") {
-          setClassList(res.Table1 || []);
-        } else {
-          setClassList([]);
-        }
-      } catch (error) {
-        console.log("Class API Error:", error);
-        setClassList([]);
+   /* ---------------- DATE FORMAT ---------------- */
+   const formatDotNetDate = (dotNetDate) => {
+      if (!dotNetDate) return "-";
+      const ts = Number(dotNetDate.match(/\d+/)?.[0]);
+      return ts ? new Date(ts).toLocaleDateString("en-GB") : "-";
+   };
+
+   /* ---------------- FETCH CLASS LIST (same as previous pages) ---------------- */
+   useEffect(() => {
+      const instId = localStorage.getItem("InstituteID");
+      if (!instId) return;
+
+      async function fetchClasses() {
+         try {
+            const res = await getclass(instId);
+            if (res?.Table?.[0]?.ResultCode === "R100") {
+               setClassList(res.Table1 || []);
+            } else {
+               setClassList([]);
+            }
+         } catch (error) {
+            console.log("Class API Error:", error);
+            setClassList([]);
+         }
       }
-    }
 
-    fetchClasses();
-  }, []);
+      fetchClasses();
+   }, []);
 
-  return (
-    <div className="w-full h-full bg-white flex flex-col px-4 py-2">
-      <div className="flex justify-between mb-5">
-        <Heading label={"Enquiry Details"} />
+   /* ---------------- FETCH ENQUIRY TYPE LIST ---------------- */
+   useEffect(() => {
+      async function fetchEnquiryTypes() {
+         try {
+            const res = await getEnquiryTypeList();
+            if (res?.Table?.[0]?.ResultCode === "R100") {
+               setEnquiryTypeList(res.Table1 || []);
+            } else {
+               setEnquiryTypeList([]);
+            }
+         } catch (error) {
+            console.log("Enquiry Type API Error:", error);
+            setEnquiryTypeList([]);
+         }
+      }
+
+      fetchEnquiryTypes();
+   }, []);
+
+   /* ---------------- SEARCH ---------------- */
+   const handleSearch = async () => {
+      const instId = localStorage.getItem("InstituteID");
+      const sessionId = localStorage.getItem("SessionID");
+
+      try {
+         setLoading(true);
+         setTableData([]);
+
+         const res = await getEnquiryReportDetail(
+            instId,
+            sessionId,
+            selectedClassId,
+            selectedSearchType,
+            srNo,
+            name
+         );
+
+         if (Array.isArray(res?.Table)) {
+            setTableData(
+               res.Table.map((r) => ({
+                  id: r.Id,
+                  en: r.EnquireNo,
+                  name: r.Name,
+                  fname: r.FatherName,
+                  mname: r.MotherName,
+                  className: r.ClassName,
+                  dob: formatDotNetDate(r.DOB),
+                  address: r.Address1,
+                  fno: r.FMobileNo,
+               }))
+            );
+         }
+      } catch (error) {
+         console.log("Enquiry Report API Error:", error);
+         setTableData([]);
+      } finally {
+         setLoading(false);
+      }
+   };
+
+   /* ---------------- UI ---------------- */
+   return (
+      <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+         <div className="flex justify-between mb-5">
+            <Heading label="Enquiry Details" />
+         </div>
+
+         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 mb-5 w-full">
+            <Options
+               label="Class"
+               optionMsg="Select Class"
+               options={classList}
+               valueKey="Id"
+               labelKey="ClassName"
+               onChange={(e) => setSelectedClassId(e.target.value)}
+            />
+
+            <Options
+               label="Search By"
+               optionMsg="Select Option"
+               options={enquiryTypeList}
+               valueKey="Id"
+               labelKey="UserType"
+               onChange={(e) => setSelectedSearchType(e.target.value)}
+            />
+            <FormInput
+               label="Sr No"
+               value={srNo}
+               onChange={(e) => setSrNo(e.target.value)}
+            />
+            <FormInput
+               label="Name"
+               placeholder="Enter Name"
+               value={name}
+               onChange={(e) => setName(e.target.value)}
+            />
+         </div>
+
+         <div className="flex justify-end mb-5">
+            <Buttons label="Search" click={handleSearch} />
+         </div>
+
+         <Table
+            columns={columns}
+            data={tableData}
+            loading={loading}
+            onRowSelect={() => {}}
+            disableFloatingRow={false}
+            onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)}
+         />
+
+         <div className="flex justify-center sm:justify-end space-x-0 sm:space-x-10 mt-5">
+            <Buttons
+               label="Clear"
+               click={() => {
+                  setSelectedClassId("");
+                  setSelectedSearchType("");
+                  setName("");
+                  setTableData([]);
+               }}
+            />
+         </div>
+
+         {rowDetailOpen && window.innerWidth < 768 && <div className="h-140" />}
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 mb-5 w-full">
-        <Options
-          label={"Class"}
-          name={""}
-          optionMsg="Select Class"
-          options={classList.map((item) => item.ClassName)}
-        />
-        <Options
-          label={"Search By"}
-          name={""}
-          optionMsg="Select Option"
-          options={["Registered", "UnRegistered", "All"]}
-        />
-        <FormInput label={"Name"} placeholder={"Enter Name"} />
-      </div>
-
-      <div className="flex justify-end mb-5">
-        <Buttons click={() => navigate("")} label={"Search"} />
-      </div>
-
-      <Table
-        columns={columns}
-        data={data}
-        onRowSelect={() => {}}
-        disableFloatingRow={false}
-        onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)}
-      />
-
-      <div className="flex justify-center sm:justify-end space-x-0 sm:space-x-10 mt-5">
-        <Buttons label={"Clear"} />
-      </div>
-
-      {/* ✅ Dynamic div for spacing */}
-      {rowDetailOpen && window.innerWidth < 768 && (
-        <div className="h-140"></div>
-      )}
-    </div>
-  );
+   );
 }
 
 export default Enquiry_Details;

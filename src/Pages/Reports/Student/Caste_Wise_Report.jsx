@@ -80,107 +80,186 @@
 
 // export default Caste_Wise_Report
 
+import React, { useState,useEffect } from "react";
 
+import Heading from "../../../Components/Page_Forms/Heading";
+import CheckBox from "../../../Components/Page_Forms/CheckBox";
+import Buttons from "../../../Components/Page_Forms/Buttons";
+import Table from "../../../Components/Page_Forms/Table";
 
-import React, { useState } from 'react'
-import Heading from '../../../Components/Page_Forms/Heading';
-import CheckBox from '../../../Components/Page_Forms/CheckBox';
-import Buttons from '../../../Components/Page_Forms/Buttons';
-import { useNavigate } from 'react-router-dom';
-import Table from '../../../Components/Page_Forms/Table';
+import { getStudentCasteWiseReport } from "../../../services/api";
 
 function Caste_Wise_Report() {
-    const navigate = useNavigate()    
-    const [agree, setAgree] = useState(false);   // checkbox state
-    const [showTable2, setShowTable2] = useState(false); // ✅ controls which table to show
-    const [rowDetailOpen, setRowDetailOpen] = useState(false); 
-        
+
+    // 🔹 Replace these with real values (props / redux / localStorage)
+  
+
+    const [agree, setAgree] = useState(false);
+    const [showTable2, setShowTable2] = useState(false);
+    const [tableData, setTableData] = useState([]);
+    const [rowDetailOpen, setRowDetailOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    // ===================== TABLE DEFINITIONS =====================
+
     const columns = [
-        { header: "Class", shortHeader: "Class", accessor: "class" },
-        { header: "OBC Boy", shortHeader: "OBC Boy", accessor: "oboy" },
-        { header: "OBC Girl", shortHeader: "OBC Girl", accessor: "ogirl" },
-        { header: "Gen Boy", shortHeader: "Gen Boy", accessor: "gboy" },
-        { header: "Gen Girl", shortHeader: "Gen Girl", accessor: "ggirl" },
-        { header: "SC Boy", shortHeader: "SC Boy", accessor: "sboy" },
-        { header: "SC Girl", shortHeader: "SC Girl", accessor: "sgirl" },
-        { header: "ST Boy", shortHeader: "ST Boy", accessor: "stboy" },
-        { header: "ST Girl", shortHeader: "ST Girl", accessor: "stgirl" },
-        { header: "SBC Boy", shortHeader: "SBC Boy", accessor: "sbboy" },
-        { header: "SBC Girl", shortHeader: "SBC Girl", accessor: "sbgirl" },
-        { header: "MIN Boy", shortHeader: "MIN Boy", accessor: "mboy" },
-        { header: "MIN Girl", shortHeader: "MIN Girl", accessor: "mgirl" },
-        { header: "Jain Boy", shortHeader: "Jain Boy", accessor: "jboy" },
-        { header: "Jain Girl", shortHeader: "Jain Girl", accessor: "jgirl" },
-        { header: "Christian Boy", shortHeader: "Christian Boy", accessor: "cboy" },
-        { header: "Christian Girl", shortHeader: "Christian Girl", accessor: "cgirl" },
-        { header: "Total", shortHeader: "Total", accessor: "tot" },
-    ];
-        
-    const data = [
-        { id: 1, class: "Nur", oboy:"5", ogirl:"2", gboy:"3", ggirl:"5", sboy:"1", sgirl:"2", stboy:"6", stgirl:"2", sbboy:"2", sbgirl:"4", mboy:"5", mgirl:"6", jboy:"2", jgirl:"2", cboy:"3", cgirl:"2", tot:"30", },
+        { header: "Class", accessor: "class" },
+        { header: "OBC Boy", accessor: "oboy" },
+        { header: "OBC Girl", accessor: "ogirl" },
+        { header: "Gen Boy", accessor: "gboy" },
+        { header: "Gen Girl", accessor: "ggirl" },
+        { header: "SC Boy", accessor: "sboy" },
+        { header: "SC Girl", accessor: "sgirl" },
+        { header: "ST Boy", accessor: "stboy" },
+        { header: "ST Girl", accessor: "stgirl" },
+        { header: "SBC Boy", accessor: "sbboy" },
+        { header: "SBC Girl", accessor: "sbgirl" },
+        { header: "MIN Boy", accessor: "mboy" },
+        { header: "MIN Girl", accessor: "mgirl" },
+        { header: "Jain Boy", accessor: "jboy" },
+        { header: "Jain Girl", accessor: "jgirl" },
+        { header: "Christian Boy", accessor: "cboy" },
+        { header: "Christian Girl", accessor: "cgirl" },
+        { header: "Total", accessor: "tot" },
     ];
 
     const columns2 = [
-        { header: "Class", shortHeader: "Class", accessor: "class" },
-        { header: " Boy", shortHeader: " Boy", accessor: "boy" },
-        { header: " Girl", shortHeader: " Girl", accessor: "girl" },
-        { header: "Total", shortHeader: "Total", accessor: "tot" },
-    ];
-        
-    const data2 = [
-        { id: 1, class: "Nur", boy:"5", girl:"2", tot:"7", },
+        { header: "Class", accessor: "class" },
+        { header: "Boy", accessor: "boy" },
+        { header: "Girl", accessor: "girl" },
+        { header: "Total", accessor: "tot" },
     ];
 
-    const handleSearch = () => {
-        if (agree) {
-            setShowTable2(true);  // show Table2 if checkbox is checked
+
+    const fetchReport = async (IsOnlyGirl) => {
+    setShowTable2(IsOnlyGirl === 1);
+    setLoading(true);
+    setTableData([]);
+
+    const instId = localStorage.getItem("InstituteID");
+    const sessionId = localStorage.getItem("SessionID");
+
+    if (!instId || !sessionId) {
+        setLoading(false);
+        return;
+    }
+
+    try {
+        const res = await getStudentCasteWiseReport(
+            instId,
+            sessionId,
+            IsOnlyGirl
+        );
+
+        if (!res?.Table) return;
+
+        if (IsOnlyGirl === 0) {
+            const formatted = res.Table.map((row) => ({
+                class: row.ClassName,
+                oboy: row.OBC_Boy,
+                ogirl: row.OBC_Girl,
+                gboy: row.GEN_Boy,
+                ggirl: row.GEN_Girl,
+                sboy: row.SC_Boy,
+                sgirl: row.SC_Girl,
+                stboy: row.ST_Boy,
+                stgirl: row.ST_Girl,
+                sbboy: row.SBC_Boy,
+                sbgirl: row.SBC_Girl,
+                mboy: row.MIN_Boy,
+                mgirl: row.MIN_Girl,
+                jboy: row.JAIN_Boy,
+                jgirl: row.JAIN_Girl,
+                cboy: row.Christian_Boy,
+                cgirl: row.Christian_Girl,
+                tot: row.Total,
+            }));
+            setTableData(formatted);
         } else {
-            setShowTable2(false); // otherwise show Table1
+            const formatted = res.Table.map((row) => ({
+                class: row.ClassName || "Total",
+                boy: row.Boy,
+                girl: row.GIRL,
+                tot: row.Total,
+            }));
+            setTableData(formatted);
         }
+    } finally {
+        setLoading(false);
+    }
+};
+useEffect(() => {
+    const IsOnlyGirl = agree ? 1 : 0;
+    fetchReport(IsOnlyGirl);
+}, []); // 👈 runs only once on reload
+
+    // ===================== SEARCH HANDLER =====================
+
+   const handleSearch = () => {
+    const IsOnlyGirl = agree ? 1 : 0;
+    fetchReport(IsOnlyGirl);
+};
+
+    // ===================== CLEAR =====================
+
+    const handleClear = () => {
+        setAgree(false);
+        setShowTable2(false);
+        setTableData([]);
     };
+
+    // ===================== UI =====================
 
     return (
         <div className="w-full h-full bg-white flex flex-col px-4 py-2">
             <div className="flex justify-between mb-5">
-                <Heading label={"Caste Wise Report"} />
-            </div>            
-          
-            <div className="flex justify-between items-center gap-x-4 mb-5">
-                <CheckBox label={"Boy And Girl"} labelClass='text-[20px]' name={""} checked={agree} 
-                    onChange={(e) => setAgree(e.target.checked)} labelstyle={"text-[22px] sm:text-3xl"}
-                />
-                <Buttons click={handleSearch} label={"Search"} style='whitespace-nowrap h-10'/>
+                <Heading label="Caste Wise Report" />
             </div>
 
-            {/* ✅ Conditional rendering for tables */}
+            <div className="flex justify-between items-center gap-x-4 mb-5">
+                <CheckBox
+                    label="Boy And Girl"
+                    checked={agree}
+                    onChange={(e) => setAgree(e.target.checked)}
+                    labelstyle="text-[22px] sm:text-3xl"
+                />
+
+                <Buttons
+                    click={handleSearch}
+                    label={loading ? "Loading..." : "Search"}
+                    style="whitespace-nowrap h-10"
+                />
+            </div>
+
             {!showTable2 && (
-                <Table 
-                    columns={columns} 
-                    data={data} 
-                    onRowSelect={() => {}} 
-                    disableFloatingRow={false} 
-                    onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)} 
+                <Table
+                    columns={columns}
+                    data={tableData}
+                    onRowSelect={() => {}}
+                    disableFloatingRow={false}
+                    onOverlayToggle={setRowDetailOpen}
                 />
             )}
 
             {showTable2 && (
-                <Table 
-                    columns={columns2} 
-                    data={data2} 
-                    onRowSelect={() => {}} 
-                    disableFloatingRow={false} 
-                    onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)} 
+                <Table
+                    columns={columns2}
+                    data={tableData}
+                    onRowSelect={() => {}}
+                    disableFloatingRow={false}
+                    onOverlayToggle={setRowDetailOpen}
                 />
             )}
-            
-            <div className="flex justify-center sm:justify-end space-x-0 sm:space-x-10 mt-5">
-                <Buttons label={"Clear"}/>
+
+            <div className="flex justify-center sm:justify-end mt-5">
+                <Buttons label="Clear" click={handleClear} />
             </div>
 
-            {/* ✅ Dynamic div for spacing */}
-            {rowDetailOpen && window.innerWidth < 768 && <div className='h-140'></div>}
+            {rowDetailOpen && window.innerWidth < 768 && (
+                <div className="h-140"></div>
+            )}
         </div>
-    )
+    );
 }
 
-export default Caste_Wise_Report
+export default Caste_Wise_Report;

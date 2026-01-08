@@ -44,7 +44,7 @@ import React from "react";
 
 function Options({
   label,
-  optionMsg = "Select",
+  optionMsg = "---Select---",
   labelstyle,
   name,
   bool = false,

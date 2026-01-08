@@ -2,133 +2,61 @@ import React, { useEffect, useState } from "react";
 import Heading from "../../../Components/Page_Forms/Heading";
 import Options from "../../../Components/Page_Forms/Options";
 import FormInput from "../../../Components/Page_Forms/FormInput";
-import CheckBox from "../../../Components/Page_Forms/CheckBox";
 import Buttons from "../../../Components/Page_Forms/Buttons";
 import Table from "../../../Components/Page_Forms/Table";
 import { useNavigate } from "react-router-dom";
-import { getclass } from "../../../services/api";
+import {
+  getBankChallanReport,
+  getclass,
+  getMonthList,
+} from "../../../services/api";
 
 function Bank_Challan() {
   const navigate = useNavigate();
-  const [agree, setAgree] = useState(false);
-  const [agree2, setAgree2] = useState(false);
-  const [rowDetailOpen, setRowDetailOpen] = useState(false); // ✅ track overlay open/close
+
+  const [selectedMonthId, setSelectedMonthId] = useState("");
+  const [selectedClassId, setSelectedClassId] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [marksData, setMarksData] = useState([]);
+  const [monthList, setMonthList] = useState([]);
+  const [classList, setClassList] = useState([]);
+  const [rowDetailOpen, setRowDetailOpen] = useState(false);
+
+  // 🔍 Search states
+  const [searchBy, setSearchBy] = useState("");
+  const [searchText, setSearchText] = useState("");
+
+  // ✅ TABLE COLUMNS (API MAPPED)
   const columns = [
-    { header: "Serial No.", shortHeader: "Serial No.", accessor: "serial" },
-    { header: "Name", shortHeader: "Name", accessor: "name" },
-    { header: "Father Name", shortHeader: "Father Name", accessor: "fname" },
-    { header: "Mother Name", shortHeader: "Mother Name", accessor: "mname" },
-    { header: "Class", shortHeader: "Class", accessor: "class" },
-    {
-      header: "Addmission Date",
-      shortHeader: "Addmission Date",
-      accessor: "addate",
-    },
+    { header: "Roll No.", accessor: "RollNo" },
+    { header: "Name", accessor: "Name" },
+    { header: "Father Name", accessor: "FatherName" },
+    { header: "Mother Name", accessor: "MotherName" },
+    { header: "Class", accessor: "Class" },
+    { header: "Admission Date", accessor: "AdmissionDate" },
     {
       header: "Address",
-      shortHeader: "Address",
-      accessor: "add",
+      accessor: "Address1",
       cellStyle:
-        "max-w-[160px] truncate sm:whitespace-normal sm:break-words sm:max-w-xs sm:line-clamp-2 md:max-w-md",
+        "max-w-[160px] truncate sm:whitespace-normal sm:break-words sm:max-w-xs",
     },
-    { header: "Father No.", shortHeader: "Father No.", accessor: "fno" },
-    { header: "Amount", shortHeader: "Amount", accessor: "amt" },
+    { header: "Father Mobile", accessor: "FMobileNo" },
   ];
 
-  const data = [
-    {
-      id: 1,
-      serial: "01",
-      name: "Ajay",
-      fname: "Rman Thakur",
-      mname: "Shreya",
-      class: "Nur",
-      addate: "26-may-2024",
-      add: "221, Shanti Nagar, Near Hanuman Mandir, Jaipur, Rajasthan – 302012",
-      fno: "1234567890",
-      amt: "12,000",
-    },
-    {
-      id: 2,
-      serial: "02",
-      name: "Ajay",
-      fname: "Rman",
-      mname: "Priya",
-      class: "Nur",
-      addate: "10-Dec-2023",
-      add: "Flat No. 14, Green Valley Apartments, Sector 21, Gandhinagar, Gujarat – 382021",
-      fno: "1234567540",
-      amt: "10,000",
-    },
-    {
-      id: 3,
-      serial: "03",
-      name: "Viren",
-      fname: "Devanh Bhalla",
-      mname: "Kiya",
-      class: "Nur",
-      addate: "03-feb-2024",
-      add: "3rd Floor, Lakeview Residency, Green Valley Apartments, Sector 21, Gandhinagar Whitefield, Bengaluru, Karnataka – 560066",
-      fno: "1234567890",
-      amt: "15,000",
-    },
-    {
-      id: 4,
-      serial: "04",
-      name: "anuj",
-      fname: "aditya",
-      mname: "Teena",
-      class: "Nur",
-      addate: "10-Dec-2025",
-      add: "House No. 77, Palm Avenue, Vyttila, Kochi, Kerala – 682019",
-      fno: "1234567890",
-      amt: "10,000",
-    },
-    {
-      id: 5,
-      serial: "05",
-      name: "somya",
-      fname: "Devanh",
-      mname: "Shalini",
-      class: "Nur",
-      addate: "01-jan-2024",
-      add: "Plot No. 9, Palm Avenue, Vyttila, Ocean Pearl Apartments, Juhu, Near Hanuman Mandir, Jaipur, Rose Garden Society, Alkapuri, Vadodara, Gujarat – 390007",
-      fno: "1234567867",
-      amt: "14,000",
-    },
-  ];
-
-  const [classList, setClassList] = useState([]);
-  // useEffect(() => {
-  //     const instId = localStorage.getItem("InstituteID");  // ✅ Get dynamic ID
-  //     if (!instId) return;
-
-  //     async function fetchClasses() {
-  //         try {
-  //             const res = await getclass(instId);  // ✅ Pass selected Institute ID
-  //             setClassList(res.Table || []);
-  //         } catch (error) {
-  //             console.log("Class API Error:", error);
-  //         }
-  //     }
-
-  //     fetchClasses();
-  // }, []);
-
+  // ✅ FETCH CLASSES
   useEffect(() => {
     const instId = localStorage.getItem("InstituteID");
     if (!instId) return;
+
     async function fetchClasses() {
       try {
         const res = await getclass(instId);
-        // ✅ check API success
         if (res?.Table?.[0]?.ResultCode === "R100") {
           setClassList(res.Table1 || []);
         } else {
           setClassList([]);
         }
-      } catch (error) {
-        console.log("Class API Error:", error);
+      } catch {
         setClassList([]);
       }
     }
@@ -136,60 +64,135 @@ function Bank_Challan() {
     fetchClasses();
   }, []);
 
+  // ✅ FETCH MONTH LIST
+  useEffect(() => {
+    const instId = localStorage.getItem("InstituteID");
+    if (!instId) return;
+
+    async function fetchMonth() {
+      try {
+        const res = await getMonthList(instId);
+        setMonthList(res?.Table || []);
+      } catch {
+        setMonthList([]);
+      }
+    }
+
+    fetchMonth();
+  }, []);
+
+  // ✅ SEARCH API CALL
+  const handleSearch = async () => {
+    const instId = localStorage.getItem("InstituteID");
+    const sessionId = localStorage.getItem("SessionID");
+
+    if (!instId || !sessionId || !selectedClassId || !selectedMonthId) {
+      alert("Please select Class and Month");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const res = await getBankChallanReport(
+        instId,
+        sessionId,
+        selectedClassId,
+        selectedMonthId
+      );
+
+      setMarksData(res?.Table || []);
+    } catch (error) {
+      console.log("Error:", error);
+      setMarksData([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ✅ FILTER DATA (NAME / ROLL NO)
+  const filteredData = marksData.filter((row) => {
+    if (!searchText) return true;
+
+    const text = searchText.toLowerCase();
+
+    if (searchBy === "Name") {
+      return row?.Name?.toLowerCase().includes(text);
+    }
+
+    if (searchBy === "Roll No") {
+      return row?.RollNo?.toString().includes(text);
+    }
+
+    return true;
+  });
+
   return (
     <div className="w-full h-full bg-white flex flex-col px-4 py-2">
-      <div className="flex justify-between items-center gap-x-4 mb-5">
-        <Heading label={"Bank Challan"} style={"text-[22px] sm:text-3xl"} />
-        <Buttons
-          click={() => navigate("")}
-          label={"Print Challan"}
-          style="whitespace-nowrap h-10"
-        />
+      <div className="flex justify-between items-center mb-5">
+        <Heading label="Bank Challan" style="text-[22px] sm:text-3xl" />
+        <Buttons label="Print Challan" click={() => navigate("")} />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 mb-5 w-full">
+      {/* 🔽 FILTERS */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-5">
         <Options
-          label={"Class"}
-          name={""}
+          label="Class"
           optionMsg="Select Class"
-          options={classList.map((item) => item.ClassName)}
+          options={classList}
+          valueKey="Id"
+          labelKey="ClassName"
+          onChange={(e) => setSelectedClassId(e.target.value)}
         />
+
         <Options
-          label={"Fee"}
-          name={""}
-          optionMsg="Select Fee"
-          options={["Jan", "Feb"]}
+          label="Month"
+          optionMsg="Select Month"
+          options={monthList}
+          valueKey="ID"
+          labelKey="MonthName"
+          onChange={(e) => setSelectedMonthId(e.target.value)}
         />
+
+        <Options
+          label="Search By"
+          optionMsg="Select"
+          options={["Name", "Roll No"]}
+          value={searchBy}
+          onChange={(e) => {
+            setSearchBy(e.target.value);
+            setSearchText("");
+          }}
+        />
+
+        {/* 🔍 CONDITIONAL INPUT */}
+        {searchBy && (
+          <FormInput
+            label={`Search By ${searchBy}`}
+            placeholder={`Enter ${searchBy}`}
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+        )}
       </div>
 
       <div className="flex justify-end mb-5">
-        <Buttons click={() => navigate("")} label={"Search"} />
+        <Buttons label={loading ? "Loading..." : "Search"} click={handleSearch} />
       </div>
 
+      {/* 📊 TABLE */}
       <Table
         columns={columns}
-        data={data}
-        onRowSelect={() => {}}
+        data={filteredData}
         disableFloatingRow={false}
-        onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)}
-        actions={(row) => (
-          <CheckBox
-            label={""}
-            name={""}
-            checked={agree}
-            onChange={(e) => setAgree(e.target.checked)}
-          />
-        )}
+        onOverlayToggle={(open) => setRowDetailOpen(open)}
+         colStyle="sm:min-w-[135px]  text-[12px]  whitespace-nowrap"
       />
 
-      <div className="flex justify-center sm:justify-end space-x-5 sm:space-x-10 mt-5">
-        <Buttons label={"Clear"} />
+      <div className="flex justify-end mt-5">
+        <Buttons label="Clear" click={() => setMarksData([])} />
       </div>
 
-      {/* ✅ Dynamic div for spacing */}
-      {rowDetailOpen && window.innerWidth < 768 && (
-        <div className="h-140"></div>
-      )}
+      {rowDetailOpen && window.innerWidth < 768 && <div className="h-140"></div>}
     </div>
   );
 }

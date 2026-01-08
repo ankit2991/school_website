@@ -1,124 +1,48 @@
 import React, { useEffect, useState } from "react";
 import Heading from "../../../Components/Page_Forms/Heading";
 import Options from "../../../Components/Page_Forms/Options";
-import FormInput from "../../../Components/Page_Forms/FormInput";
-import CheckBox from "../../../Components/Page_Forms/CheckBox";
 import Buttons from "../../../Components/Page_Forms/Buttons";
 import Table from "../../../Components/Page_Forms/Table";
 import { useNavigate } from "react-router-dom";
-import { getclass } from "../../../services/api";
+import {
+  getclass,
+  getClassWiseStudents,
+  getStudentSiblingReport,
+} from "../../../services/api";
 
 function Sibling_Details() {
   const navigate = useNavigate();
-  const [rowDetailOpen, setRowDetailOpen] = useState(false); // ✅ track overlay open/close
+
+  const [classList, setClassList] = useState([]);
+  const [studentList, setStudentList] = useState([]);
+  const [siblingData, setSiblingData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const [selectedClassId, setSelectedClassId] = useState("");
+  const [selectedStudentId, setSelectedStudentId] = useState("");
+
+  const [rowDetailOpen, setRowDetailOpen] = useState(false);
+
+  /* ---------------- TABLE COLUMNS ---------------- */
   const columns = [
-    { header: "Serial No.", shortHeader: "Serial No.", accessor: "serial" },
-    { header: "Name", shortHeader: "Name", accessor: "name" },
-    { header: "Father Name", shortHeader: "Father Name", accessor: "fname" },
-    { header: "Mother Name", shortHeader: "Mother Name", accessor: "mname" },
-    { header: "Class", shortHeader: "Class", accessor: "class" },
-    { header: "D.O.B.", shortHeader: "D.O.B.", accessor: "dob" },
-    {
-      header: "Addmission Date",
-      shortHeader: "Addmission Date",
-      accessor: "addate",
-    },
+    { header: "Serial No.", accessor: "serial" },
+    { header: "Name", accessor: "name" },
+    { header: "Father Name", accessor: "fname" },
+    { header: "Mother Name", accessor: "mname" },
+    { header: "Class", accessor: "class" },
+    { header: "D.O.B.", accessor: "dob" },
+    { header: "Admission Date", accessor: "addate" },
     {
       header: "Address",
-      shortHeader: "Address",
       accessor: "add",
       cellStyle:
         "max-w-[160px] truncate sm:whitespace-normal sm:break-words sm:max-w-xs sm:line-clamp-2 md:max-w-md",
     },
-    { header: "Father No.", shortHeader: "Father No.", accessor: "fno" },
-    { header: "Mother No.", shortHeader: "Mother No.", accessor: "mno" },
+    { header: "Father No.", accessor: "fno" },
+    { header: "Mother No.", accessor: "mno" },
   ];
 
-  const data = [
-    {
-      id: 1,
-      serial: "01",
-      name: "Ajay",
-      fname: "Rman Thakur",
-      mname: "Shreya",
-      class: "Nur",
-      dob: "10-Dec-2022",
-      addate: "26-may-2024",
-      add: "221, Shanti Nagar, Near Hanuman Mandir, Jaipur, Rajasthan – 302012",
-      fno: "1234567890",
-      mno: "1234567890",
-    },
-    {
-      id: 2,
-      serial: "02",
-      name: "Ajay",
-      fname: "Rman",
-      mname: "Priya",
-      class: "Nur",
-      dob: "01-jan-2021",
-      addate: "10-Dec-2023",
-      add: "Flat No. 14, Green Valley Apartments, Sector 21, Gandhinagar, Gujarat – 382021",
-      fno: "1234567540",
-      mno: "1234567890",
-    },
-    {
-      id: 3,
-      serial: "03",
-      name: "Viren",
-      fname: "Devanh Bhalla",
-      mname: "Kiya",
-      class: "Nur",
-      dob: "31-sep-2023",
-      addate: "03-feb-2024",
-      add: "3rd Floor, Lakeview Residency, Green Valley Apartments, Sector 21, Gandhinagar Whitefield, Bengaluru, Karnataka – 560066",
-      fno: "1234567890",
-      mno: "1234567890",
-    },
-    {
-      id: 4,
-      serial: "04",
-      name: "anuj",
-      fname: "aditya",
-      mname: "Teena",
-      class: "Nur",
-      dob: "26-may-2023",
-      addate: "10-Dec-2025",
-      add: "House No. 77, Palm Avenue, Vyttila, Kochi, Kerala – 682019",
-      fno: "1234567890",
-      mno: "1234567890",
-    },
-    {
-      id: 5,
-      serial: "05",
-      name: "somya",
-      fname: "Devanh",
-      mname: "Shalini",
-      class: "Nur",
-      dob: "03-feb-2022",
-      addate: "01-jan-2024",
-      add: "Plot No. 9, Palm Avenue, Vyttila, Ocean Pearl Apartments, Juhu, Near Hanuman Mandir, Jaipur, Rose Garden Society, Alkapuri, Vadodara, Gujarat – 390007",
-      fno: "1234567867",
-      mno: "1234567890",
-    },
-  ];
-
-  const [classList, setClassList] = useState([]);
-  // useEffect(() => {
-  //   const instId = localStorage.getItem("InstituteID");  // ✅ Get dynamic ID
-  //   if (!instId) return;
-
-  //   async function fetchClasses() {
-  //     try {
-  //       const res = await getclass(instId);  // ✅ Pass selected Institute ID
-  //       setClassList(res.Table || []);
-  //     } catch (error) {
-  //       console.log("Class API Error:", error);
-  //     }
-  //   }
-
-  //   fetchClasses();
-  // }, []);
-
+  /* ---------------- FETCH CLASS LIST ---------------- */
   useEffect(() => {
     const instId = localStorage.getItem("InstituteID");
     if (!instId) return;
@@ -126,14 +50,13 @@ function Sibling_Details() {
     async function fetchClasses() {
       try {
         const res = await getclass(instId);
-        // ✅ check API success
         if (res?.Table?.[0]?.ResultCode === "R100") {
           setClassList(res.Table1 || []);
         } else {
           setClassList([]);
         }
-      } catch (error) {
-        console.log("Class API Error:", error);
+      } catch (err) {
+        console.log("Class API Error:", err);
         setClassList([]);
       }
     }
@@ -141,49 +64,128 @@ function Sibling_Details() {
     fetchClasses();
   }, []);
 
+  /* ---------------- CLASS CHANGE ---------------- */
+  const handleClassChange = async (e) => {
+    const classId = e.target.value;
+
+    setSelectedClassId(classId);
+    setSelectedStudentId("");
+    setStudentList([]);
+    setSiblingData([]);
+
+    if (!classId) return;
+
+    const instId = localStorage.getItem("InstituteID");
+    const sessionId = localStorage.getItem("SessionID");
+
+    try {
+      const res = await getClassWiseStudents(instId, sessionId, classId);
+      setStudentList(res?.Table || []);
+    } catch (err) {
+      console.log("Student API Error:", err);
+      setStudentList([]);
+    }
+  };
+
+  /* ---------------- SEARCH (Sibling API) ---------------- */
+  const handleSearch = async () => {
+    const instId = localStorage.getItem("InstituteID");
+    const sessionId = localStorage.getItem("SessionID");
+
+    if (!selectedClassId || !selectedStudentId) {
+      alert("Please select Class and Student");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setSiblingData([]);
+
+      const res = await getStudentSiblingReport(
+        instId,
+        sessionId,
+        selectedStudentId
+      );
+
+      if (Array.isArray(res?.Table)) {
+        const mapped = res.Table.map((item, index) => ({
+          id: item.ID,
+          serial: index + 1,
+          name: item.Name,
+          fname: item.FatherName,
+          mname: item.MotherName,
+          class: item.Class,
+          dob: item.DOB,
+          addate: item.AdmissionDate,
+          add: item.Address1,
+          fno: item.FMobileNo,
+          mno: item.MMobileNo,
+        }));
+
+        setSiblingData(mapped);
+      } else {
+        setSiblingData([]);
+      }
+    } catch (err) {
+      console.log("Sibling API Error:", err);
+      setSiblingData([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="w-full h-full bg-white flex flex-col px-4 py-2">
-      <div className="flex justify-between items-center gap-x-4 mb-5">
-        <Heading label={"Sibling Details"} style={"text-[22px] sm:text-3xl"} />
-        <Buttons
-          click={() => navigate("")}
-          label={"Print"}
-          style="whitespace-nowrap h-10"
-        />
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <Heading label="Sibling Details" style="text-[22px] sm:text-3xl" />
+        <Buttons label="Print" click={() => navigate("")} />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 mb-5 w-full">
+      {/* FILTERS */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5">
         <Options
-          label={"Class"}
-          name={""}
+          label="Class"
           optionMsg="Select Class"
-          options={classList.map((item) => item.ClassName)}
+          options={classList}
+          valueKey="Id"
+          labelKey="ClassName"
+          onChange={handleClassChange}
         />
+
         <Options
-          label={"Name"}
-          name={""}
-          optionMsg="Select Name"
-          options={["Ajay", "somya", "anuj"]}
+          label="Student Name"
+          optionMsg="Select Student"
+          options={studentList}
+          valueKey="Id"
+          labelKey="Name"
+          value={selectedStudentId}
+          onChange={(e) => {
+            setSelectedStudentId(e.target.value);
+            setSiblingData([]);
+          }}
         />
       </div>
 
+      {/* SEARCH BUTTON */}
       <div className="flex justify-end mb-5">
-        <Buttons click={() => navigate("")} label={"Search"} />
+        <Buttons label="Search" click={handleSearch} />
       </div>
 
+      {/* TABLE */}
       <Table
         columns={columns}
-        data={data}
-        onRowSelect={() => {}}
+        data={siblingData}
+        loading={loading}
         disableFloatingRow={false}
-        onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)}
+        onOverlayToggle={setRowDetailOpen}
       />
 
-      <div className="flex justify-center sm:justify-end space-x-0 sm:space-x-10 mt-5">
-        <Buttons label={"Clear"} />
+      {/* FOOTER */}
+      <div className="flex justify-end mt-5">
+        <Buttons label="Clear" click={() => setSiblingData([])} />
       </div>
-      {/* ✅ Dynamic div for spacing */}
-      {/* {rowDetailOpen && <div className='h-100'></div>} */}
+
       {rowDetailOpen && window.innerWidth < 768 && (
         <div className="h-140"></div>
       )}
