@@ -28,7 +28,7 @@ function Department() {
             </div>
             
             <div className="flex justify-end">
-                <Buttons click={() => navigate("/Department2")} label={"Search"} />                    
+                <Buttons click={() => navigate("/Department2")} label={"Search"} />
             </div>
             
             <div className="mt-5">

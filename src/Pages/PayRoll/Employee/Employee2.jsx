@@ -116,7 +116,7 @@ function Employee2() {
                 <FormInput label={"Join Date"} type='date' />
                 <CheckBox label={"Pension"} labelClass='text-[20px] md:mt-8' checkstyle={"md:mt-8"} name={""}
                     checked={agree} onChange={(e) => setAgree(e.target.checked)}
-                />                  
+                />
             </div>
 
             <div className="flex justify-between sm:justify-end space-x-0 sm:space-x-10 pt-2 mt-5">

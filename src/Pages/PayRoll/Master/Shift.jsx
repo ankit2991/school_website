@@ -14,7 +14,7 @@ function Shift() {
     ]
     const data = [
         { id: 1,  name: "Morning", },
-        { id: 2,  name: "Evening", },    
+        { id: 2,  name: "Evening", },
     ];
 
     return (

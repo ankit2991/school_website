@@ -27,7 +27,7 @@ function Add_Bank() {
             </div>
             
             <div className="flex justify-end">
-                <Buttons click={() => navigate("/Add-Bank2")} label={"Search"} />                    
+                <Buttons click={() => navigate("/Add-Bank2")} label={"Search"} />
             </div>
             
             <div className="mt-5">

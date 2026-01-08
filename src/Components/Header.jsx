@@ -1,88 +1,514 @@
-// import React, { useState } from 'react'
-// import { FaUserCircle, FaHome, FaSignOutAlt, FaBars } from 'react-icons/fa';
-// import { Link } from 'react-router-dom';
+// import React, { useEffect, useState } from "react";
+// import { FaBars } from "react-icons/fa";
+// import { getinstitute, getsession } from "../services/api";
+// import Dialog from "./Page_Forms/Dialog";
+// import Options from "./Page_Forms/Options";
 
 // function Header({ onToggleSidebar }) {
 //   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+//   const [institutes, setInstitutes] = useState([]);
+//   const [sessions, setSessions] = useState([]);
+
+//   const [selectedInstituteName, setSelectedInstituteName] = useState(
+//     localStorage.getItem("InstituteName") || ""
+//   );
+
+//   const [selectedSessionName, setSelectedSessionName] = useState(
+//     localStorage.getItem("SessionName") || ""
+//   );
+
+//   const [showPopup, setShowPopup] = useState(false); // ✅ single popup
+
+//   // 🔹 Fetch institutes
+//   useEffect(() => {
+//     async function fetchInstitutes() {
+//       try {
+//         const data = await getinstitute();
+//         setInstitutes(data.Table1 || []);
+//       } catch (error) {
+//         console.log("Institute API Error:", error);
+//       }
+//     }
+//     fetchInstitutes();
+//   }, []);
+
+//   // 🔹 Fetch sessions (NO SchID)
+//   useEffect(() => {
+//     async function fetchSessions() {
+//       try {
+//         const data = await getsession();
+//         setSessions(data.Table1 || []);
+//       } catch (error) {
+//         console.log("Session API Error:", error);
+//       }
+//     }
+//     fetchSessions();
+//   }, []);
+
 //   const handleToggle = () => {
 //     setSidebarOpen(!sidebarOpen);
-//     if (onToggleSidebar) {
-//       console.log("clicked")
-//       onToggleSidebar(!sidebarOpen);
-//     }
+//     onToggleSidebar && onToggleSidebar(!sidebarOpen);
+//   };
+
+//   // 🔹 Institute change
+//   const handleInstituteChange = (e) => {
+//     const selectedName = e.target.value;
+//     const selectedObj = institutes.find((ins) => ins.Name === selectedName);
+//     if (!selectedObj) return;
+
+//     setSelectedInstituteName(selectedObj.Name);
+//     localStorage.setItem("InstituteID", selectedObj.Id);
+//     localStorage.setItem("InstituteName", selectedObj.Name);
+//   };
+
+//   // 🔹 Session change
+//   const handleSessionChange = (e) => {
+//     const selectedName = e.target.value;
+//     const selectedObj = sessions.find((s) => s.Session === selectedName);
+//     if (!selectedObj) return;
+
+//     setSelectedSessionName(selectedObj.Session);
+//     localStorage.setItem("SessionID", selectedObj.Id);
+//     localStorage.setItem("SessionName", selectedObj.Session);
 //   };
 
 //   return (
-//     <header className="fixed top-0 bg-gradient-to-b from-[#E46343] via-[#CC3015] to-[#772109] text-white shadow-md py-4 px-6 flex items-center justify-between w-full">
-//       {/* Left Side - Logo and School Info */}
-//       <div className="flex items-center space-x-4">
-//         <img
-//           src="/Systrans_Logo.jpeg"
-//           alt="School Logo"
-//           className="h-12 w-12 object-cover rounded-full border-2"
-//         />
-//         <div>
-//           <h1 className="text-lg font-semibold">
-//             Kesharam Memorial Manakchand Public School
-//           </h1>
-//           <p className="text-sm opacity-80">Current Session: 2024–2025</p>
-//         </div>
-//       </div>
+//     <>
+//       <header className="fixed top-0 bg-gradient-to-b from-[#E46343] via-[#CC3015] to-[#772109] text-white shadow-md py-3 px-4 flex items-center justify-between w-full z-40">
+//         {/* Left Side */}
+//         <div className="flex items-center space-x-3 min-w-0">
+//           <img
+//             src="/Systrans_Logo.jpeg"
+//             alt="School Logo"
+//             className="h-10 w-10 object-cover rounded-full border-2"
+//           />
 
-//       {/* Right Side - Buttons */}
-//       <div className="flex items-center space-x-4">
-//         <FaBars className="text-white me-4 cursor-pointer"onClick={handleToggle}/>
-//       </div>
-//     </header>
+//           <div className="min-w-0">
+//             {/* Institute (opens same popup) */}
+//             <h1
+//               onClick={() => setShowPopup(true)}
+//               className="cursor-pointer text-md md:text-lg font-semibold truncate hover:underline"
+//             >
+//               {selectedInstituteName || "Select Institute"}
+//             </h1>
+
+//             {/* Session (opens same popup) */}
+//             <p
+//               onClick={() => setShowPopup(true)}
+//               className="cursor-pointer text-xs md:text-sm opacity-80 truncate hover:underline"
+//             >
+//               {selectedSessionName
+//                 ? `Current Session: ${selectedSessionName}`
+//                 : "Select Session"}
+//             </p>
+//           </div>
+//         </div>
+
+//         {/* Right Side */}
+//         <FaBars
+//           className="text-white text-xl md:text-2xl cursor-pointer"
+//           onClick={handleToggle}
+//         />
+//       </header>
+
+//       {/* 🔹 ONE POPUP ONLY */}
+//       <Dialog
+//         open={showPopup}
+//         title="Select Institute & Session"
+//         dialogstyle="sm:w-[380px]"
+//       >
+//         {/* Institute */}
+//         <Options
+//           optionMsg="Select Institute"
+//           options={institutes.map((item) => item.Name)}
+//           value={selectedInstituteName}
+//           onChange={handleInstituteChange}
+//         />
+
+//         <div className="h-4 "></div>
+
+//         {/* Session */}
+//         <Options
+//           optionMsg="Select Session"
+//           options={sessions.map((item) => item.Session)}
+//           value={selectedSessionName}
+//           onChange={handleSessionChange}
+//         />
+
+//         <div className="flex justify-end mt-4 gap-2">
+//           <button
+//             onClick={() => setShowPopup(false)}
+//             className="px-4 py-1 rounded bg-gray-300 text-sm"
+//           >
+//             Close
+//           </button>
+//         </div>
+//       </Dialog>
+//     </>
 //   );
 // }
 
 // export default Header;
 
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
+import { getinstitute, getsession } from "../services/api";
+import Dialog from "./Page_Forms/Dialog";
+import Options from "./Page_Forms/Options";
 
 function Header({ onToggleSidebar }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const [institutes, setInstitutes] = useState([]);
+  const [sessions, setSessions] = useState([]);
+
+  const [selectedInstituteName, setSelectedInstituteName] = useState(
+    localStorage.getItem("InstituteName") || ""
+  );
+
+  const [selectedSessionName, setSelectedSessionName] = useState(
+    localStorage.getItem("SessionName") || ""
+  );
+
+  const [showPopup, setShowPopup] = useState(false);
+
+  // ✅ store old values when popup opens
+  const [prevInstituteId, setPrevInstituteId] = useState(null);
+  const [prevSessionId, setPrevSessionId] = useState(null);
+
+  // 🔹 Fetch institutes
+  useEffect(() => {
+    async function fetchInstitutes() {
+      try {
+        const data = await getinstitute();
+        setInstitutes(data.Table1 || []);
+      } catch (error) {
+        console.log("Institute API Error:", error);
+      }
+    }
+    fetchInstitutes();
+  }, []);
+
+  // 🔹 Fetch sessions
+  useEffect(() => {
+    async function fetchSessions() {
+      try {
+        const data = await getsession();
+        setSessions(data.Table1 || []);
+      } catch (error) {
+        console.log("Session API Error:", error);
+      }
+    }
+    fetchSessions();
+  }, []);
+
   const handleToggle = () => {
     setSidebarOpen(!sidebarOpen);
-    if (onToggleSidebar) {
-      console.log("clicked")
-      onToggleSidebar(!sidebarOpen);
-    }
+    onToggleSidebar && onToggleSidebar(!sidebarOpen);
   };
 
-  return (
-    <header className="fixed top-0 bg-gradient-to-b from-[#E46343] via-[#CC3015] to-[#772109] text-white shadow-md py-3 px-4 flex items-center justify-between w-full z-40">
-      {/* Left Side - Logo and School Info */}
-      <div className="flex items-center space-x-3 min-w-0">
-        <img
-          src="/Systrans_Logo.jpeg"
-          alt="School Logo"
-          className="h-10 w-10 object-cover rounded-full border-2 flex-shrink-0"
-        />
-        <div className="min-w-0">
-          <h1 className="text-md md:text-lg font-semibold leading-tight truncate max-w-[250px]  md:max-w-[500px]">
-            Kesharam Memorial Manakchand Public School
-          </h1>
-          <p className="text-xs md:text-sm opacity-80 truncate max-w-[200px] md:max-w-[300px]">
-            Current Session: 2024–2025
-          </p>
-        </div>
-      </div>
+  // ✅ open popup and save current IDs
+  const openPopup = () => {
+    setPrevInstituteId(localStorage.getItem("InstituteID"));
+    setPrevSessionId(localStorage.getItem("SessionID"));
+    setShowPopup(true);
+  };
 
-      {/* Right Side - Buttons */}
-      <div className="flex items-center space-x-4">
+  // 🔹 Institute change (NO reload here)
+  const handleInstituteChange = (e) => {
+    const selectedName = e.target.value;
+    const selectedObj = institutes.find((ins) => ins.Name === selectedName);
+    if (!selectedObj) return;
+
+    setSelectedInstituteName(selectedObj.Name);
+    localStorage.setItem("InstituteID", selectedObj.Id);
+    localStorage.setItem("InstituteName", selectedObj.Name);
+  };
+
+  // 🔹 Session change (NO reload here)
+  const handleSessionChange = (e) => {
+    const selectedName = e.target.value;
+    const selectedObj = sessions.find((s) => s.Session === selectedName);
+    if (!selectedObj) return;
+
+    setSelectedSessionName(selectedObj.Session);
+    localStorage.setItem("SessionID", selectedObj.Id);
+    localStorage.setItem("SessionName", selectedObj.Session);
+  };
+
+  // ✅ reload ONLY on close if changed
+  // const handleClose = () => {
+  //   setShowPopup(false);
+
+  //   const newInstituteId = localStorage.getItem("InstituteID");
+  //   const newSessionId = localStorage.getItem("SessionID");
+
+  //   if (
+  //     newInstituteId !== prevInstituteId ||
+  //     newSessionId !== prevSessionId
+  //   ) {
+  //     window.location.reload();
+  //   }
+  // };
+  const handleClose = () => {
+  const newInstituteId = localStorage.getItem("InstituteID");
+  const newSessionId = localStorage.getItem("SessionID");
+
+  if (
+    newInstituteId !== prevInstituteId ||
+    newSessionId !== prevSessionId
+  ) {
+    window.location.replace(window.location.href);
+    return;
+  }
+
+  setShowPopup(false);
+};
+
+
+  return (
+    <>
+      <header className="fixed top-0 bg-gradient-to-b from-[#E46343] via-[#CC3015] to-[#772109] text-white shadow-md py-3 px-4 flex items-center justify-between w-full z-40">
+        {/* Left Side */}
+        <div className="flex items-center space-x-3 min-w-0">
+          <img
+            src="/Systrans_Logo.jpeg"
+            alt="School Logo"
+            className="h-10 w-10 object-cover rounded-full border-2"
+          />
+
+          <div className="min-w-0">
+            <h1
+              onClick={openPopup}
+              className="cursor-pointer text-md md:text-lg font-semibold truncate hover:underline"
+            >
+              {selectedInstituteName || "Select Institute"}
+            </h1>
+
+            <p
+              onClick={openPopup}
+              className="cursor-pointer text-xs md:text-sm opacity-80 truncate hover:underline"
+            >
+              {selectedSessionName
+                ? `Current Session: ${selectedSessionName}`
+                : "Select Session"}
+            </p>
+          </div>
+        </div>
+
+        {/* Right Side */}
         <FaBars
-          className="text-white text-xl md:text-2xl cursor-pointer  "
-          onClick={handleToggle} 
+          className="text-white text-xl md:text-2xl cursor-pointer"
+          onClick={handleToggle}
         />
-      </div>
-    </header>
+      </header>
+
+      {/* 🔹 ONE POPUP ONLY */}
+      <Dialog
+        open={showPopup}
+        title="Select Institute & Session"
+        dialogstyle="sm:w-[380px]"
+      >
+        <Options
+          optionMsg="Select Institute"
+          options={institutes.map((item) => item.Name)}
+          value={selectedInstituteName}
+          onChange={handleInstituteChange}
+        />
+
+        <div className="h-4"></div>
+
+        <Options
+          optionMsg="Select Session"
+          options={sessions.map((item) => item.Session)}
+          value={selectedSessionName}
+          onChange={handleSessionChange}
+        />
+
+        <div className="flex justify-end mt-4 gap-2">
+          <button
+            onClick={handleClose}
+            className="px-4 py-1 rounded bg-gray-300 text-sm"
+          >
+            Close
+          </button>
+        </div>
+      </Dialog>
+    </>
   );
 }
 
 export default Header;
+
+
+
+// import React, { useEffect, useState } from "react";
+// import { FaBars } from "react-icons/fa";
+// import { getinstitute, getsession } from "../services/api";
+// import Dialog from "./Page_Forms/Dialog";
+// import Options from "./Page_Forms/Options";
+
+// function Header({ onToggleSidebar }) {
+//   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+//   const [institutes, setInstitutes] = useState([]);
+//   const [sessions, setSessions] = useState([]);
+
+//   const [selectedInstituteName, setSelectedInstituteName] = useState(
+//     localStorage.getItem("InstituteName") || ""
+//   );
+
+//   const [selectedSessionName, setSelectedSessionName] = useState(
+//     localStorage.getItem("SessionName") || ""
+//   );
+
+//   const [showPopup, setShowPopup] = useState(false); // ✅ single popup
+
+//   // 🔹 Fetch institutes
+//   useEffect(() => {
+//     async function fetchInstitutes() {
+//       try {
+//         const data = await getinstitute();
+//         setInstitutes(data.Table1 || []);
+//       } catch (error) {
+//         console.log("Institute API Error:", error);
+//       }
+//     }
+//     fetchInstitutes();
+//   }, []);
+
+//   // 🔹 Fetch sessions (NO SchID)
+//   useEffect(() => {
+//     async function fetchSessions() {
+//       try {
+//         const data = await getsession();
+//         setSessions(data.Table1 || []);
+//       } catch (error) {
+//         console.log("Session API Error:", error);
+//       }
+//     }
+//     fetchSessions();
+//   }, []);
+
+//   const handleToggle = () => {
+//     setSidebarOpen(!sidebarOpen);
+//     onToggleSidebar && onToggleSidebar(!sidebarOpen);
+//   };
+
+//   const reloadIfChanged = (key, newValue) => {
+//   const oldValue = localStorage.getItem(key);
+//   if (oldValue && oldValue !== String(newValue)) {
+//     setTimeout(() => {
+//       window.location.reload();
+//     }, 100);
+//   }
+// };
+
+
+//   // 🔹 Institute change
+//   const handleInstituteChange = (e) => {
+//   const selectedName = e.target.value;
+//   const selectedObj = institutes.find((ins) => ins.Name === selectedName);
+//   if (!selectedObj) return;
+
+//   reloadIfChanged("InstituteID", selectedObj.Id);
+
+//   setSelectedInstituteName(selectedObj.Name);
+//   localStorage.setItem("InstituteID", selectedObj.Id);
+//   localStorage.setItem("InstituteName", selectedObj.Name);
+// };
+
+
+//   // 🔹 Session change
+//  const handleSessionChange = (e) => {
+//   const selectedName = e.target.value;
+//   const selectedObj = sessions.find((s) => s.Session === selectedName);
+//   if (!selectedObj) return;
+
+//   reloadIfChanged("SessionID", selectedObj.Id);
+
+//   setSelectedSessionName(selectedObj.Session);
+//   localStorage.setItem("SessionID", selectedObj.Id);
+//   localStorage.setItem("SessionName", selectedObj.Session);
+// };
+
+
+//   return (
+//     <>
+//       <header className="fixed top-0 bg-gradient-to-b from-[#E46343] via-[#CC3015] to-[#772109] text-white shadow-md py-3 px-4 flex items-center justify-between w-full z-40">
+//         {/* Left Side */}
+//         <div className="flex items-center space-x-3 min-w-0">
+//           <img
+//             src="/Systrans_Logo.jpeg"
+//             alt="School Logo"
+//             className="h-10 w-10 object-cover rounded-full border-2"
+//           />
+
+//           <div className="min-w-0">
+//             {/* Institute (opens same popup) */}
+//             <h1
+//               onClick={() => setShowPopup(true)}
+//               className="cursor-pointer text-md md:text-lg font-semibold truncate hover:underline"
+//             >
+//               {selectedInstituteName || "Select Institute"}
+//             </h1>
+
+//             {/* Session (opens same popup) */}
+//             <p
+//               onClick={() => setShowPopup(true)}
+//               className="cursor-pointer text-xs md:text-sm opacity-80 truncate hover:underline"
+//             >
+//               {selectedSessionName
+//                 ? `Current Session: ${selectedSessionName}`
+//                 : "Select Session"}
+//             </p>
+//           </div>
+//         </div>
+
+//         {/* Right Side */}
+//         <FaBars
+//           className="text-white text-xl md:text-2xl cursor-pointer"
+//           onClick={handleToggle}
+//         />
+//       </header>
+
+//       {/* 🔹 ONE POPUP ONLY */}
+//       <Dialog
+//         open={showPopup}
+//         title="Select Institute & Session"
+//         dialogstyle="sm:w-[380px]"
+//       >
+//         {/* Institute */}
+//         <Options
+//           optionMsg="Select Institute"
+//           options={institutes.map((item) => item.Name)}
+//           value={selectedInstituteName}
+//           onChange={handleInstituteChange}
+//         />
+
+//         <div className="h-4 "></div>
+
+//         {/* Session */}
+//         <Options
+//           optionMsg="Select Session"
+//           options={sessions.map((item) => item.Session)}
+//           value={selectedSessionName}
+//           onChange={handleSessionChange}
+//         />
+
+//         <div className="flex justify-end mt-4 gap-2">
+//           <button
+//             onClick={() => setShowPopup(false)}
+//             className="px-4 py-1 rounded bg-gray-300 text-sm"
+//           >
+//             Close
+//           </button>
+//         </div>
+//       </Dialog>
+//     </>
+//   );
+// }
+
+// export default Header;

@@ -1,204 +1,273 @@
-// import React, { useState } from 'react'
-// import Heading from '../../../Components/Page_Forms/Heading'
-// import Options from '../../../Components/Page_Forms/Options'
-// import FormInput from '../../../Components/Page_Forms/FormInput'
-// import Buttons from '../../../Components/Page_Forms/Buttons'
-// import { useNavigate } from 'react-router-dom'
-// import Table from '../../../Components/Page_Forms/Table'
+import React, { useEffect, useState } from "react";
+import Heading from "../../../Components/Page_Forms/Heading";
+import Options from "../../../Components/Page_Forms/Options";
+import FormInput from "../../../Components/Page_Forms/FormInput";
+import Buttons from "../../../Components/Page_Forms/Buttons";
+import Table from "../../../Components/Page_Forms/Table";
+import { getMonthList, getStudentAttReport, getYearList } from "../../../services/api";
+import useClassList from "../../../hooks/useClassList";
+import Loader from "../../../Components/Page_Forms/Loader";
 
-// function Student_Attend_Report() {
-//     const navigate = useNavigate()
-//     const [rowDetailOpen, setRowDetailOpen] = useState(false); // ✅ track overlay open/close
+function Student_Attend_Report() { 
+  const instId = localStorage.getItem("InstituteID"); 
+  const sessId = localStorage.getItem("SessionID"); 
+  const [columns, setColumns] = useState([]); 
+  const [data, setData] = useState([]); 
+  const [rowDetailOpen, setRowDetailOpen] = useState(false); // ✅ track overlay open/close 
+  const { classList } = useClassList(); 
+  const [selectedClassId, setSelectedClassId] = useState(""); 
+  const [monthList, setMonthList] = useState([]); 
+  const [selectedMonthId, setSelectedMonthId] = useState(""); 
+  const [yearList, setYearList] = useState([]); 
+  const [selectedYearId, setSelectedYearId] = useState(""); 
+  const [searched, setSearched] = useState(false); 
+  const [searchType, setSearchType] = useState(""); 
+  const [selectedYearName, setSelectedYearName] = useState(""); 
+  const [selectedDate, setSelectedDate] = useState(""); 
+
+  const SummaryList=[ 
+    {Id: 1, Name:"Summary"}, {Id:2 ,Name:"Details"}, 
+    {Id:3,Name:"Class wise Summary"},
+  ] 
+     
+  // =================== MONTH LIST ======================  
+  useEffect(() => { 
+    fetchMonthList(); 
+  }, []); 
+  
+  const fetchMonthList = async () => { 
+    try { 
+      setSearched(true); 
+      const res = await getMonthList(); 
+      if (res?.Table) { 
+        setMonthList(res.Table); 
+      } 
+    } catch (error) { 
+      console.error("Stop API Error:", error); 
+    } finally { 
+      setSearched(false); 
+    } 
+  };
+  
+  // =================== YEAR LIST ====================== 
+  useEffect(() => { 
+    fetchYearList(); 
+  }, []); 
+  
+  const fetchYearList = async () => { 
+    try { 
+      setSearched(true); 
+      const res = await getYearList(); 
+      if (res?.Table) { 
+        setYearList(res.Table); 
+      } 
+    } catch (error) { 
+      console.error("Stop API Error:", error); 
+    } finally { 
+      setSearched(false); 
+    } 
+  }; 
+  
+  // =================== SUMMARY TABLE ====================== 
+  const summaryColumns = [ 
+    { header: "Sr No", accessor: "SrNo" }, 
+    { header: "Student Name", accessor: "Student" }, 
+    { header: "Father Name", accessor: "FatherName" }, 
+    { header: "Total Attendance", accessor: "TotalAtt" }, 
+    { header: "Leave", accessor: "Leave" }, 
+    { header: "Leave1", accessor: "Leave1" }, 
+  ]; 
+
+  // =================== DETAIL TABLE ====================== 
+  const generateDetailsColumnsFromApi = (year, month) => { 
+    const daysInMonth = new Date(year, month, 0).getDate(); 
+    const baseCols = [ 
+      { header: "S.No", accessor: "SNo" }, 
+      { header: "Student", accessor: "Student" }, 
+      { header: "Gender", accessor: "Gender" }, 
+      { header: "Caste", accessor: "Caste" }, 
+    ]; 
     
-    // const columns = [
-    //     { header: "Serial No.", shortHeader: "Serial No.", accessor: "serial" },
-    //     { header: "Name", shortHeader: "Name", accessor: "name" },
-    //     { header: "Father Name", shortHeader: "Father Name", accessor: "fname" },
-    //     { header: "Total Attendance", shortHeader: "Total Attendance", accessor: "tot" },
-    //     { header: "Leave", shortHeader: "Leave", accessor: "leave" },
-    //     { header: "Leave1", shortHeader: "Leave1", accessor: "leave1" },
-    // ];
+    const dateCols = Array.from({ length: daysInMonth }, (_, i) => ({ 
+      header: `${i + 1}`, accessor: `${i + 1}`, 
+    })); 
     
-    // const data = [
-    //     { id: 1,  serial: "01", name: "Ajay", fname: "Rman Thakur",  tot:"30", leave:"5", leave1:"3" },
-    //     { id: 2,  serial: "02", name: "Ajay", fname: "Rman", tot:"30", leave:"5", leave1:"3" },
-    //     { id: 3,  serial: "03", name: "Viren", fname: "Devanh Bhalla",  tot:"30", leave:"5", leave1:"3" },
-    //     { id: 4,  serial: "04", name: "anuj", fname: "aditya", tot:"30", leave:"5", leave1:"3" },
-    //     { id: 5,  serial: "05", name: "somya", fname: "Devanh",  tot:"30", leave:"5", leave1:"3" },
-    // ];
-
-//     const columns = [
-//         { header: "Serial No.", shortHeader: "Serial No.", accessor: "serial" },
-//         { header: "Name", shortHeader: "Name", accessor: "name" },
-//         { header: "Gender", shortHeader: "Gender", accessor: "gen" },
-//         { header: "Caste", shortHeader: "Caste", accessor: "caste" },
-//         { header: "Total P", shortHeader: "Total P", accessor: "totp" },
-//         { header: "Total AB", shortHeader: "Total AB", accessor: "tota" },
-//         { header: "Till Date P", shortHeader: "Till Date P", accessor: "tillp" },
-//         { header: "Till Date AB", shortHeader: "Till Date P", accessor: "tillab" },
-//     ];
+    const endCols = [ 
+      { header: "Total P", accessor: "TotalP" }, 
+      { header: "Total AB", accessor: "TotalAb" }, 
+      { header: "Till Date P", accessor: "TillDateP" }, 
+      { header: "Till Date AB", accessor: "TillDateAb" }, 
+    ]; 
     
-//     const data = [
-//         { id: 1,  serial: "01", name: "Ajay", gen:"Boy", caste:"Gen",  totp:"30",tota:"0", tillp:"5", tillab:"3" },
-//         { id: 2,  serial: "02", name: "Ajay", gen:"Boy", caste:"St", totp:"30",tota:"0", tillp:"5", tillab:"3" },
-//         { id: 3,  serial: "03", name: "Viren", gen:"Boy", caste:"SC",  totp:"30",tota:"0", tillp:"5", tillab:"3" },
-//         { id: 4,  serial: "04", name: "anuj", gen:"Boy", caste:"Min", totp:"30",tota:"0", tillp:"5", tillab:"3" },
-//         { id: 5,  serial: "05", name: "somya", gen:"Girl", caste:"Jain",  totp:"30",tota:"0", tillp:"5", tillab:"3" },
-//     ];
-
-//     return (
-//          <div className="w-full h-full bg-white flex flex-col px-4 py-2">
-//             <div className="flex justify-between mb-5">
-//                 <Heading label={"Student Attendance Report"} />                                   
-//             </div>
+    return [...baseCols, ...dateCols, ...endCols]; 
+  }; 
+  
+  // =================== CLASS WISE SUMMARY TABLE ====================== 
+  const classWiseColumns = [ 
+    { header: "Class", accessor: "Class" }, 
+    { header: "Students", accessor: "Student" }, 
+    { header: "Present", accessor: "Present" }, 
+    { header: "Leave", accessor: "Leave" }, 
+  ]; 
+  
+  /* ================= DATE FORMATTER ================= */ 
+  // INPUT → API 
+  const formatDateForApi = (dateStr) => { 
+    if (!dateStr) return null; 
+    const d = new Date(dateStr); 
+    if (isNaN(d)) return null; 
+    const day = d.getDate().toString().padStart(2, "0"); 
+    const month = d.toLocaleString("en-GB", { month: "short" }); 
+    const year = d.getFullYear(); 
+    return `${day}/${month}/${year}`; 
+  }; 
+  
+  // API → INPUT 
+  const apiDateToInput = (apiDate) => { 
+    if (!apiDate) return ""; 
+    const timestamp = parseInt(apiDate.match(/\d+/)[0], 10); 
+    const d = new Date(timestamp); 
+    const year = d.getFullYear(); 
+    const month = String(d.getMonth() + 1).padStart(2, "0"); 
+    const day = String(d.getDate()).padStart(2, "0"); 
+    return `${year}-${month}-${day}`; 
+  }; 
+  
+  /* ================= STUDENT ATTENDANCE REPORT ================= */
+  const handleSearch = async () => { 
+    try { 
+      setSearched(true); 
+      
+      // ================= SUMMARY ================= 
+      if (searchType === "1") { 
+        if (!selectedClassId || !selectedMonthId || !selectedYearName) { 
+          alert("Please select all fields"); 
+          return; 
+        } 
+        const res = await getStudentAttReport( instId, sessId, selectedClassId, selectedMonthId, selectedYearName, 1 ); 
+        
+        if (res?.Table) { 
+          setColumns(summaryColumns); 
+          setData(res.Table); 
+        } 
+      } 
+      
+      // ================= DETAILS ================= 
+      if (searchType === "2") { 
+        if (!selectedClassId || !selectedMonthId || !selectedYearName) { 
+          alert("Please select all fields"); 
+          return; 
+        } 
+        
+        const res = await getStudentAttReport( instId, sessId, selectedClassId, selectedMonthId, selectedYearName, 2 ); 
+        
+        if (res?.Table) { 
+          const cols = generateDetailsColumnsFromApi( selectedYearId, selectedMonthId ); 
+          setColumns(cols); 
+          setData(res.Table); 
+        } 
+      } 
+      
+      // ================= CLASS WISE SUMMARY ================= 
+      if (searchType === "3") { 
+        if (!selectedDate) { 
+          alert("Please select date"); 
+          return; 
+        } 
+        
+        const formattedDate = formatDateForApi(selectedDate); 
+        const res = await getStudentAttReport( instId, sessId, 0, 0, 0, 3, formattedDate ); 
+        
+        if (res?.Table) { 
+          setColumns(classWiseColumns); 
+          setData(res.Table); 
+        } 
+      } 
+    } catch (error) { 
+      console.error("Attendance Report Error", error); 
+    } finally { 
+      setSearched(false); 
+    } 
+  }; 
+  
+  return ( 
+    <div className="w-full h-full bg-white flex flex-col px-4 py-2"> 
+      <Loader show={searched}/> 
+      <div className="flex justify-between mb-5"> 
+        <Heading label={"Student Attendance Report"} /> 
+      </div> 
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-3 mb-5 w-full"> 
+        {/* SEARCH TYPE */} 
+        <Options 
+          label="Search" optionMsg="Select Option" options={SummaryList} 
+          valueKey="Id" labelKey="Name" 
+          onChange={(e) => { 
+            setSearchType(e.target.value); 
+            setColumns([]); 
+            setData([]); 
+          }} 
+        /> 
+        {/* SHOW ONLY FOR SUMMARY & DETAILS */} 
+        {(searchType === "1" || searchType === "2") && ( 
+          <> 
+            <Options 
+              label="Class" optionMsg="Select Class" options={classList} valueKey="Id" 
+              labelKey="ClassName" onChange={(e) => setSelectedClassId(e.target.value)} 
+            /> 
             
-//             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 mb-5 w-full">
-//                 <Options label={"Search"} name={""} optionMsg="Select Option" options={["Summary", "Details", "Class wise Summary", "Date wise"]}/>
-//                 <Options label={"Class"} name={""} optionMsg="Select Class" options={["Nur", "K.G.", "Prep"]}/>
-//                 <FormInput label={"Month"} type='month' />
-//                 <FormInput label={"Year"} type='year' />
-//                 <FormInput label={"Date"} type='date' />
-//             </div>           
-
-//             <div className="flex justify-end">
-//                 <Buttons click={() => navigate("/Hostel-fee")} label={"Search"} />
-//             </div>
-
-//             <Table columns={columns} data={data} onRowSelect={() => {}} disableFloatingRow={false}
-//                 onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)}
-//             />
-
-//             <div className="flex justify-center sm:justify-end space-x-0 sm:space-x-10 mt-5">
-//                 <Buttons label={"Clear"}/>
-//             </div>
-
-//             {/* ✅ Dynamic div for spacing */}
-//             {rowDetailOpen && window.innerWidth < 768 && <div className='h-140'></div>}
-           
-//         </div>
-//     )
-// }
-
-// export default Student_Attend_Report
-import React, { useState } from 'react'
-import Heading from '../../../Components/Page_Forms/Heading'
-import Options from '../../../Components/Page_Forms/Options'
-import FormInput from '../../../Components/Page_Forms/FormInput'
-import Buttons from '../../../Components/Page_Forms/Buttons'
-import Table from '../../../Components/Page_Forms/Table'
-
-function Student_Attend_Report() {
-    const [searchType, setSearchType] = useState("");
-    const [selectedClass, setSelectedClass] = useState("");
-    const [selectedMonth, setSelectedMonth] = useState("");
-    const [selectedYear, setSelectedYear] = useState("");
-    const [columns, setColumns] = useState([]);
-    const [data, setData] = useState([]);
-    const [rowDetailOpen, setRowDetailOpen] = useState(false); // ✅ track overlay open/close
-
-    // ✅ Summary columns
-    const summaryColumns = [
-        { header: "Serial No.", shortHeader: "Serial No.", accessor: "serial" },
-        { header: "Name", shortHeader: "Name", accessor: "name" },
-        { header: "Father Name", shortHeader: "Father Name", accessor: "fname" },
-        { header: "Total Attendance", shortHeader: "Total Attendance", accessor: "tot" },
-        { header: "Leave", shortHeader: "Leave", accessor: "leave" },
-        { header: "Leave1", shortHeader: "Leave1", accessor: "leave1" },
-    ];
-
-    const summaryData = [
-        { id: 1, serial: "01", name: "Ajay", fname: "Rman Thakur", tot:"30", leave:"5", leave1:"3" },
-        { id: 2, serial: "02", name: "Ajay", fname: "Rman", tot:"30", leave:"5", leave1:"3" },
-        { id: 3, serial: "03", name: "Viren", fname: "Devanh Bhalla", tot:"30", leave:"5", leave1:"3" },
-        { id: 4, serial: "04", name: "Anuj", fname: "Aditya", tot:"30", leave:"5", leave1:"3" },
-        { id: 5, serial: "05", name: "Somya", fname: "Devanh", tot:"30", leave:"5", leave1:"3" },
-    ];
-
-    // ✅ Generate Details columns dynamically (with dates)
-    const generateDetailsColumns = (month, year) => {
-        const daysInMonth = new Date(year, month, 0).getDate();
-        const baseCols = [
-            { header: "Serial No.", accessor: "serial" },
-            { header: "Name", accessor: "name" },
-            { header: "Gender", accessor: "gen" },
-            { header: "Caste", accessor: "caste" },
-        ];
-        const dateCols = Array.from({ length: daysInMonth }, (_, i) => ({
-            header: `${i + 1}`,
-            accessor: `d${i + 1}`,
-        }));
-        const endCols = [
-            { header: "Total P", accessor: "totp" },
-            { header: "Total AB", accessor: "tota" },
-            { header: "Till Date P", accessor: "tillp" },
-            { header: "Till Date AB", accessor: "tillab" },
-        ];
-        return [...baseCols, ...dateCols, ...endCols];
-    };
-    
-    // ✅ Generate Details data
-    const generateDetailsData = (month, year) => {
-        const daysInMonth = new Date(year, month, 0).getDate();
-        return [
-            { id: 1, serial: "01", name: "Ajay", gen: "Boy", caste: "Gen", 
-                ...Object.fromEntries( Array.from({ length: daysInMonth }, (_, i) => [`d${i + 1}`, i % 2 === 0 ? "P" : "AB"])),
-                totp: "20", tota: "10", tillp: "15", tillab: "5",
-            },
-            { id: 2, serial: "02", name: "Somya", gen: "Girl", caste: "SC", 
-                ...Object.fromEntries( Array.from({ length: daysInMonth }, (_, i) => [`d${i + 1}`, i % 3 === 0 ? "AB" : "P"])), 
-                totp: "25", tota: "5", tillp: "20", tillab: "5", 
-            },
-        ];
-    };
-
-    const handleSearch = () => {
-        if (searchType === "Summary") {
-            setColumns(summaryColumns);
-            setData(summaryData);
-        }
-        else if (searchType === "Details" && selectedClass && selectedMonth && selectedYear) {
-            const monthIndex = new Date(Date.parse(`${selectedMonth} 1, ${selectedYear}`)).getMonth() + 1;
-            setColumns(generateDetailsColumns(monthIndex, selectedYear));
-            setData(generateDetailsData(monthIndex, selectedYear));
-        }
-    };
-
-    return (
-        <div className="w-full h-full bg-white flex flex-col px-4 py-2">
-            <div className="flex justify-between mb-5">
-                <Heading label={"Student Attendance Report"} />
-            </div>
+            <Options 
+              label="Month" optionMsg="Select Month" options={monthList} valueKey="ID" 
+              labelKey="MonthName" onChange={(e) => setSelectedMonthId(e.target.value)} 
+            /> 
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-3 mb-5 w-full">
-                <Options label={"Search"} optionMsg="Select Option" options={["Summary", "Details", "Class wise Summary", "Date wise"]} 
-                    onChange={(e) => setSearchType(e.target.value)}
-                />
-                <Options label={"Class"} optionMsg="Select Class" options={["Nur", "K.G.", "Prep"]} onChange={(e) => setSelectedClass(e.target.value)} />
-                <Options label={"Month"} optionMsg="Select Month" options={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]}
-                    onChange={(e) => setSelectedMonth(e.target.value)}
-                />
-                <Options label={"Year"} optionMsg="Select Year" options={["2022", "2023", "2024", "2025"]} onChange={(e) => setSelectedYear(e.target.value)}/>
-            </div>
-            
-            <div className="flex justify-end mb-5">
-                <Buttons click={handleSearch} label={"Search"} />
-            </div>
-            
-            {columns.length > 0 && <Table
-                columns={columns} 
-                data={data} 
-                onRowSelect={() => {}}
-                disableFloatingRow={false}
-                onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)}
-            />}
-            {columns.length > 0 && (<div className="flex justify-center sm:justify-end space-x-0 sm:space-x-10 mt-5">
-                <Buttons label={"Clear"} click={() => { setColumns([]); setData([]); }} />
-            </div>)}
-
-            {/* ✅ Dynamic div for spacing */}
-            {rowDetailOpen && window.innerWidth < 768 && <div className='h-140'></div>}
-        </div>
-  );
-}
+            <Options 
+              label="Year" optionMsg="Select Year" options={yearList} valueKey="ID" 
+              labelKey="MonthName" 
+              onChange={(e) => { 
+                const yearId = e.target.value; 
+                setSelectedYearId(yearId); 
+                const yearObj = yearList.find(y => y.ID == yearId); 
+                setSelectedYearName(yearObj?.MonthName || ""); 
+              }} 
+            /> 
+          </> 
+        )} 
+        
+        {/* SHOW ONLY FOR CLASS WISE SUMMARY */} 
+        {searchType === "3" && ( 
+          <FormInput 
+            label="Date" type="date" name="date" value={selectedDate} 
+            onChange={(e) => setSelectedDate(e.target.value)} 
+          /> 
+        )} 
+      </div> 
+      
+      <div className="flex justify-end mb-5"> 
+        <Buttons click={handleSearch} label={"Search"} /> 
+      </div> 
+      
+      {columns.length > 0 && ( 
+        <Table 
+          columns={columns} data={data} disableFloatingRow={false} 
+          onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)} 
+        /> 
+      )} 
+      
+      {columns.length > 0 && ( 
+        <div className="flex justify-center sm:justify-end space-x-0 sm:space-x-10 mt-5"> 
+          <Buttons 
+            label={"Clear"} click={() => {setColumns([]); setData([]); }} 
+          /> 
+        </div> 
+      )} 
+      
+      {/* ✅ Dynamic div for spacing */} 
+      {rowDetailOpen && window.innerWidth < 768 && ( 
+        <div className="h-140"></div> 
+      )} 
+    </div> 
+  ); 
+} 
 
 export default Student_Attend_Report;

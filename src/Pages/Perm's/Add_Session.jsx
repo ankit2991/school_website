@@ -19,7 +19,7 @@ function Add_Session() {
         <div className="w-full h-full bg-white flex flex-col px-4 py-2">
             <div className="flex justify-between items-center gap-x-4 mb-5">
                 <Heading label={"Session Master"} style={"text-[22px] sm:text-3xl"} />
-                <Buttons click={() => navigate("/Add-Session2")} label={"Add"} style='whitespace-nowrap h-10'/>                    
+                <Buttons click={() => navigate("/Add-Session2")} label={"Add"} style='whitespace-nowrap h-10'/>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5 w-full">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Heading from '../../Components/Page_Forms/Heading';
 import Options from '../../Components/Page_Forms/Options';
 import FormInput from '../../Components/Page_Forms/FormInput';
@@ -6,10 +6,13 @@ import Table from '../../Components/Page_Forms/Table';
 import CheckBox from '../../Components/Page_Forms/CheckBox';
 import Buttons from '../../Components/Page_Forms/Buttons';
 import Heading2 from '../../Components/Page_Forms/Heading2';
+import { getUserTypeList } from '../../services/api';
 
 function User_Creation2() {
     const [agree, setAgree] = useState(false)
     const [agree2, setAgree2] = useState(false)
+    const [userTypeList, setUserTypeList] = useState([]);
+const [selectedUserTypeId, setSelectedUserTypeId] = useState("");
     const columns = [
     { header: "Title",  shortHeader: "Title", accessor: "title" },    
   ]
@@ -30,12 +33,38 @@ function User_Creation2() {
     { id: 1, alias: "KMMPS", branch: "Kesharam Memorial Manakchand Public School", },
     
   ];
+
+  useEffect(() => {
+    fetchUserTypes();
+}, []);
+
+const fetchUserTypes = async () => {
+    try {
+        const res = await getUserTypeList();
+
+        if (res?.Table1) {
+            setUserTypeList(res.Table1);
+        }
+    } catch (error) {
+        console.error("UserType API Error:", error);
+    }
+};
+
     return (
         <div className='w-full h-full bg-white  px-4 py-2 flex flex-col'>
             <Heading style={"mb-5"} label={"User Master"}/>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-5 w-full">
-                <Options label={"Branch"} name={""} optionMsg="Select Branch" options={["Admin", "Operator", "Super",]}/>
+                <Options
+    label="User Type"
+    optionMsg="Select User Type"
+    options={userTypeList}
+    valueKey="Id"           // 👈 from API
+    labelKey="UserType"     // 👈 from API
+    value={selectedUserTypeId}
+    onChange={(e) => setSelectedUserTypeId(e.target.value)}
+/>
+
                 <FormInput label={"User Name"} placeholder={"Enter USer Name"}/>
                 <FormInput label={"User Pass"} placeholder={"Enter User Passward"}/>
             </div>

@@ -42,9 +42,13 @@ import Hostel_Provider2 from './Pages/Hostel_Master/Hostel_Provider2'
 import Assign_Hostel from './Pages/Hostel_Master/Assign_Hostel'
 import Assign_Hostel2 from './Pages/Hostel_Master/Assign_Hostel2'
 import Subject from './Pages/Manage_Exam/Subject/Subject'
+import Subject2 from './Pages/Manage_Exam/Subject/Subject2'
 import Grade from './Pages/Manage_Exam/Subject/Grade'
+import Grade2 from './Pages/Manage_Exam/Subject/Grade2'
 import Exam_Type from './Pages/Manage_Exam/Exam/Exam_Type'
+import Exam_Type2 from './Pages/Manage_Exam/Exam/Exam_Type2'
 import Exam from './Pages/Manage_Exam/Exam/Exam'
+import Exam2 from './Pages/Manage_Exam/Exam/Exam2'
 import Assign_Roll_No from './Pages/Manage_Exam/Exam/Assign_Roll_No'
 import Exam_Schedule from './Pages/Manage_Exam/Exam/Exam_Schedule'
 import Exam_Schedule2 from './Pages/Manage_Exam/Exam/Exam_Schedule2'
@@ -202,10 +206,14 @@ function App() {
           {/* {Manage Exam} */}
           {/* Subject */}
             <Route path='/Subject' element={<Subject />}/>
+            <Route path='/Subject2' element={<Subject2 />}/>
             <Route path='/Grade' element={<Grade />}/>
+            <Route path='/Grade2' element={<Grade2 />}/>
           {/* Exam */}
             <Route path='/Exam-Type' element={<Exam_Type />}/>
+            <Route path='/Exam-Type2' element={<Exam_Type2 />}/>
             <Route path='/Exam' element={<Exam />}/>
+            <Route path='/Exam2' element={<Exam2 />}/>
             <Route path='/Assign-Roll' element={<Assign_Roll_No />}/>
             <Route path='/Schedule' element={<Exam_Schedule />}/>
             <Route path='/Exam-Schedule' element={<Exam_Schedule2 />}/>

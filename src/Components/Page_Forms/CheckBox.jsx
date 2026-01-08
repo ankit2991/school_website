@@ -1,12 +1,9 @@
 import React from 'react'
 
-function CheckBox({label, labelstyle,  name,
-  checked = false,
-  checkstyle,
-  onChange,
-  disabled = false,
-  className = "",
-  labelClass = "",}) {
+function CheckBox({
+  label, labelstyle,  name, checked = false, checkstyle, onChange, 
+  disabled = false, className = "", labelClass = "",
+}) {
   // return (
   //   <div className='w-full flex flex-col'>
   //       <h2 className={`cursor-default text-md font-medium mb-1 ${labelstyle} text-gray-700`}>{label}</h2>

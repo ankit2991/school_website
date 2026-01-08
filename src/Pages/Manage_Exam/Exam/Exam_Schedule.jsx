@@ -1,55 +1,111 @@
-import React from 'react'
-import Heading from '../../../Components/Page_Forms/Heading';
-import Buttons from '../../../Components/Page_Forms/Buttons';
-import { useNavigate } from 'react-router-dom';
-import Options from '../../../Components/Page_Forms/Options';
-import Table from '../../../Components/Page_Forms/Table';
+import React, { useState } from "react";
+import Heading from "../../../Components/Page_Forms/Heading";
+import Buttons from "../../../Components/Page_Forms/Buttons";
+import { useNavigate } from "react-router-dom";
+import Options from "../../../Components/Page_Forms/Options";
+import Table from "../../../Components/Page_Forms/Table";
+import useClassList from "../../../hooks/useClassList";
+import { getExamTimeTableList } from "../../../services/api";
+import Loader from "../../../Components/Page_Forms/Loader";
 
-function Exam_Schedule() {
-    const navigate = useNavigate()
-    const columns = [
-        { header: "Exam Name", shortHeader: "Exam Name", accessor: "exam" },       
-    ]
-    const data = [
-        { id: 1, exam: "Unit Test", },
-        { id: 2, exam: "Yearly Exam", },
-        { id: 3, exam: "Annual Exam", },       
-    ];
-    return (
-        <div className="w-full h-full bg-white flex flex-col px-4 py-2">
-           
-            <div className="flex justify-between items-center gap-x-4 mb-5">
-                <Heading label={
-                    <>
-                        <span className="block sm:hidden">Exam Schedule</span>
-                        <span className="hidden sm:block">Exam Schedule (Exam Time Table)</span>
-                    </>
-                } style={"text-[22px] sm:text-3xl"} />
-                <Buttons click={() => navigate("/Exam-Schedule")} label={"Add"} style='whitespace-nowrap h-10'/>
-            </div>
+function Exam_Schedule() { 
+  const navigate = useNavigate(); 
+  const instId = localStorage.getItem("InstituteID"); 
+  const sessId = localStorage.getItem("SessionID"); 
+  const { classList } = useClassList(); 
+  const [selectedClassId, setSelectedClassId] = useState(""); 
+  const [tableData, setTableData] = useState([]); 
+  const [searched, setSearched] = useState(false); 
+  const columns = [ { header: "Exam Name", accessor: "Name" }, ]; 
+  
+  // =================== SEARCH ====================== 
+  const handleSearch = async () => { 
+    if (!selectedClassId) { 
+      alert("Please select class"); 
+      return; 
+    } 
+    
+    try { 
+      setSearched(true); 
+      
+      const res = await getExamTimeTableList(instId, sessId, selectedClassId); 
+      setTableData(res?.Table || []); 
+    } catch (err) { 
+      console.error(err); 
+    } finally { 
+      setSearched(false); 
+    } 
+  }; 
+  
+  return ( 
+    <div className="w-full h-full bg-white px-4 py-2"> 
+      <Loader show={searched} /> 
+      <div className="flex justify-between mb-5"> 
+        <Heading label="Exam Schedule" /> 
+        <Buttons 
+          label="Add" click={() => navigate("/Exam-Schedule")} 
+        /> 
+      </div> 
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2  gap-6 mb-5 w-full"> 
+        {/* CLASS DROPDOWN */} 
+        <Options 
+          label="Class" optionMsg="Select Class" options={classList} 
+          valueKey="Id" labelKey="ClassName" value={selectedClassId} 
+          onChange={(e) => setSelectedClassId(e.target.value)} 
+        /> 
+      </div> 
+      
+      <div className="flex justify-end mt-4"> 
+        <Buttons 
+          label="Search" click={handleSearch} 
+        /> 
+      </div> 
+      
+      <div className="mt-5"> 
+        <Table 
+          columns={columns} data={tableData} 
+          actions={(row) => ( 
+            <> 
+              <Buttons 
+                style="hidden sm:inline" label={"Edit"} 
+                click={() => navigate("/Exam-Schedule", { 
+                  state: { 
+                    listId: row.Id, examId: row.F_ExamMaster, 
+                    classId: selectedClassId, 
+                  }, 
+                }) } 
+              /> 
+              <Buttons 
+                label={"Delete"} style="hidden sm:inline"
+                click={() => console.log("Print:", row)} 
+              />
+              
+              {/* Mobile icons */} 
+              <button 
+                onClick={() => navigate("/Exam-Schedule", { 
+                  state: { 
+                    listId: row.Id, examId: row.F_ExamMaster, 
+                    classId: selectedClassId, 
+                  }, 
+                }) } 
+                className="sm:hidden text-lg pt-2.5" 
+              > 
+                ✏️ 
+              </button> 
+              <button 
+                className="sm:hidden text-xl pt-2.5" 
+                onClick={() => console.log("Print:", row)} 
+              > 
+                🗑️ 
+              </button> 
+            </> 
+          )} 
+        /> 
+      </div> 
+    </div> 
+  ); 
+} 
 
-            <div className="grid grid-cols-1 sm:grid-cols-2  gap-6 mb-5 w-full">
-                <Options label={"Class"} name={""} optionMsg="Select Class" options={["Nur", "K.G.", "Prep"]}/>
-                {/* <FormInput label={"Provider"} placeholder={"Enter Provider"} /> */}
-            </div>
+export default Exam_Schedule;
 
-            <div className="flex justify-end">
-                <Buttons click={() => navigate("/")} label={"Search"} />                    
-            </div>
-            
-            <div className="mt-5">
-                <Table columns={columns} data={data} actions={(row) => (
-                    <>
-                        <Buttons label={"Edit"} click={() => navigate("/Exam-Schedule") } style="hidden sm:inline" />
-                        <Buttons label={"Delete"} click={() => console.log("Print:", row)} style="hidden sm:inline" />
-                        {/* Mobile icons */}
-                        <button className="sm:hidden text-lg pt-2.5" onClick={() => navigate("/Exam-Schedule")} >✏️</button>
-                        <button className="sm:hidden text-xl pt-2.5"  onClick={() => console.log("Print:", row)} >🗑️</button>
-                    </>
-                )}/>
-            </div>
-        </div>
-  )
-}
-
-export default Exam_Schedule

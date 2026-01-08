@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+
+.spinner::-webkit-inner-spin-button,  
+.spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}

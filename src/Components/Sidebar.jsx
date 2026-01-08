@@ -1,305 +1,3 @@
-// import React, { useState } from "react";
-// import { FaUserGraduate, FaBus, FaBed, FaTools } from "react-icons/fa";
-// import { MdAccountBalance, MdReport, MdPayments } from "react-icons/md";
-// import { NavLink } from "react-router-dom";
-
-// function Sidebar({ sidebarToggle, setSidebarToggle }) {
-//   const [openMenu, setOpenMenu] = useState(null);
-//   const [openSubMenu, setOpenSubMenu] = useState(null); // 👈 new state
-  
-//   const menu = [
-//     {
-//       name: "Student Master",
-//       icon: <FaUserGraduate className="inline-block w-5 h-5 mr-2 -mt-1" />,
-//       submenus: [
-//         { name: "Enquiry Form", path: "/Enquiry" },
-//         { name: "Create Student", path: "/Create" },
-//         { name: "Add Sibling", path: "/Sibling" },
-//         { name: "Student Summary", path: "/Summary" },
-//       ],
-//     },
-//     {
-//       name: "Account Master",
-//       icon: <MdAccountBalance className="inline-block w-5 h-5 mr-2 -mt-1" />,
-//       submenus: [
-//         { name: "Addmission Fee Receipt", path: "/Addmission" },
-//         { name: "Fee Receipt", path: "/Fees" },
-//         { name: "Transport Fee", path: "/Transport" },
-//         { name: "Sibling Fee", path: "/Sibling-Fee" },
-//         { name: "Hostel Fee", path: "/Hostel" },
-//         { name: "Expenditure", path: "/Expenditure" },
-//         { name: "Income", path: "/Income" },
-//         { name: "Adjustment", path: "/Adjustment" },
-//         { name: "Cash In Hand", path: "/Cash-In-Hand" },
-//         { name: "Year End Activity", path: "/Year-End-Activity" },
-//       ],
-//     },
-//     {
-//       name: "Transport Master",
-//       icon: <FaBus className="inline-block w-5 h-5 mr-2 -mt-1" />,
-//       submenus: [
-//         { name: "Route Master", path: "/Route-Master" },
-//         { name: "Add Stop", path: "/Add" },
-//         { name: "Vehicle Type", path: "/Vehicle-Type" },
-//         { name: "Vehicle Provider", path: "/Vehicle" },
-//         { name: "Vehicle Master", path: "/Master" },
-//         { name: "Assign Vehicle", path: "/Assign" },
-//       ],
-//     },
-//     {
-//       name: "Hostel Master",
-//       icon: <FaBed className="inline-block w-5 h-5 mr-2 -mt-1" />,
-//       submenus: [
-//         { name: "Hostel Provider", path: "/Hostel-Provide" },
-//         { name: "Assign Hostel", path: "/Assign-Hostels" },
-//       ],
-//     },
-//     {
-//       name: "Manage Exam",
-//       icon: <FaBed className="inline-block w-5 h-5 mr-2 -mt-1" />,
-//       submenus: [
-//         {name: "Subject", 
-//           submenus: [
-//             { name: "Subject", path: "/Subject" },
-//             { name: "Grade", path: "/Grade" },
-//           ],
-//         },
-//         {name: "Exam", 
-//           submenus: [
-//             { name: "Exam Type", path: "/Exam-Type" },
-//             { name: "Exam", path: "/Exam" },
-//             { name: "Assign Roll No.", path: "/Assign-Roll" },
-//             { name: "Exam Schedule", path: "/Schedule" },
-//             { name: "Assign Exam Hole", path: "/Assign-Exam-Hole" },
-//           ],
-//         },
-//         { name: "Student Attendance", path: "/Student-Attendance" },
-//         { name: "Marks Entry", path: "/Marks-Entry" },
-
-//       ],
-//     },
-//     {
-//       name: "Transfer Certificate",
-//       icon: <MdReport className="inline-block w-5 h-5 mr-2 -mt-1" />,
-//       submenus: [
-//         { name: "Transfer Certificate (T.C.)", path: "/TC" },
-//       ],
-//     },
-//     {
-//       name: "Utility",
-//       icon: <MdReport className="inline-block w-5 h-5 mr-2 -mt-1" />,
-//       submenus: [
-//         { name: "Event SMS", path: "/SMS" },
-//         { name: "User Creation", path: "/Creation" },
-//         { name: "User SMS", path: "/User-SMS" },
-//       ],
-//     },
-//     {
-//       name: "Reports",
-//       icon: <MdReport className="inline-block w-5 h-5 mr-2 -mt-1" />,
-//       submenus: [
-//         {name: "Student", 
-//           submenus: [
-//             { name: "Student Details", path: "/Details" },
-//             { name: "Student Sibling Details", path: "/Sibling-Details" },
-//             { name: "Student Fee Details", path: "/Fee-Details" },
-//             { name: "Student Transport Details", path: "/Transport-Details" },
-//             { name: "Transport Fee Details", path: "/Transport-Fee-Details" },
-//             { name: "Hostel Student Details", path: "/Hostel-Stud-Details" },
-//             { name: "Hostel Fee Details", path: "/Hostel-Fee-Details" },
-//             { name: "Student TC Details", path: "/Student-TC-Details" },
-//             { name: "Enquiry Details", path: "/Enquiry-Details" },
-//             { name: "Caste Wise Report", path: "/Caste-Wise-Report" },
-//             { name: "Student Age Wise", path: "/Student-Age-Wise" },
-//             { name: "Student Attendance Report", path: "/Student-Attend-Report" },
-//             { name: "Student Fee Detail Ledger Wise", path: "/Student-Fee-Detail-Ledger-Wise" },
-//           ],
-//         },
-
-//         {name: "Day Transaction", 
-//           submenus: [
-//             { name: "Day Details", path: "/Day-Details" },
-//             { name: "Day Book", path: "/Day-Book" },
-//             { name: "Day Summary Book", path: "/Day-Summary-Book" },
-//           ],
-//         },
-//         {name: "Transaction", 
-//           submenus: [
-//             { name: "Due Report", path: "/Due-Report" },
-//             { name: "Transport Due Report", path: "/Transport-Due-Report" },
-//             { name: "Hostel Due Report", path: "/Hostel-Due-Report" },
-//             { name: "Other Fee Due Report", path: "/Other-Fee-Due-Report" },
-//             { name: "Student Ledger Details", path: "/Student-Ledger-Details" },
-//             { name: "Ledger Details", path: "/Ledger-Details" },
-//             { name: "Profit And Loss", path: "/Profit-And-Loss" },
-//             { name: "Total Outstanding Report", path: "/Total-Outstanding-Report" },
-//           ],
-//         },
-//         {name: "Exam", 
-//           submenus: [
-//             { name: "Exam Report", path: "/Exam-Report" },
-//             { name: "Marksheet", path: "/Marksheet" },
-//             { name: "Exam Admit Card", path: "/Exam-Admit-Card" },
-//             { name: "Exam Hole Report", path: "/Exam-Hole-Report" },
-//           ],
-//         },
-//         {name: "MISC", 
-//           submenus: [
-//             { name: "Id Card", path: "/Id-Card" },
-//             { name: "Certificate", path: "/Certificate" },
-//             { name: "Bank Challan", path: "/Bank-Challan" },
-           
-//           ],
-//         },
-//       ],
-//     },
-//     {
-//       name: "Perm's",
-//       icon: <FaUserGraduate className="inline-block w-5 h-5 mr-2 -mt-1" />,
-//       submenus: [
-//         { name: "Add Institute", path: "/Add-Institute" },
-//         { name: "Add Session", path: "/Add-Session" },
-//         { name: "Add Class", path: "/Add-Class" },
-//         { name: "Subject Allocation", path: "/Subject-Allocation" },
-//         { name: "Add Bank", path: "/Add-Bank" },
-//         { name: "Add Room", path: "/Add-Room" },
-//         { name: "Assign Other Income", path: "/Assign-Other-Income" },
-//         { name: "Add Ledger", path: "/Add-Ledger" },
-//         { name: "Fee Parameter", path: "/Fee-Parameter" },
-//         { name: "SMS Templete", path: "/SMS-Templete" },
-//       ],
-//     },
-//     {
-//       name: "Tools",
-//       icon: <FaTools className="inline-block w-5 h-5 mr-2 -mt-1" />,
-//       submenus: [
-//         { name: "GlobalPerameters", path: "/Global-Perameters" },
-//         { name: "Promote Student", path: "/Promote-Student" },
-//         { name: "Delete Receipt", path: "/Delete-Receipt" },
-//       ],
-//     },
-//     {
-//       name: "PayRoll",
-//       icon: <MdPayments className="inline-block w-5 h-5 mr-2 -mt-1" />,
-//       submenus: [
-//         {name: "Master", 
-//           submenus: [
-//             { name: "Department", path: "/Department" },
-//             { name: "Designation", path: "/Designation" },
-//             { name: "Allowance Deducation", path: "/Allowance-Deducation" },
-//             { name: "Event", path: "/Event" },
-//             { name: "Shift", path: "/Shift" },
-//             { name: "Allowance Parameter", path: "/Allowance-Parameter" },
-//           ],
-//         },
-//         {name: "Employee", 
-//           submenus: [
-//             { name: "Employee", path: "/Employee" },
-//             { name: "Employee Salary", path: "/Employee-Salary" },
-//             { name: "Manage Attendance", path: "/Manage-Attendance" },
-//             { name: "Update Attendance", path: "/Update-Attendance" },
-//             { name: "Get Machine", path: "/Get-Machine" },
-//           ],
-//         },
-//         {name: "Transection", 
-//           submenus: [
-//             { name: "Salary Process", path: "/Salary-Process" },
-//           ],
-//         },
-//         {name: "Report", 
-//           submenus: [
-//             { name: "Employee Detail", path: "/Employee-Detail" },
-//             { name: "Employee Attendance Detail", path: "/Employee-Attendance-Detail" },
-//             // { name: "Employee Month Wise Attendance Detail", path: "/Month-Wise-Employee-Attendance-Detail" },
-//             { name: "Employee Salary Detail", path: "/Employee-Salary-Detail" },
-//             { name: "Due Report", path: "/Event-Detail" },
-//           ],
-//         },
-//       ],
-//     },    
-//   ];
-//   const handletoggle = () => {setSidebarToggle(!sidebarToggle);};
-
-//   const toggleMenu = (i) => {setOpenMenu(openMenu === i ? null : i);};
-
-//   const toggleSubMenu = (key) => {setOpenSubMenu(openSubMenu === key ? null : key);};
-
-//   // Recursive renderer
-//   const renderSubmenus = (submenus, parentKey = "") => {
-//     if (!Array.isArray(submenus)) return null;
-//     return (
-//       <ul className="ml-6 mt-2 text-sm font-semibold text-[#5a1c0a] overflow-y-auto">
-//         {submenus.map((sub, j) => {
-//           const key = `${parentKey}-${j}`;
-//           return (
-//           <li key={key} onClick={!sub.submenus ? handletoggle : undefined}>
-//               {sub.submenus ? (
-//                 <>
-//                   <button
-//                     onClick={() => toggleSubMenu(key)}
-//                     className={`flex justify-between w-full px-2 py-1 rounded ${
-//                       openSubMenu === key? "bg-blue-400 text-white" : "hover:bg-blue-400 hover:text-white"
-//                     }`}
-//                   >
-//                     {sub.name}
-//                     <span>{openSubMenu === key ? "−" : "▼"}</span>
-//                   </button>
-//                   {openSubMenu === key && renderSubmenus(sub.submenus, key)}
-//                 </>
-//                 ) : (
-//                 <NavLink
-//                   to={sub.path}
-//                   className={({ isActive }) =>
-//                     `block mb-2 rounded-md px-2 py-2 transition cursor-pointer ${
-//                       isActive? "bg-blue-400 text-white" : "hover:bg-blue-400 hover:text-white"
-//                     }`
-//                   }
-//                 >
-//                   {sub.name}
-//                 </NavLink>
-//               )}
-//             </li>
-//           );
-//         })}
-//       </ul>
-//     );
-//   };
-
-//   return (
-//     <div
-//       className={`${
-//         sidebarToggle ? "translate-x-0" : "translate-x-full shadow-none"
-//       } w-64 block fixed right-0 bg-[#f7edcfda] shadow-2xl rounded-l-3xl transform transition-all duration-700 ease-in-out overflow-y-auto no-scrollbar z-50`}
-//     >
-//       <ul className="pt-3 text-[#a7230b] font-bold overflow-y-auto mb-20 no-scrollbar bg-[#f7edcfda] px-4 py-2 h-screen z-50">
-//         {menu.map((item, i) => (
-//           <li key={i} className="mb-2">
-//             <button
-//               onClick={() => toggleMenu(i)}
-//               className={`flex items-center justify-between w-full px-3 py-2 rounded transition ${
-//                 openMenu === i ? "bg-blue-500 text-white shadow" : "hover:bg-blue-500 hover:text-white"
-//               }`}
-//             >
-//               <span className="flex items-center">
-//                 {item.icon}
-//                 {item.name}
-//               </span>
-//               {/* <span>{openMenu === i ? "−" : "+"}</span> */}
-//             </button>
-
-//             {openMenu === i && renderSubmenus(item.submenus, `menu-${i}`)}
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// }
-
-// export default Sidebar;
-
-
-
-
 import React, { useState, useEffect } from "react";
 import { FaUserGraduate, FaBus, FaBed, FaTools } from "react-icons/fa";
 import { MdAccountBalance, MdReport, MdPayments } from "react-icons/md";
@@ -307,18 +5,16 @@ import { NavLink } from "react-router-dom";
 
 function Sidebar({ sidebarToggle, setSidebarToggle }) {
   const [openMenu, setOpenMenu] = useState(null);
-  const [openSubMenu, setOpenSubMenu] = useState(null); // 👈 new state
+  const [openSubMenu, setOpenSubMenu] = useState(null);
 
-  // ✅ Prevent background scroll when sidebar is open
   useEffect(() => {
     if (sidebarToggle) {
-      document.body.style.overflow = "hidden"; // stop background scroll
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "auto"; // restore scroll
+      document.body.style.overflow = "auto";
     }
-
     return () => {
-      document.body.style.overflow = "auto"; // cleanup on unmount
+      document.body.style.overflow = "auto";
     };
   }, [sidebarToggle]);
 
@@ -394,11 +90,11 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
         { name: "Marks Entry", path: "/Marks-Entry" },
       ],
     },
-    {
-      name: "Transfer Certificate",
-      icon: <MdReport className="inline-block w-5 h-5 mr-2 -mt-1" />,
-      submenus: [{ name: "Transfer Certificate (T.C.)", path: "/TC" }],
-    },
+    // {
+    //   name: "Transfer Certificate",
+    //   icon: <MdReport className="inline-block w-5 h-5 mr-2 -mt-1" />,
+    //   submenus: [{ name: "Transfer Certificate (T.C.)", path: "/TC" }],
+    // },
     {
       name: "Utility",
       icon: <MdReport className="inline-block w-5 h-5 mr-2 -mt-1" />,
@@ -426,8 +122,14 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
             { name: "Enquiry Details", path: "/Enquiry-Details" },
             { name: "Caste Wise Report", path: "/Caste-Wise-Report" },
             { name: "Student Age Wise", path: "/Student-Age-Wise" },
-            { name: "Student Attendance Report", path: "/Student-Attend-Report" },
-            { name: "Student Fee Detail Ledger Wise", path: "/Student-Fee-Detail-Ledger-Wise" },
+            {
+              name: "Student Attendance Report",
+              path: "/Student-Attend-Report",
+            },
+            {
+              name: "Student Fee Detail Ledger Wise",
+              path: "/Student-Fee-Detail-Ledger-Wise",
+            },
           ],
         },
         {
@@ -448,7 +150,10 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
             { name: "Student Ledger Details", path: "/Student-Ledger-Details" },
             { name: "Ledger Details", path: "/Ledger-Details" },
             { name: "Profit And Loss", path: "/Profit-And-Loss" },
-            { name: "Total Outstanding Report", path: "/Total-Outstanding-Report" },
+            {
+              name: "Total Outstanding Report",
+              path: "/Total-Outstanding-Report",
+            },
           ],
         },
         {
@@ -528,7 +233,10 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
           name: "Report",
           submenus: [
             { name: "Employee Detail", path: "/Employee-Detail" },
-            { name: "Employee Attendance Detail", path: "/Employee-Attendance-Detail" },
+            {
+              name: "Employee Attendance Detail",
+              path: "/Employee-Attendance-Detail",
+            },
             { name: "Employee Salary Detail", path: "/Employee-Salary-Detail" },
             { name: "Due Report", path: "/Event-Detail" },
           ],
@@ -570,6 +278,7 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
                     {sub.name}
                     <span>{openSubMenu === key ? "−" : "▼"}</span>
                   </button>
+
                   {openSubMenu === key && renderSubmenus(sub.submenus, key)}
                 </>
               ) : (
@@ -597,9 +306,11 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
     <div
       className={`${
         sidebarToggle ? "translate-x-0" : "translate-x-full shadow-none"
-      } w-64 block fixed right-0 bg-[#f7edcfda] shadow-2xl rounded-l-3xl transform transition-all duration-700 ease-in-out overflow-y-auto no-scrollbar z-50`}
+      } w-64 block fixed right-0 bg-[#f7edcfda] shadow-2xl rounded-l-3xl 
+      transform transition-all duration-700 ease-in-out 
+      overflow-y-scroll no-scrollbar h-screen z-50`}
     >
-      <ul className="pt-3 text-[#a7230b] font-bold overflow-y-auto mb-20 no-scrollbar bg-[#f7edcfda] px-4 py-2 h-screen z-50">
+      <ul className="pt-3 text-[#a7230b] font-bold mb-30 no-scrollbar bg-[#f7edcfda] px-4 py-2">
         {menu.map((item, i) => (
           <li key={i} className="mb-2">
             <button
@@ -626,312 +337,174 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
 
 export default Sidebar;
 
-
-
-
-
-// import React, { useState } from "react";
-// import { FaUserGraduate, FaBus, FaBed, FaTools } from "react-icons/fa";
-// import { MdAccountBalance, MdReport, MdPayments } from "react-icons/md";
+// import React, { useState, useEffect } from "react";
+// import {
+//   FaUserGraduate,
+//   FaBus,
+//   FaBed,
+//   FaTools,
+// } from "react-icons/fa";
+// import {
+//   MdAccountBalance,
+//   MdReport,
+//   MdPayments,
+// } from "react-icons/md";
 // import { NavLink, useLocation } from "react-router-dom";
 
 // function Sidebar({ sidebarToggle, setSidebarToggle }) {
 //   const [openMenu, setOpenMenu] = useState(null);
 //   const [openSubMenu, setOpenSubMenu] = useState(null);
-//   const location = useLocation(); // <-- added
+//   const location = useLocation();
 
-  // const menu = [
-  //   {
-  //     name: "Student Master",
-  //     icon: <FaUserGraduate className="inline-block w-5 h-5 mr-2 -mt-1" />,
-  //     submenus: [
-  //       { name: "Enquiry Form", path: "/Enquiry" },
-  //       { name: "Create Student", path: "/Create" },
-  //       { name: "Add Sibling", path: "/Sibling" },
-  //       { name: "Student Summary", path: "/Summary" },
-  //     ],
-  //   },
-  //   {
-  //     name: "Account Master",
-  //     icon: <MdAccountBalance className="inline-block w-5 h-5 mr-2 -mt-1" />,
-  //     submenus: [
-  //       { name: "Addmission Fee Receipt", path: "/Addmission" },
-  //       { name: "Fee Receipt", path: "/Fees" },
-  //       { name: "Transport Fee", path: "/Transport" },
-  //       { name: "Sibling Fee", path: "/Sibling-Fee" },
-  //       { name: "Hostel Fee", path: "/Hostel" },
-  //       { name: "Expenditure", path: "/Expenditure" },
-  //       { name: "Income", path: "/Income" },
-  //       { name: "Adjustment", path: "/Adjustment" },
-  //       { name: "Cash In Hand", path: "/Cash-In-Hand" },
-  //       { name: "Year End Activity", path: "/Year-End-Activity" },
-  //     ],
-  //   },
-  //   {
-  //     name: "Transport Master",
-  //     icon: <FaBus className="inline-block w-5 h-5 mr-2 -mt-1" />,
-  //     submenus: [
-  //       { name: "Route Master", path: "/Route-Master" },
-  //       { name: "Add Stop", path: "/Add" },
-  //       { name: "Vehicle Type", path: "/Vehicle-Type" },
-  //       { name: "Vehicle Provider", path: "/Vehicle" },
-  //       { name: "Vehicle Master", path: "/Master" },
-  //       { name: "Assign Vehicle", path: "/Assign" },
-  //     ],
-  //   },
-  //   {
-  //     name: "Hostel Master",
-  //     icon: <FaBed className="inline-block w-5 h-5 mr-2 -mt-1" />,
-  //     submenus: [
-  //       { name: "Hostel Provider", path: "/Hostel-Provide" },
-  //       { name: "Assign Hostel", path: "/Assign-Hostels" },
-  //     ],
-  //   },
-  //   {
-  //     name: "Manage Exam",
-  //     icon: <FaBed className="inline-block w-5 h-5 mr-2 -mt-1" />,
-  //     submenus: [
-  //       {
-  //         name: "Subject",
-  //         submenus: [
-  //           { name: "Subject", path: "/Subject" },
-  //           { name: "Grade", path: "/Grade" },
-  //         ],
-  //       },
-  //       {
-  //         name: "Exam",
-  //         submenus: [
-  //           { name: "Exam Type", path: "/Exam-Type" },
-  //           { name: "Exam", path: "/Exam" },
-  //           { name: "Assign Roll No.", path: "/Assign-Roll" },
-  //           { name: "Exam Schedule", path: "/Schedule" },
-  //           { name: "Assign Exam Hole", path: "/Assign-Exam-Hole" },
-  //         ],
-  //       },
-  //       { name: "Student Attendance", path: "/Student-Attendance" },
-  //       { name: "Marks Entry", path: "/Marks-Entry" },
-  //     ],
-  //   },
-  //   {
-  //     name: "Transfer Certificate",
-  //     icon: <MdReport className="inline-block w-5 h-5 mr-2 -mt-1" />,
-  //     submenus: [{ name: "Transfer Certificate (T.C.)", path: "/TC" }],
-  //   },
-  //   {
-  //     name: "Utility",
-  //     icon: <MdReport className="inline-block w-5 h-5 mr-2 -mt-1" />,
-  //     submenus: [
-  //       { name: "Event SMS", path: "/SMS" },
-  //       { name: "User Creation", path: "/Creation" },
-  //       { name: "User SMS", path: "/User-SMS" },
-  //     ],
-  //   },
-  //   {
-  //     name: "Reports",
-  //     icon: <MdReport className="inline-block w-5 h-5 mr-2 -mt-1" />,
-  //     submenus: [
-  //       {
-  //         name: "Student",
-  //         submenus: [
-  //           { name: "Student Details", path: "/Details" },
-  //           { name: "Student Sibling Details", path: "/Sibling-Details" },
-  //           { name: "Student Fee Details", path: "/Fee-Details" },
-  //           { name: "Student Transport Details", path: "/Transport-Details" },
-  //           { name: "Transport Fee Details", path: "/Transport-Fee-Details" },
-  //           { name: "Hostel Student Details", path: "/Hostel-Stud-Details" },
-  //           { name: "Hostel Fee Details", path: "/Hostel-Fee-Details" },
-  //           { name: "Student TC Details", path: "/Student-TC-Details" },
-  //           { name: "Enquiry Details", path: "/Enquiry-Details" },
-  //           { name: "Caste Wise Report", path: "/Caste-Wise-Report" },
-  //           { name: "Student Age Wise", path: "/Student-Age-Wise" },
-  //           { name: "Student Attendance Report", path: "/Student-Attend-Report" },
-  //           { name: "Student Fee Detail Ledger Wise", path: "/Student-Fee-Detail-Ledger-Wise" },
-  //         ],
-  //       },
-  //       {
-  //         name: "Day Transaction",
-  //         submenus: [
-  //           { name: "Day Details", path: "/Day-Details" },
-  //           { name: "Day Book", path: "/Day-Book" },
-  //           { name: "Day Summary Book", path: "/Day-Summary-Book" },
-  //         ],
-  //       },
-  //       {
-  //         name: "Transaction",
-  //         submenus: [
-  //           { name: "Due Report", path: "/Due-Report" },
-  //           { name: "Transport Due Report", path: "/Transport-Due-Report" },
-  //           { name: "Hostel Due Report", path: "/Hostel-Due-Report" },
-  //           { name: "Other Fee Due Report", path: "/Other-Fee-Due-Report" },
-  //           { name: "Student Ledger Details", path: "/Student-Ledger-Details" },
-  //           { name: "Ledger Details", path: "/Ledger-Details" },
-  //           { name: "Profit And Loss", path: "/Profit-And-Loss" },
-  //           { name: "Total Outstanding Report", path: "/Total-Outstanding-Report" },
-  //         ],
-  //       },
-  //       {
-  //         name: "Exam",
-  //         submenus: [
-  //           { name: "Exam Report", path: "/Exam-Report" },
-  //           { name: "Marksheet", path: "/Marksheet" },
-  //           { name: "Exam Admit Card", path: "/Exam-Admit-Card" },
-  //           { name: "Exam Hole Report", path: "/Exam-Hole-Report" },
-  //         ],
-  //       },
-  //       {
-  //         name: "MISC",
-  //         submenus: [
-  //           { name: "Id Card", path: "/Id-Card" },
-  //           { name: "Certificate", path: "/Certificate" },
-  //           { name: "Bank Challan", path: "/Bank-Challan" },
-  //         ],
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     name: "Perm's",
-  //     icon: <FaUserGraduate className="inline-block w-5 h-5 mr-2 -mt-1" />,
-  //     submenus: [
-  //       { name: "Add Institute", path: "/Add-Institute" },
-  //       { name: "Add Session", path: "/Add-Session" },
-  //       { name: "Add Class", path: "/Add-Class" },
-  //       { name: "Subject Allocation", path: "/Subject-Allocation" },
-  //       { name: "Add Bank", path: "/Add-Bank" },
-  //       { name: "Add Room", path: "/Add-Room" },
-  //       { name: "Assign Other Income", path: "/Assign-Other-Income" },
-  //       { name: "Add Ledger", path: "/Add-Ledger" },
-  //       { name: "Fee Parameter", path: "/Fee-Parameter" },
-  //       { name: "SMS Templete", path: "/SMS-Templete" },
-  //     ],
-  //   },
-  //   {
-  //     name: "Tools",
-  //     icon: <FaTools className="inline-block w-5 h-5 mr-2 -mt-1" />,
-  //     submenus: [
-  //       { name: "GlobalPerameters", path: "/Global-Perameters" },
-  //       { name: "Promote Student", path: "/Promote-Student" },
-  //       { name: "Delete Receipt", path: "/Delete-Receipt" },
-  //     ],
-  //   },
-  //   {
-  //     name: "PayRoll",
-  //     icon: <MdPayments className="inline-block w-5 h-5 mr-2 -mt-1" />,
-  //     submenus: [
-  //       {
-  //         name: "Master",
-  //         submenus: [
-  //           { name: "Department", path: "/Department" },
-  //           { name: "Designation", path: "/Designation" },
-  //           { name: "Allowance Deducation", path: "/Allowance-Deducation" },
-  //           { name: "Event", path: "/Event" },
-  //           { name: "Shift", path: "/Shift" },
-  //           { name: "Allowance Parameter", path: "/Allowance-Parameter" },
-  //         ],
-  //       },
-  //       {
-  //         name: "Employee",
-  //         submenus: [
-  //           { name: "Employee", path: "/Employee" },
-  //           { name: "Employee Salary", path: "/Employee-Salary" },
-  //           { name: "Manage Attendance", path: "/Manage-Attendance" },
-  //           { name: "Update Attendance", path: "/Update-Attendance" },
-  //           { name: "Get Machine", path: "/Get-Machine" },
-  //         ],
-  //       },
-  //       {
-  //         name: "Transection",
-  //         submenus: [{ name: "Salary Process", path: "/Salary-Process" }],
-  //       },
-  //       {
-  //         name: "Report",
-  //         submenus: [
-  //           { name: "Employee Detail", path: "/Employee-Detail" },
-  //           { name: "Employee Attendance Detail", path: "/Employee-Attendance-Detail" },
-  //           { name: "Employee Salary Detail", path: "/Employee-Salary-Detail" },
-  //           { name: "Due Report", path: "/Event-Detail" },
-  //         ],
-  //       },
-  //     ],
-  //   },
-  // ];
+//   useEffect(() => {
+//     document.body.style.overflow = sidebarToggle ? "hidden" : "auto";
+//     return () => (document.body.style.overflow = "auto");
+//   }, [sidebarToggle]);
 
-//   const handletoggle = () => { setSidebarToggle(!sidebarToggle); };
-//   const toggleMenu = (i) => { setOpenMenu(openMenu === i ? null : i); };
-//   const toggleSubMenu = (key) => { setOpenSubMenu(openSubMenu === key ? null : key); };
+//   const menu = [
+//     {
+//       name: "Student Master",
+//       icon: <FaUserGraduate className="inline-block w-5 h-5 mr-2 -mt-1" />,
+//       submenus: [
+//         { name: "Enquiry Form", path: "/Enquiry" },
+//         { name: "Create Student", path: "/Create" },
+//         { name: "Add Sibling", path: "/Sibling" },
+//         { name: "Student Summary", path: "/Summary" },
+//       ],
+//     },
+//     {
+//       name: "Account Master",
+//       icon: <MdAccountBalance className="inline-block w-5 h-5 mr-2 -mt-1" />,
+//       submenus: [
+//         { name: "Addmission Fee Receipt", path: "/Addmission" },
+//         { name: "Fee Receipt", path: "/Fees" },
+//         { name: "Transport Fee", path: "/Transport" },
+//         { name: "Sibling Fee", path: "/Sibling-Fee" },
+//         { name: "Hostel Fee", path: "/Hostel" },
+//         { name: "Expenditure", path: "/Expenditure" },
+//         { name: "Income", path: "/Income" },
+//         { name: "Adjustment", path: "/Adjustment" },
+//         { name: "Cash In Hand", path: "/Cash-In-Hand" },
+//         { name: "Year End Activity", path: "/Year-End-Activity" },
+//       ],
+//     },
+//     {
+//       name: "Transport Master",
+//       icon: <FaBus className="inline-block w-5 h-5 mr-2 -mt-1" />,
+//       submenus: [
+//         { name: "Route Master", path: "/Route-Master" },
+//         { name: "Add Stop", path: "/Add" },
+//         { name: "Vehicle Type", path: "/Vehicle-Type" },
+//         { name: "Vehicle Provider", path: "/Vehicle" },
+//         { name: "Vehicle Master", path: "/Master" },
+//         { name: "Assign Vehicle", path: "/Assign" },
+//       ],
+//     },
+//     {
+//       name: "Hostel Master",
+//       icon: <FaBed className="inline-block w-5 h-5 mr-2 -mt-1" />,
+//       submenus: [
+//         { name: "Hostel Provider", path: "/Hostel-Provide" },
+//         { name: "Assign Hostel", path: "/Assign-Hostels" },
+//       ],
+//     },
+//     {
+//       name: "Manage Exam",
+//       icon: <FaBed className="inline-block w-5 h-5 mr-2 -mt-1" />,
+//       submenus: [
+//         {
+//           name: "Subject",
+//           submenus: [
+//             { name: "Subject", path: "/Subject" },
+//             { name: "Grade", path: "/Grade" },
+//           ],
+//         },
+//         {
+//           name: "Exam",
+//           submenus: [
+//             { name: "Exam Type", path: "/Exam-Type" },
+//             { name: "Exam", path: "/Exam" },
+//             { name: "Assign Roll No.", path: "/Assign-Roll" },
+//             { name: "Exam Schedule", path: "/Schedule" },
+//             { name: "Assign Exam Hole", path: "/Assign-Exam-Hole" },
+//           ],
+//         },
+//         { name: "Student Attendance", path: "/Student-Attendance" },
+//         { name: "Marks Entry", path: "/Marks-Entry" },
+//       ],
+//     },
+//   ];
 
-//   // normalize path (no trailing slash)
-//   const normalize = (p) => (p ? p.replace(/\/+$/, "") : "");
+//   const handletoggle = () => setSidebarToggle(!sidebarToggle);
+//   const toggleMenu = (i) => setOpenMenu(openMenu === i ? null : i);
+//   const toggleSubMenu = (key) =>
+//     setOpenSubMenu(openSubMenu === key ? null : key);
 
-//   // slugify name for fallback matching
-//   const slugify = (s) =>
-//     s ? s.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "") : "";
+//   /* ✅ ACTIVE PATH CHECK (SELF + CHILD + GRAND CHILD) */
+//   const isPathActive = (item) => {
+//     if (!item) return false;
 
-//   // Robust active check: exact, prefix, segment, name-slug fallback
-//   const isPathActive = (path, name) => {
-//     const current = (location.pathname || "/").toLowerCase();
-//     if (!path) {
-//       if (!name) return false;
-//       const slug = slugify(name);
-//       return current.split("/").some((seg) => seg.includes(slug));
+//     if (item.path && item.path === location.pathname) return true;
+
+//     if (item.submenus) {
+//       return item.submenus.some((child) => isPathActive(child));
 //     }
-//     const np = normalize(path).toLowerCase();
-//     const npSeg = np.replace(/^\//, "");
-//     if (current === np) return true; // exact
-//     if (current.startsWith(np + "/")) return true; // /Department/123
-//     const segments = current.split("/").filter(Boolean);
-//     if (segments.includes(npSeg)) return true; // segment match
-//     // fallback: check if any segment contains name slug (handles /Department2 or /department-edit)
-//     if (name) {
-//       const slug = slugify(name);
-//       if (slug && segments.some((seg) => seg.includes(slug))) return true;
-//     }
+
 //     return false;
 //   };
 
-//   // Recursively check submenus for any active route
-//   const hasActiveInSubmenus = (submenus) => {
-//     if (!Array.isArray(submenus)) return false;
-//     for (const s of submenus) {
-//       if (s.path && isPathActive(s.path, s.name)) return true;
-//       if (s.submenus && hasActiveInSubmenus(s.submenus)) return true;
-//     }
-//     return false;
-//   };
+//   /* ✅ AUTO OPEN MENU + SUBMENU ON ROUTE CHANGE */
+//   useEffect(() => {
+//     menu.forEach((item, i) => {
+//       item.submenus?.forEach((sub, j) => {
+//         if (isPathActive(sub)) {
+//           setOpenMenu(i);
+//           if (sub.submenus) {
+//             setOpenSubMenu(`menu-${i}-${j}`);
+//           }
+//         }
+//       });
+//     });
+//   }, [location.pathname]);
 
-//   // Recursive renderer
 //   const renderSubmenus = (submenus, parentKey = "") => {
 //     if (!Array.isArray(submenus)) return null;
+
 //     return (
-//       <ul className="ml-6 mt-2 text-sm font-semibold text-[#5a1c0a] overflow-y-auto">
+//       <ul className="ml-6 mt-2 text-sm font-semibold text-[#5a1c0a]">
 //         {submenus.map((sub, j) => {
 //           const key = `${parentKey}-${j}`;
-//           const submenuHasActive = sub.submenus ? hasActiveInSubmenus(sub.submenus) : false;
-//           const isActivePath = sub.path ? isPathActive(sub.path, sub.name) : false;
+//           const isActive = isPathActive(sub);
 
 //           return (
 //             <li key={key} onClick={!sub.submenus ? handletoggle : undefined}>
 //               {sub.submenus ? (
 //                 <>
-//                   <button
-//                     onClick={() => toggleSubMenu(key)}
-//                     className={`flex justify-between w-full px-2 py-1 rounded ${
-//                       openSubMenu === key || submenuHasActive
-//                         ? "bg-blue-400 text-white"
-//                         : "hover:bg-blue-400 hover:text-white"
-//                     }`}
-//                   >
+//                  <button
+//   onClick={() => toggleSubMenu(key)}
+//   className={`flex justify-between w-full px-2 py-1 rounded transition ${
+//     isActive
+//       ? "bg-blue-400 !text-white"
+//       : "hover:bg-blue-400 hover:text-white"
+//   }`}
+// >
+
 //                     {sub.name}
-//                     <span>{openSubMenu === key || submenuHasActive ? "−" : "▼"}</span>
+//                     <span>{openSubMenu === key ? "−" : "▼"}</span>
 //                   </button>
 
-//                   {(openSubMenu === key || submenuHasActive) && renderSubmenus(sub.submenus, key)}
+//                   {isActive && renderSubmenus(sub.submenus, key)}
 //                 </>
 //               ) : (
 //                 <NavLink
 //                   to={sub.path}
-//                   className={`block mb-2 rounded-md px-2 py-2 transition cursor-pointer ${
-//                     isActivePath ? "bg-blue-400 text-white" : "hover:bg-blue-400 hover:text-white"
-//                   }`}
+//                   className={({ isActive }) =>
+//                     `block mb-2 rounded-md px-2 py-2 transition cursor-pointer ${
+//                       isActive
+//                         ? "bg-blue-400 text-white"
+//                         : "hover:bg-blue-400 hover:text-white"
+//                     }`
+//                   }
 //                 >
 //                   {sub.name}
 //                 </NavLink>
@@ -947,44 +520,33 @@ export default Sidebar;
 //     <div
 //       className={`${
 //         sidebarToggle ? "translate-x-0" : "translate-x-full shadow-none"
-//       } w-64 block h-full fixed right-0 bg-[#f7edcfda] shadow-2xl rounded-l-3xl transform transition-all duration-700 ease-in-out px-4 py-2 overflow-y-auto no-scrollbar `}
+//       } w-64 fixed right-0 bg-[#f7edcfda] shadow-2xl rounded-l-3xl 
+//       transform transition-all duration-700 ease-in-out 
+//       overflow-y-scroll no-scrollbar h-screen z-50`}
 //     >
-//       <ul className="mt-3 text-[#a7230b] font-bold overflow-y-auto mb-20 no-scrollbar">
-//         {menu.map((item, i) => {
-//           const itemHasActive = hasActiveInSubmenus(item.submenus);
-//           return (
-//             <li key={i} className="mb-2">
-//               <button
-//                 onClick={() => toggleMenu(i)}
-//                 className={`flex items-center justify-between w-full px-3 py-2 rounded transition ${
-//                   openMenu === i || itemHasActive ? "bg-blue-500 text-white shadow" : "hover:bg-blue-500 hover:text-white"
-//                 }`}
-//               >
-//                 <span className="flex items-center">
-//                   {item.icon}
-//                   {item.name}
-//                 </span>
-//               </button>
+//       <ul className="pt-3 text-[#a7230b] font-bold bg-[#f7edcfda] px-4 py-2">
+//         {menu.map((item, i) => (
+//           <li key={i} className="mb-2">
+//             <button
+//               onClick={() => toggleMenu(i)}
+//               className={`flex items-center justify-between w-full px-3 py-2 rounded transition ${
+//                 openMenu === i
+//                   ? "bg-blue-500 text-white shadow"
+//                   : "hover:bg-blue-500 hover:text-white"
+//               }`}
+//             >
+//               <span className="flex items-center">
+//                 {item.icon}
+//                 {item.name}
+//               </span>
+//             </button>
 
-//               {(openMenu === i || itemHasActive) && renderSubmenus(item.submenus, `menu-${i}`)}
-//             </li>
-//           );
-//         })}
+//             {openMenu === i && renderSubmenus(item.submenus, `menu-${i}`)}
+//           </li>
+//         ))}
 //       </ul>
 //     </div>
 //   );
 // }
 
 // export default Sidebar;
-
-
-
-
-
-
-
-
-
-
-
-
