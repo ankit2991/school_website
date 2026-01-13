@@ -99,7 +99,7 @@ import { useNavigate } from "react-router-dom";
 import Options from "../../Components/Page_Forms/Options";
 import Table from "../../Components/Page_Forms/Table";
 import useClassList from "../../hooks/useClassList";
-import { getAssignVehicleDelete, getClassWiseTransportStudentList } from "../../services/api";
+import { getClassWiseTransportStudentList } from "../../services/api";
 import Loader from "../../Components/Page_Forms/Loader";
 
 function Assign_Vehicle() {

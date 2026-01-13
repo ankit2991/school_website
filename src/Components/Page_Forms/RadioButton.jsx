@@ -20,7 +20,7 @@ function RadioButton({
         disabled={disabled}
         className="w-4 h-4 accent-red-500" // Tailwind for size & color
       />
-      <span className="text-sm text-gray-700">{label}</span>
+      <span className="text-[18px] text-gray-700">{label}</span>
     </label>
   );
 }
