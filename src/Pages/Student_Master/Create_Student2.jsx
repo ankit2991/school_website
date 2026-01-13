@@ -27,7 +27,9 @@ function Create_Student2() {
   const { classList } = useClassList();
   const [lastClassId, setLastClassId] = useState("");
   const [currentClassId, setCurrentClassId] = useState("");
-  const [serialNo, setSerialNo] = useState(null);
+  const [serialNo, setSerialNo] = useState({ 
+    srno: "", enrollNo: "", 
+  });
   const [typelist, setTypeList] = useState([]);
   const [casteList, setCasteList] = useState([]);
   const [selectetypeId, setSelectedTypeId] = useState("");
@@ -46,8 +48,12 @@ function Create_Student2() {
           editClassId
         );
 
-        const d = res?.Table?.[0];
+        const d = res?.Table?.[0];       
         if (!d) return;
+        setSerialNo({ 
+          srno: d.OldSrno || "", 
+          enrollNo: d.EnrollmentNo || "", 
+        });
 
         setFormData((prev) => ({
           ...prev,
@@ -191,17 +197,34 @@ function Create_Student2() {
   {
     /* ================= FETCH SERIAL NO (ONLY ADD MODE) ================= */
   }
-  useEffect(() => {
-    // if (!instId || editEqId) return;
-    if (!instId) return;
+  // useEffect(() => {
+  //   // if (!instId || editEqId) return;
+  //   if (!instId) return;
 
-    getSerialNo(instId).then((res) => {
-      if (res?.Table?.[0]?.ResultCode === "R100") {
-        const row = res.Table1?.[0];
-        setSerialNo(row);
-      }
-    });
-  }, [instId]);
+  //   getSerialNo(instId).then((res) => {
+  //     if (res?.Table?.[0]?.ResultCode === "R100") {
+  //       const row = res.Table1?.[0];
+  //       setSerialNo(row);
+  //     }
+  //   });
+  // }, [instId]);
+
+  useEffect(() => {
+  // ❌ Do not run in edit mode
+  if (!instId || editStudId) return;
+
+  getSerialNo(instId).then((res) => {
+    if (res?.Table?.[0]?.ResultCode === "R100") {
+      const row = res.Table1?.[0];
+
+      setSerialNo({
+        srno: row?.MaxSrNo || "",
+        enrollNo: row?.MaxSrNo || "",
+      });
+    }
+  });
+}, [instId, editStudId]);
+
 
   // ================= TYPE LIST ================= 
   useEffect(() => {
@@ -261,8 +284,10 @@ function Create_Student2() {
       userId: numOrZero(userId),
       studId: getStudentIdForApi(),
       eqno: numOrZero(formData.eqno),
-      srno: numOrZero(serialNo?.MaxSrNo),
-      enroNo: numOrZero(serialNo?.MaxSrNo),
+      // srno: numOrZero(serialNo?.MaxSrNo),
+      // enroNo: numOrZero(serialNo?.MaxSrNo),
+      srno: numOrZero(serialNo.srno),
+enroNo: numOrZero(serialNo.enrollNo),
       name: strOrEmpty(formData.name),
       gen: strOrEmpty(formData.gen),
       dob: dateOrEmpty(formData.dob),
@@ -449,7 +474,7 @@ function Create_Student2() {
           value={formData.studId}
           onChange={handleChange}
         />
-        <FormInput
+        {/* <FormInput
           label={"Sr. No."}
           placeholder={"Enter Serial Number"}
           value={serialNo?.MaxSrNo || ""}
@@ -460,7 +485,19 @@ function Create_Student2() {
           placeholder={"Enter Enrollment No."}
           value={serialNo?.MaxSrNo || ""}
           disabled
-        />
+        /> */}
+
+        <FormInput
+  label={"Sr. No."}
+  value={serialNo.srno}
+  disabled
+/>
+
+<FormInput
+  label={"Enrollment No."}
+  value={serialNo.enrollNo}
+  disabled
+/>
         <FormInput
           label={"First Name"}
           placeholder={"Enter First Name"}

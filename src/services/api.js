@@ -2050,69 +2050,6 @@ export const getTotalOutStandingReport = async (insid, sessid, clid, monthid,) =
 
 
 
-// --------------------------------------This is Old API  -----------------------------------------
-// --------------------------------------This is not correct -----------------------------------------
-// --------------------------------------This is Exam List api function -----------------------------------------
-export const getexam = async (insid) => {
-    const params = {
-        ParmCriteria: JSON.stringify({
-            InstId: insid,
-            ApiAdd: "ExamList", 
-            CallBy: "MobileApi",
-            AuthKey: "AK101"
-        }),
-        SchID: scId,
-        ApiAdd: "ExamList",
-    };
-    const response = await axios.get(API_URL, { params });
-    return response.data;
-};
-// ------------------------------------This is Exam List api function end----------------------------------------
-
-
-
-// --------------------------------------This is Exam Type List api function -----------------------------------------
-export const getsubexam = async (insid) => {
-    const params = {
-        ParmCriteria: JSON.stringify({
-            InstId: insid,
-            ApiAdd: "ExamTypeList", 
-            CallBy: "MobileApi",
-            AuthKey: "AK101"
-        }),
-        SchID: scId,
-        ApiAdd: "ExamTypeList",
-    };
-    const response = await axios.get(API_URL, { params });
-    return response.data;
-};
-// ------------------------------------This is Exam Type List api function end----------------------------------------
-
-
-
-// --------------------------------------This is Sub Exam Subject List api function -----------------------------------------
-export const getsubject = async (insid, clid, exmid, subexmid) => {
-    const params = {
-        ParmCriteria: JSON.stringify({
-            InstId: insid,
-            ClassId: clid, 
-            ExamId: exmid,
-            SubExamId: subexmid,
-            ApiAdd: "SubExamSubjectList", 
-            CallBy: "MobileApi",
-            AuthKey: "AK101"
-        }),
-        SchID: scId,
-        ApiAdd: "SubExamSubjectList",
-    };
-    const response = await axios.get(API_URL, { params });
-    return response.data;
-};
-// ------------------------------------This is Sub Exam Subject List api function end----------------------------------------
-
-
-
-
 // --------------------------------------This is Bank List api function -----------------------------------------
 export const getbank = async (insid,) => {
     const params = {

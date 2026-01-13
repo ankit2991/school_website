@@ -5,6 +5,7 @@ import FormInput from "../../../Components/Page_Forms/FormInput";
 import Buttons from "../../../Components/Page_Forms/Buttons";
 import Table from "../../../Components/Page_Forms/Table";
 import { getFeesDetails, getTransportReportFee } from "../../../services/api";
+import Loader from "../../../Components/Page_Forms/Loader";
 
 function Transport_Details() {
   /* ---------------- STATE ---------------- */
@@ -19,8 +20,9 @@ function Transport_Details() {
   const [name, setName] = useState("");
 
   const [tableData, setTableData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
   const [rowDetailOpen, setRowDetailOpen] = useState(false);
+  const [showTable, setShowTable] = useState(false);
 
   /* ---------------- TABLE COLUMNS ---------------- */
   const columns = [
@@ -69,8 +71,9 @@ function Transport_Details() {
     const sessionId = localStorage.getItem("SessionID");
 
     try {
-      setLoading(true);
+      setSearched(true);
       setTableData([]);
+      setShowTable(false);
 
       const res = await getTransportReportFee(
         instId,
@@ -98,18 +101,21 @@ function Transport_Details() {
             jdate: formatDotNetDate(r.JoinDate),
           }))
         );
+        setShowTable(true);
       }
     } catch (err) {
       console.error("Transport API Error:", err);
       setTableData([]);
+      setShowTable(false);
     } finally {
-      setLoading(false);
+      setSearched(false);
     }
   };
 
   /* ---------------- UI ---------------- */
   return (
     <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+      <Loader show={searched} />
       <Heading label="Transport Details" />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-5">
@@ -165,12 +171,14 @@ function Transport_Details() {
         <Buttons label="Search" click={handleSearch} />
       </div>
 
+{showTable && (
       <Table
         columns={columns}
         data={tableData}
-        loading={loading}
+        loading={searched}
         onOverlayToggle={setRowDetailOpen}
       />
+)}
 
       {rowDetailOpen && window.innerWidth < 768 && <div className="h-140" />}
     </div>

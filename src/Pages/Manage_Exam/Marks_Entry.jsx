@@ -6,15 +6,12 @@ import FormInput from "../../Components/Page_Forms/FormInput";
 import Buttons from "../../Components/Page_Forms/Buttons";
 import { useNavigate } from "react-router-dom";
 import RadioButton from "../../Components/Page_Forms/RadioButton";
-import { getclass, getexam, getExamList, getExamTypeList, getStudentMarksList, getsubexam, getsubject, getSubjectList } from "../../services/api";
+import { getExamList, getExamTypeList, getStudentMarksList, getSubjectList } from "../../services/api";
 import useClassList from "../../hooks/useClassList";
 import Loader from "../../Components/Page_Forms/Loader";
 
 function Marks_Entry() {
   const navigate = useNavigate();
-  const [agree, setAgree] = useState(false);
-  const [agree2, setAgree2] = useState(false);
-  const [selected, setSelected] = useState("1");
   const [searched, setSearched] = useState(false); 
   const instId = localStorage.getItem("InstituteID"); 
   const sessId = localStorage.getItem("SessionID"); 
@@ -26,7 +23,6 @@ function Marks_Entry() {
   const [selectedExamTypeId, setSelectedExamTypeId] = useState("");
   const [subjectList, setSubjectList] = useState([]); 
   const [selectedSubjectId, setSelectedSubjectId] = useState("");
-  const [selectedDate, setSelectedDate] = useState("");
   const [minMarks, setMinMarks] = useState(""); 
   const [maxMarks, setMaxMarks] = useState("");
   const [marksType, setMarksType] = useState("1");

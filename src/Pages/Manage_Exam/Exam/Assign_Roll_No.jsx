@@ -62,44 +62,15 @@ function Assign_Roll_No() {
     }, 
   ]; 
   
-  // =================== EXAM TYPE LIST ====================== 
-  // const handleSearch = async () => { 
-  //   if (!selectedClassId) { 
-  //     alert("Please select class"); 
-  //     return; 
-  //   } 
-    
-  //   try { 
-  //     setSearched(true); 
-      
-  //     const res = await getStudentRollList(instId, sessId, selectedClassId); 
-      
-  //     if (res?.Table) { 
-  //       const updated = res.Table.map((r) => ({ 
-  //         ...r, RollNo: r.RollNo || "", 
-  //       })); 
-  //       setTableData(updated); 
-  //     } else { 
-  //       setTableData([]); 
-  //     } 
-  //   } catch (error) { 
-  //     console.error("Student Roll API Error:", error); 
-  //   } finally { 
-  //     setSearched(false); 
-  //   } 
-  // }; 
-
-  const handleSearch = async () => {
-  if (!selectedClassId) {
-    alert("Please select class");
-    return;
-  }
+  // =================== STUDENT ROLL LIST ====================== 
+  const fetchStudentRollList = async (classId) => {
+  if (!classId) return;
 
   try {
     setSearched(true);
-    setShowTable(false); // 🔹 hide before search
+    setShowTable(false); // hide table before fetch
 
-    const res = await getStudentRollList(instId, sessId, selectedClassId);
+    const res = await getStudentRollList(instId, sessId, classId);
 
     if (res?.Table && res.Table.length > 0) {
       const updated = res.Table.map((r) => ({
@@ -108,7 +79,7 @@ function Assign_Roll_No() {
       }));
 
       setTableData(updated);
-      setShowTable(true); // ✅ SHOW table
+      setShowTable(true);
     } else {
       setTableData([]);
       setShowTable(false);
@@ -121,6 +92,56 @@ function Assign_Roll_No() {
     setSearched(false);
   }
 };
+
+useEffect(() => {
+  if (selectedClassId) {
+    fetchStudentRollList(selectedClassId);
+  }
+}, [selectedClassId]);
+
+  // =================== SEARCH ====================== 
+  //   const handleSearch = async () => {
+//   if (!selectedClassId) {
+//     alert("Please select class");
+//     return;
+//   }
+
+//   try {
+//     setSearched(true);
+//     setShowTable(false); // 🔹 hide before search
+
+//     const res = await getStudentRollList(instId, sessId, selectedClassId);
+
+//     if (res?.Table && res.Table.length > 0) {
+//       const updated = res.Table.map((r) => ({
+//         ...r,
+//         RollNo: r.RollNo || "",
+//       }));
+
+//       setTableData(updated);
+//       setShowTable(true); // ✅ SHOW table
+//     } else {
+//       setTableData([]);
+//       setShowTable(false);
+//     }
+//   } catch (error) {
+//     console.error("Student Roll API Error:", error);
+//     setTableData([]);
+//     setShowTable(false);
+//   } finally {
+//     setSearched(false);
+//   }
+// };
+
+const handleSearch = () => {
+  if (!selectedClassId) {
+    alert("Please select class");
+    return;
+  }
+
+  fetchStudentRollList(selectedClassId);
+};
+
 
   
   // =================== CHECK BOX (ALL) ====================== 

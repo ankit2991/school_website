@@ -91,7 +91,7 @@
 
 
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Heading from "../../Components/Page_Forms/Heading";
 import Buttons from "../../Components/Page_Forms/Buttons";
 import FormInput from "../../Components/Page_Forms/FormInput";
@@ -125,48 +125,18 @@ function Assign_Vehicle() {
     { header: "Status", shortHeader: "Status", accessor: "status" },
   ];
 
-  /* ================= SEARCH HANDLER ================= */
-  // const handleSearch = async () => {
-  //   if (!selectedClassId) {
-  //     alert("Please select class");
-  //     return;
-  //   }
-
-  //   try {
-  //     setSearched(true);
-
-  //     const response = await getClassWiseTransportStudentList(instId, sessId, selectedClassId);
-
-  //     const formattedData = (response?.Table || []).map((item) => ({
-  //       id: item.Id,
-  //       enquiryNo: item.EnrollmentNo,
-  //       name: item.Name,
-  //       status: item.SStatus || "No",
-  //     }));
-
-  //     setTableData(formattedData);
-  //   } catch (error) {
-  //     console.error("Error fetching student list:", error);
-  //     setTableData([]);
-  //   } finally {
-  //     setSearched(false);
-  //   }
-  // };
-
-  const handleSearch = async () => {
-  if (!selectedClassId) {
-    alert("Please select class");
-    return;
-  }
+  /* ================= CLASS WISE TRANSPORT STUDENT LIST ================= */ 
+  const fetchTransportStudents = async (classId) => {
+  if (!classId) return;
 
   try {
     setSearched(true);
-    setShowTable(false); // 🔹 hide before new search
+    setShowTable(false); // hide table before new fetch
 
     const response = await getClassWiseTransportStudentList(
       instId,
       sessId,
-      selectedClassId
+      classId
     );
 
     const formattedData = (response?.Table || []).map((item) => ({
@@ -178,9 +148,10 @@ function Assign_Vehicle() {
 
     setTableData(formattedData);
 
-    // ✅ show table only if data exists
     if (formattedData.length > 0) {
       setShowTable(true);
+    } else {
+      setShowTable(false);
     }
   } catch (error) {
     console.error("Error fetching student list:", error);
@@ -190,6 +161,62 @@ function Assign_Vehicle() {
     setSearched(false);
   }
 };
+
+useEffect(() => {
+  if (selectedClassId) {
+    fetchTransportStudents(selectedClassId);
+  }
+}, [selectedClassId]);
+
+  /* ================= SEARCH HANDLER ================= */
+//   const handleSearch = async () => {
+//   if (!selectedClassId) {
+//     alert("Please select class");
+//     return;
+//   }
+
+//   try {
+//     setSearched(true);
+//     setShowTable(false); // 🔹 hide before new search
+
+//     const response = await getClassWiseTransportStudentList(
+//       instId,
+//       sessId,
+//       selectedClassId
+//     );
+
+//     const formattedData = (response?.Table || []).map((item) => ({
+//       id: item.Id,
+//       enquiryNo: item.EnrollmentNo,
+//       name: item.Name,
+//       status: item.SStatus || "No",
+//     }));
+
+//     setTableData(formattedData);
+
+//     // ✅ show table only if data exists
+//     if (formattedData.length > 0) {
+//       setShowTable(true);
+//     }
+//   } catch (error) {
+//     console.error("Error fetching student list:", error);
+//     setTableData([]);
+//     setShowTable(false);
+//   } finally {
+//     setSearched(false);
+//   }
+// };
+
+const handleSearch = () => {
+  if (!selectedClassId) {
+    alert("Please select class");
+    return;
+  }
+
+  fetchTransportStudents(selectedClassId);
+};
+
+
 
 
   /* ================= CLIENT-SIDE FILTER ================= */
@@ -251,75 +278,7 @@ function Assign_Vehicle() {
 
       {/* Table */}
       <div className="mt-5">
-        {/* <Table
-  columns={columns}
-  data={filteredData}
-  actions={(row) => {
-    const isAssigned = row.status === "Yes";
-
-    return (
-      <> */}
-        {/* Desktop Buttons */}
-        {/* <Buttons
-          label={"Add"}
-          click={() => {
-            if (!isAssigned) {
-              navigate("/Assign-Vehicle", {
-                state: { studentId: row.id },
-              });
-            }
-          }}
-          disabled={isAssigned}
-          style={`hidden sm:inline ${isAssigned ? "opacity-50 cursor-not-allowed" : ""}`}
-        />
-
-        <Buttons
-          label={"Edit"}
-          click={() => {
-            if (isAssigned) {
-              navigate("/Assign-Vehicle", {
-                state: { studentId: row.id },
-              });
-            }
-          }}
-          disabled={!isAssigned}
-          style={`hidden sm:inline ${!isAssigned ? "opacity-50 cursor-not-allowed" : ""}`}
-        /> */}
-
-        {/* Mobile Icons */}
-        {/* <button
-          className={`sm:hidden text-xl pt-2.5 ${
-            isAssigned ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          disabled={isAssigned}
-          onClick={() =>
-            !isAssigned &&
-            navigate("/Assign-Vehicle", {
-              state: { studentId: row.id },
-            })
-          }
-        >
-          ➕
-        </button>
-
-        <button
-          className={`sm:hidden text-lg pt-2.5 ${
-            !isAssigned ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          disabled={!isAssigned}
-          onClick={() =>
-            isAssigned &&
-            navigate("/Assign-Vehicle", {
-              state: { studentId: row.id },
-            })
-          }
-        >
-          ✏️
-        </button>
-      </>
-    );
-  }}
-/> */}
+        
 {/* Table (shown only after Search) */}
 {showTable && (
   <div className="mt-5">

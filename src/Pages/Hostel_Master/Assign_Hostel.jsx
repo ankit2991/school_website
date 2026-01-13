@@ -17,6 +17,7 @@ function Assign_Hostel() {
   const [searched, setSearched] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [srNoText, setSrNoText] = useState("");
+  const [showTable, setShowTable] = useState(false);
   const instId = localStorage.getItem("InstituteID");
   const sessId = localStorage.getItem("SessionID");
   const navigate = useNavigate()
@@ -26,28 +27,76 @@ function Assign_Hostel() {
     { header: "Status", shortHeader: "Status", accessor: "SStatus" }, 
   ]
 
-  // =================== Student Hostel LIST ====================== 
-  const handleSearch = async () => { 
-    if (!selectedClassId) { 
-      alert("Please select class"); 
-      return; 
-    } 
+  // =================== STUDENT HOSTEL LIST ====================== 
+  const fetchStudentHostelList = async (classId) => {
+  if (!classId) return;
+
+  try {
+    setSearched(true);
+    setShowTable(false);
+
+    const res = await getStudentHostelList(instId, sessId, classId);
+
+    if (res?.Table) {
+      setStudentList(res.Table);
+      setFilteredList(res.Table);
+      setShowTable(true);
+
+    } else {
+      setStudentList([]);
+      setFilteredList([]);
+      setShowTable(false);
+
+    }
+  } catch (error) {
+    console.error("API Error:", error);
+    setStudentList([]);
+    setFilteredList([]);
+    setShowTable(false);
+  } finally {
+    setSearched(false);
+  }
+};
+
+useEffect(() => {
+  if (selectedClassId) {
+    fetchStudentHostelList(selectedClassId);
+  }
+}, [selectedClassId]);
+
+
+  // =================== SEARCH ====================== 
+  // const handleSearch = async () => { 
+  //   if (!selectedClassId) { 
+  //     alert("Please select class"); 
+  //     return; 
+  //   } 
     
-    try { 
-      setSearched(true); 
+  //   try { 
+  //     setSearched(true); 
       
-      const res = await getStudentHostelList(instId, sessId, selectedClassId); 
+  //     const res = await getStudentHostelList(instId, sessId, selectedClassId); 
       
-      if (res?.Table) { 
-        setStudentList(res.Table); 
-        setFilteredList(res.Table); 
-      } 
-    } catch (error) { 
-      console.error("API Error:", error); 
-    } finally { 
-      setSearched(false); 
-    } 
-  }; 
+  //     if (res?.Table) { 
+  //       setStudentList(res.Table); 
+  //       setFilteredList(res.Table); 
+  //     } 
+  //   } catch (error) { 
+  //     console.error("API Error:", error); 
+  //   } finally { 
+  //     setSearched(false); 
+  //   } 
+  // }; 
+
+  const handleSearch = () => {
+  if (!selectedClassId) {
+    alert("Please select class");
+    return;
+  }
+
+  fetchStudentHostelList(selectedClassId);
+};
+
   
   // =================== FILTER ======================  
   useEffect(() => { 
@@ -94,6 +143,7 @@ function Assign_Hostel() {
           click={handleSearch} label={"Search"} 
         /> 
       </div> 
+      {showTable && (
       <div className="mt-5"> 
         <Table 
           columns={columns} data={filteredList} actions={(row) => { 
@@ -145,7 +195,7 @@ function Assign_Hostel() {
                     // </>
           
           }}/> 
-      </div> 
+      </div> )}
     </div> 
   ) 
 } 

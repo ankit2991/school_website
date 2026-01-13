@@ -52,7 +52,7 @@ import Buttons from '../../../Components/Page_Forms/Buttons';
 import { useNavigate } from 'react-router-dom';
 import FormInput from '../../../Components/Page_Forms/FormInput';
 import Table from '../../../Components/Page_Forms/Table';
-import { getGradeDelete, getGradeList, getGradeWiseList, getSubjectDelete, getSubjectList } from '../../../services/api';
+import { getGradeDelete, getGradeList, getGradeWiseList, } from '../../../services/api';
 import Options from '../../../Components/Page_Forms/Options';
 
 function Grade() {
@@ -65,6 +65,7 @@ function Grade() {
     const [gradewiseList, setGradeWiseList] = useState([]); 
     const [searchText, setSearchText] = useState(""); 
     const [filteredList, setFilteredList] = useState([]);
+    const [showTable, setShowTable] = useState(false);
     const columns = [
         { header: "Grade Name", shortHeader: "Subject", accessor: "Name" },       
     ]
@@ -90,60 +91,91 @@ function Grade() {
             } 
         };
 
+    // =================== GRADE WISE LIST ====================== 
+    const fetchGradeWiseData = async (gradeId) => {
+  if (!gradeId) return;
+
+  try {
+    setSearched(true);
+    setShowTable(false);
+
+    // Clear typed filter text
+    setSearchText("");
+
+    const res = await getGradeWiseList(
+      gradeId,
+      instId,
+      sessId
+    );
+
+    if (res?.Table) {
+      setGradeWiseList(res.Table);
+      setFilteredList(res.Table);
+      setShowTable(true);
+    } else {
+      setGradeWiseList([]);
+      setFilteredList([]);
+      setShowTable(false);
+    }
+  } catch (error) {
+    console.error("Grade Wise Error:", error);
+    setShowTable(false);
+  } finally {
+    setSearched(false);
+  }
+};
+
+useEffect(() => {
+  if (selectedGradeId) {
+    fetchGradeWiseData(selectedGradeId);
+  }
+}, [selectedGradeId]);
+
     // =================== SEARCH ====================== 
-//         const handleSearch = async () => {
+
+
+// const handleSearch = async () => {
 //     if (!selectedGradeId) return;
 
 //     try {
 //         setSearched(true);
+//         setShowTable(false);
 
-//         const res = await getGradeWiseList(selectedGradeId, instId, sessId);
+//         // 🔹 Clear typed search text
+//         setSearchText("");
+
+//         const res = await getGradeWiseList(
+//             selectedGradeId,
+//             instId,
+//             sessId
+//         );
 
 //         if (res?.Table) {
-//             setGradeWiseList(res.Table); // show in table
-//             setFilteredList(res.Table);
+//             setGradeWiseList(res.Table);
+//             setFilteredList(res.Table); // show all rows
+//             setShowTable(true);
 //         } else {
 //             setGradeWiseList([]);
 //             setFilteredList([]);
+//             setShowTable(false);
 //         }
 
 //     } catch (error) {
 //         console.error("Grade Wise Error:", error);
+//         setShowTable(false);
 //     } finally {
 //         setSearched(false);
 //     }
 // };
 
-const handleSearch = async () => {
-    if (!selectedGradeId) return;
+const handleSearch = () => {
+  if (!selectedGradeId) {
+    alert("Please select grade");
+    return;
+  }
 
-    try {
-        setSearched(true);
-
-        // 🔹 Clear typed search text
-        setSearchText("");
-
-        const res = await getGradeWiseList(
-            selectedGradeId,
-            instId,
-            sessId
-        );
-
-        if (res?.Table) {
-            setGradeWiseList(res.Table);
-            setFilteredList(res.Table); // show all rows
-        } else {
-            setGradeWiseList([]);
-            setFilteredList([]);
-        }
-
-    } catch (error) {
-        console.error("Grade Wise Error:", error);
-    } finally {
-        setSearched(false);
-    }
+  fetchGradeWiseData(selectedGradeId);
 };
-
 
         // =================== FILTER ====================== 
         const handleFilter = (text) => { 
@@ -260,6 +292,7 @@ const handleSearch = async () => {
                 <Buttons click={handleSearch} label={"Search"} />                    
             </div>
             
+            {showTable && (
             <div className="mt-5">
                 <Table columns={columns} data={filteredList} actions={(row) => (
                     <>
@@ -294,7 +327,7 @@ const handleSearch = async () => {
                         <button className="sm:hidden text-xl pt-2.5"  onClick={() => handleDelete(row.Id)} >🗑️</button>
                     </>
                 )}/>
-            </div>
+            </div> )}
         </div>
     )
 }

@@ -210,6 +210,7 @@ import {
   getClassWiseStudents,
   getStudentSiblingReport,
 } from "../../../services/api";
+import Loader from "../../../Components/Page_Forms/Loader";
 
 function Sibling_Details() {
   const navigate = useNavigate();
@@ -217,12 +218,13 @@ function Sibling_Details() {
   const [classList, setClassList] = useState([]);
   const [studentList, setStudentList] = useState([]);
   const [siblingData, setSiblingData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
 
   const [selectedClassId, setSelectedClassId] = useState("");
   const [selectedStudentId, setSelectedStudentId] = useState("");
 
   const [rowDetailOpen, setRowDetailOpen] = useState(false);
+  const [showTable, setShowTable] = useState(false);
 
   /* ---------------- TABLE COLUMNS ---------------- */
   const columns = [
@@ -266,27 +268,50 @@ function Sibling_Details() {
   }, []);
 
   /* ---------------- CLASS CHANGE ---------------- */
+  // const handleClassChange = async (e) => {
+  //   const classId = e.target.value;
+
+  //   setSelectedClassId(classId);
+  //   setSelectedStudentId("");
+  //   setStudentList([]);
+  //   setSiblingData([]);
+
+  //   if (!classId) return;
+
+  //   const instId = localStorage.getItem("InstituteID");
+  //   const sessionId = localStorage.getItem("SessionID");
+
+  //   try {
+  //     const res = await getClassWiseStudents(instId, sessionId, classId);
+  //     setStudentList(res?.Table || []);
+  //   } catch (err) {
+  //     console.log("Student API Error:", err);
+  //     setStudentList([]);
+  //   }
+  // };
+
   const handleClassChange = async (e) => {
-    const classId = e.target.value;
+  const classId = e.target.value;
 
-    setSelectedClassId(classId);
-    setSelectedStudentId("");
+  setSelectedClassId(classId);
+  setSelectedStudentId("");
+  setStudentList([]);
+  setSiblingData([]);
+  setShowTable(false);
+
+  if (!classId) return;
+
+  const instId = localStorage.getItem("InstituteID");
+  const sessionId = localStorage.getItem("SessionID");
+
+  try {
+    const res = await getClassWiseStudents(instId, sessionId, classId);
+    setStudentList(res?.Table || []);
+  } catch (err) {
+    console.log("Student API Error:", err);
     setStudentList([]);
-    setSiblingData([]);
-
-    if (!classId) return;
-
-    const instId = localStorage.getItem("InstituteID");
-    const sessionId = localStorage.getItem("SessionID");
-
-    try {
-      const res = await getClassWiseStudents(instId, sessionId, classId);
-      setStudentList(res?.Table || []);
-    } catch (err) {
-      console.log("Student API Error:", err);
-      setStudentList([]);
-    }
-  };
+  }
+};
 
   /* ---------------- SEARCH (Sibling API) ---------------- */
   const handleSearch = async () => {
@@ -299,7 +324,8 @@ function Sibling_Details() {
     }
 
     try {
-      setLoading(true);
+      setSearched(true);
+      setShowTable(false);
       setSiblingData([]);
 
       const res = await getStudentSiblingReport(
@@ -324,26 +350,39 @@ function Sibling_Details() {
         }));
 
         setSiblingData(mapped);
+        setShowTable(true);
       } else {
         setSiblingData([]);
+        setShowTable(false);
       }
     } catch (err) {
       console.log("Sibling API Error:", err);
       setSiblingData([]);
+      setShowTable(false);
     } finally {
-      setLoading(false);
-    }
+    setSearched(false);
+  }
   };
+
+  useEffect(() => {
+  if (selectedClassId && selectedStudentId) {
+    handleSearch();
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [selectedClassId, selectedStudentId]);
+
 
   return (
     <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+      <Loader show={searched} />
       {/* HEADER */}
       <div className="flex justify-between items-center mb-5">
         <Heading label="Sibling Details" style="text-[22px] sm:text-3xl" />
-        <Buttons 
+        {showTable && (
+          <Buttons 
           label="Print" 
           click={() => { window.open("/pdf/2AddReportViewer.pdf", "_blank"); }} 
-        />
+        /> )}
       </div>
 
       {/* FILTERS */}
@@ -377,10 +416,12 @@ function Sibling_Details() {
       </div>
 
       {/* TABLE */}
+      {showTable && (
+        <>
       <Table
         columns={columns}
         data={siblingData}
-        loading={loading}
+        loading={searched}
         disableFloatingRow={false}
         onOverlayToggle={setRowDetailOpen}
       />
@@ -389,6 +430,8 @@ function Sibling_Details() {
       <div className="flex justify-end mt-5">
         <Buttons label="Clear" click={() => setSiblingData([])} />
       </div>
+      </>
+      )}
 
       {rowDetailOpen && window.innerWidth < 768 && (
         <div className="h-140"></div>

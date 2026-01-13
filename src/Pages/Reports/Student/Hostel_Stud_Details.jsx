@@ -5,6 +5,7 @@ import FormInput from "../../../Components/Page_Forms/FormInput";
 import Buttons from "../../../Components/Page_Forms/Buttons";
 import Table from "../../../Components/Page_Forms/Table";
 import { getFeesDetails, getHostelReportDetail } from "../../../services/api";
+import Loader from "../../../Components/Page_Forms/Loader";
 
 function Hostel_Stud_Details() {
   /* ---------------- STATE ---------------- */
@@ -16,8 +17,9 @@ function Hostel_Stud_Details() {
   const [name, setName] = useState("");
 
   const [tableData, setTableData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
   const [rowDetailOpen, setRowDetailOpen] = useState(false);
+  const [showTable, setShowTable] = useState(false);
 
   /* ---------------- TABLE COLUMNS ---------------- */
   const columns = [
@@ -63,7 +65,8 @@ function Hostel_Stud_Details() {
     const sessionId = localStorage.getItem("SessionID");
 
     try {
-      setLoading(true);
+      setSearched(true);
+      setShowTable(false); 
       setTableData([]);
 
       const res = await getHostelReportDetail(
@@ -90,18 +93,29 @@ function Hostel_Stud_Details() {
             joinDate: formatDotNetDate(r.JoinDate),
           }))
         );
+        setShowTable(true);
       }
     } catch (err) {
       console.error("Hostel API Error:", err);
       setTableData([]);
+      setShowTable(false);
     } finally {
-      setLoading(false);
+      setSearched(false);
     }
   };
+
+  useEffect(() => {
+  if (selectedClassId) {
+    handleSearch();
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [selectedClassId]);
+
 
   /* ---------------- UI ---------------- */
   return (
     <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+      <Loader show={searched} />
       <Heading label="Hostel Student Details" />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-5">
@@ -147,12 +161,14 @@ function Hostel_Stud_Details() {
         <Buttons label="Search" click={handleSearch} />
       </div>
 
+{showTable && (
       <Table
         columns={columns}
         data={tableData}
-        loading={loading}
+        loading={searched}
         onOverlayToggle={setRowDetailOpen}
       />
+)}
 
       {rowDetailOpen && window.innerWidth < 768 && <div className="h-140" />}
     </div>

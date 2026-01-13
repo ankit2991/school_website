@@ -658,54 +658,18 @@ function Assign_Exam_Hole() {
     ); 
   }, [selectedStudents, filteredData]); 
   
-  // =================STUDENT ROLL LIST ON SEARCH BUTTON ================= 
-  // const handleSearch = async () => { 
-  //   if (!selectedClassId) return; 
-    
-  //   try { 
-  //     setSearched(true); 
-  //     const res = await getStudentRollList(instId, sessId, selectedClassId); 
-  //     const apiData = res?.Table?.map((item) => ({ 
-  //       id: item.Id, roll: item.RollNo, serial: item.EnrollmentNo, 
-  //       name: item.Name, fname: item.FatherName, dob: item.DOB, 
-  //       fno: item.FMobileNo, 
-  //     })) || []; 
-      
-  //     setTableData(apiData); 
-  //     // =================== FILTRATION WORK ====================== 
-  //     if (!searchText.trim() || !searchBy) { 
-  //       setFilteredData(apiData); 
-  //       return; 
-  //     } 
-      
-  //     const lower = searchText.toLowerCase(); 
-  //     const filtered = apiData.filter((row) => { 
-  //       if (searchBy === "Name") { 
-  //         return row.name.toLowerCase().includes(lower); 
-  //       } 
-  //       if (searchBy === "Serial No.") { 
-  //         return String(row.serial).includes(searchText); 
-  //       } 
-  //       return true; 
-  //     }); 
-      
-  //     setFilteredData(filtered); 
-  //   } finally { 
-  //     setSearched(false); 
-  //   } 
-  // }; 
-
-  const handleSearch = async () => {
-  if (!selectedClassId) return;
+  // =================STUDENT ROLL LIST ================= 
+  const fetchStudentList = async (classId) => {
+  if (!classId) return;
 
   try {
     setSearched(true);
-    setShowTable(false); // hide table before new search
+    setShowTable(false); // hide table before fetch
 
     const res = await getStudentRollList(
       instId,
       sessId,
-      selectedClassId
+      classId
     );
 
     const apiData =
@@ -739,11 +703,83 @@ function Assign_Exam_Hole() {
       setFilteredData(filtered);
     }
 
-    setShowTable(true); // ✅ show table AFTER search
+    setShowTable(true);
+  } catch (err) {
+    console.error("Student Roll Error:", err);
+    setTableData([]);
+    setFilteredData([]);
+    setShowTable(false);
   } finally {
     setSearched(false);
   }
 };
+
+useEffect(() => {
+  if (selectedClassId) {
+    fetchStudentList(selectedClassId);
+  }
+}, [selectedClassId]);
+
+  // ================= SEARCH ================= 
+//     const handleSearch = async () => {
+//   if (!selectedClassId) return;
+
+//   try {
+//     setSearched(true);
+//     setShowTable(false); // hide table before new search
+
+//     const res = await getStudentRollList(
+//       instId,
+//       sessId,
+//       selectedClassId
+//     );
+
+//     const apiData =
+//       res?.Table?.map((item) => ({
+//         id: item.Id,
+//         roll: item.RollNo,
+//         serial: item.EnrollmentNo,
+//         name: item.Name,
+//         fname: item.FatherName,
+//         dob: item.DOB,
+//         fno: item.FMobileNo,
+//       })) || [];
+
+//     setTableData(apiData);
+
+//     // ---------- FILTER ----------
+//     if (!searchText.trim() || !searchBy) {
+//       setFilteredData(apiData);
+//     } else {
+//       const lower = searchText.toLowerCase();
+//       const filtered = apiData.filter((row) => {
+//         if (searchBy === "Name") {
+//           return row.name.toLowerCase().includes(lower);
+//         }
+//         if (searchBy === "Serial No.") {
+//           return String(row.serial).includes(searchText);
+//         }
+//         return true;
+//       });
+
+//       setFilteredData(filtered);
+//     }
+
+//     setShowTable(true); // ✅ show table AFTER search
+//   } finally {
+//     setSearched(false);
+//   }
+// };
+
+const handleSearch = () => {
+  if (!selectedClassId) {
+    alert("Please select class");
+    return;
+  }
+
+  fetchStudentList(selectedClassId);
+};
+
 
   
   // =================== ROOM LIST ====================== 

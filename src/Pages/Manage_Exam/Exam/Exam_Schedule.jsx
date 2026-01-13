@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Heading from "../../../Components/Page_Forms/Heading";
 import Buttons from "../../../Components/Page_Forms/Buttons";
 import { useNavigate } from "react-router-dom";
@@ -20,48 +20,74 @@ function Exam_Schedule() {
 
   const columns = [ { header: "Exam Name", accessor: "Name" }, ]; 
   
+  // =================== EXAM TIME TABLE LIST ====================== 
+  const fetchExamSchedule = async (classId) => {
+  if (!classId) return;
+
+  try {
+    setSearched(true);
+    setShowTable(false); // hide table before fetch
+
+    const res = await getExamTimeTableList(
+      instId,
+      sessId,
+      classId
+    );
+
+    setTableData(res?.Table || []);
+    setShowTable(true);
+  } catch (err) {
+    console.error("Exam Schedule Error:", err);
+    setTableData([]);
+    setShowTable(false);
+  } finally {
+    setSearched(false);
+  }
+};
+
+useEffect(() => {
+  if (selectedClassId) {
+    fetchExamSchedule(selectedClassId);
+  }
+}, [selectedClassId]);
+
+
   // =================== SEARCH ====================== 
-  // const handleSearch = async () => { 
-  //   if (!selectedClassId) { 
-  //     alert("Please select class"); 
-  //     return; 
-  //   } 
-    
-  //   try { 
-  //     setSearched(true); 
-      
-  //     const res = await getExamTimeTableList(instId, sessId, selectedClassId); 
-  //     setTableData(res?.Table || []); 
-  //   } catch (err) { 
-  //     console.error(err); 
-  //   } finally { 
-  //     setSearched(false); 
-  //   } 
-  // }; 
-  const handleSearch = async () => {
+  
+//   const handleSearch = async () => {
+//   if (!selectedClassId) {
+//     alert("Please select class");
+//     return;
+//   }
+
+//   try {
+//     setSearched(true);
+//     setShowTable(false); // hide before new search
+
+//     const res = await getExamTimeTableList(
+//       instId,
+//       sessId,
+//       selectedClassId
+//     );
+
+//     setTableData(res?.Table || []);
+//     setShowTable(true); // show after search
+//   } catch (err) {
+//     console.error(err);
+//   } finally {
+//     setSearched(false);
+//   }
+// };
+
+const handleSearch = () => {
   if (!selectedClassId) {
     alert("Please select class");
     return;
   }
 
-  try {
-    setSearched(true);
-    setShowTable(false); // hide before new search
-
-    const res = await getExamTimeTableList(
-      instId,
-      sessId,
-      selectedClassId
-    );
-
-    setTableData(res?.Table || []);
-    setShowTable(true); // show after search
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setSearched(false);
-  }
+  fetchExamSchedule(selectedClassId);
 };
+
 
   
   return ( 

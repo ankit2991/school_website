@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormInput from "../../Components/Page_Forms/FormInput";
 import Buttons from "../../Components/Page_Forms/Buttons";
 import Options from "../../Components/Page_Forms/Options";
@@ -15,7 +15,6 @@ function Student_Summary() {
   const instId = localStorage.getItem("InstituteID");
   const sesId = localStorage.getItem("SessionID");
   // 🔹 State
-  const [searchType, setSearchType] = useState("");
   const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
@@ -27,11 +26,21 @@ function Student_Summary() {
   // Search type map
   const SEARCH_TYPE_MAP = {
     "Serial Number": "1",
-    Name: "2",
+    "Name": "2",
     "Father Name": "3",
     "Mobile Number": "4",
   };
 
+  // 👇 default first option
+const searchKeys = Object.keys(SEARCH_TYPE_MAP);
+
+// 👇 UI selected value
+const [searchBy, setSearchBy] = useState(searchKeys[0]);  
+
+// 👇 API value
+const [searchType, setSearchType] = useState(
+  SEARCH_TYPE_MAP[searchKeys[0]]
+);
   // Table columns
   const columns = [
     { header: "Serial No.", shortHeader: "Serial No.", accessor: "serial" },
@@ -42,43 +51,96 @@ function Student_Summary() {
     { header: "Father No.", shortHeader: "Father No.", accessor: "fno" },
   ];
 
+  // ======================= STUDENT LIST ======================= 
+  const fetchStudents = async (classId, type) => {
+  if (!type) return;
+
+  setLoading(true);
+  setSearched(true);
+
+  try {
+    const res = await getStudentSearch({
+      instId,
+      sessionId: sesId,
+      classId: classId || "",
+      searchType: type,
+      search: "", // client-side filtering
+    });
+
+    const tableData = (res?.Table || []).map((item) => ({
+      id: item.Id,
+      serial: item.SrNo,
+      name: item.Name,
+      fname: item.FatherName,
+      mname: item.MotherName,
+      class: item.ClassName,
+      fno: item.FMobileNo,
+    }));
+
+    setAllData(tableData);
+    setFilteredData(tableData);
+  } catch (err) {
+    console.error("Search API Error:", err);
+    setAllData([]);
+    setFilteredData([]);
+  } finally {
+    setLoading(false);
+  }
+};
+
+useEffect(() => {
+  if (selectedClassId && searchType) {
+    fetchStudents(selectedClassId, searchType);
+  }
+}, [selectedClassId, searchType]);
+
   // ======================= SEARCH =======================
-  const handleSearch = async () => {
-    if (!searchType) {
-      alert("Please select search type");
-      return;
-    }
+  // const handleSearch = async () => {
+  //   if (!searchType) {
+  //     alert("Please select search type");
+  //     return;
+  //   }
 
-    setLoading(true);
-    setSearched(true);
-    try {
-      const res = await getStudentSearch({
-        instId,
-        sessionId: sesId,
-        classId: selectedClassId,
-        searchType,
-        search: "", // 🔹 empty, filtering is client-side
-      });
+  //   setLoading(true);
+  //   setSearched(true);
+  //   try {
+  //     const res = await getStudentSearch({
+  //       instId,
+  //       sessionId: sesId,
+  //       classId: selectedClassId,
+  //       searchType,
+  //       search: "", // 🔹 empty, filtering is client-side
+  //     });
 
-      const tableData = (res?.Table || []).map((item) => ({
-        id: item.Id,
-        serial: item.SrNo,
-        name: item.Name,
-        fname: item.FatherName,
-        mname: item.MotherName,
-        class: item.ClassName,
-        fno: item.FMobileNo,
-      }));
+  //     const tableData = (res?.Table || []).map((item) => ({
+  //       id: item.Id,
+  //       serial: item.SrNo,
+  //       name: item.Name,
+  //       fname: item.FatherName,
+  //       mname: item.MotherName,
+  //       class: item.ClassName,
+  //       fno: item.FMobileNo,
+  //     }));
 
-      setAllData(tableData); // 👈 store full data
-      setFilteredData(tableData); // 👈 show all initially
-    } catch (err) {
-      console.error("Search API Error:", err);
-      alert("Search failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     setAllData(tableData); // 👈 store full data
+  //     setFilteredData(tableData); // 👈 show all initially
+  //   } catch (err) {
+  //     console.error("Search API Error:", err);
+  //     alert("Search failed");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const handleSearch = () => {
+  if (!searchType) {
+    alert("Please select search type");
+    return;
+  }
+
+  fetchStudents(selectedClassId, searchType);
+};
+
 
   // ======================= SEARCH FILTTER =======================
   const handleFilter = (value) => {
@@ -159,12 +221,26 @@ function Student_Summary() {
         />
 
         {/* Search By */}
-        <Options
+        {/* <Options
           label="Search By"
           optionMsg="Select Option"
           options={Object.keys(SEARCH_TYPE_MAP)}
           onChange={(e) => setSearchType(SEARCH_TYPE_MAP[e.target.value])}
-        />
+        /> */}
+
+       <Options
+  label="Search By"
+  optionMsg="Select Option"
+  options={searchKeys}
+  value={searchBy}   // ✅ controlled by state
+  onChange={(e) => {
+    const selected = e.target.value;
+    setSearchBy(selected);                 // UI update
+    setSearchType(SEARCH_TYPE_MAP[selected]); // API ID
+  }}
+/>
+
+
 
         {/* Enter */}
         <FormInput
@@ -183,28 +259,7 @@ function Student_Summary() {
       </div>
 
       {/* Table */}
-      {/* {searched && ( 
-        <Table 
-          columns={columns} data={filteredData} selectable 
-          selectedRow={selectedRow} onRowSelect={setSelectedRow} 
-          style="max-h-[33vh] sm:max-h-[50vh]" 
-        /> 
-      )}  */}
-
-      {/* No data message */} 
-      {/* {searched && !loading && filteredData.length === 0 && ( 
-        <p className="text-center text-gray-500 mt-4"> 
-          No students found 
-        </p> 
-      )} */}
-
-      {/* {searched && ( 
-        <div className="flex justify-end py-3"> 
-          <Buttons 
-            label="Select" click={handleSelectStudent} disabled={!selectedRow} 
-          /> 
-        </div> 
-      )}  */}
+      
 
       {/* ===== Result Section ===== */}
 {searched && !loading && filteredData.length === 0 && (

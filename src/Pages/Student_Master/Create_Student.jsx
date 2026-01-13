@@ -23,43 +23,95 @@ function Create_Student() {
   const [studentName, setStudentName] = useState("");
   const [searched, setSearched] = useState(false);
 
-  // ======================= SEARCH ENQUIRY =======================
-  const handleSearch = async () => {
-    const instId = localStorage.getItem("InstituteID");
-    const sesId = localStorage.getItem("SessionID");
+  // ======================= ENQUIRY ======================= 
+  const fetchStudents = async (classId) => {
+  const instId = localStorage.getItem("InstituteID");
+  const sesId = localStorage.getItem("SessionID");
 
-    if (!selectedClassId) {
-      alert("Please select class");
-      return;
-    }
+  if (!classId) return;
 
-    try {
-      setLoading(true);
-      setSearched(true);
+  try {
+    setLoading(true);
+    setSearched(true);
 
-      const res = await getStudentList(instId, sesId, selectedClassId);
+    const res = await getStudentList(instId, sesId, classId);
 
-      // ✅ API returns data directly in Table
-      if (Array.isArray(res?.Table)) {
-        const mappedData = res.Table.map((item) => ({
-          id: item.Id,
-          name: item.Name,
-        }));
+    if (Array.isArray(res?.Table)) {
+      const mappedData = res.Table.map((item) => ({
+        id: item.Id,
+        name: item.Name,
+      }));
 
-        setStudentList(mappedData);
-        setFilteredList(mappedData);
-      } else {
-        setStudentList([]);
-        setFilteredList([]);
-      }
-    } catch (error) {
-      console.log("Student API Error:", error);
+      setStudentList(mappedData);
+      setFilteredList(mappedData);
+    } else {
       setStudentList([]);
       setFilteredList([]);
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (error) {
+    console.log("Student API Error:", error);
+    setStudentList([]);
+    setFilteredList([]);
+  } finally {
+    setLoading(false);
+  }
+};
+
+useEffect(() => {
+  if (selectedClassId) {
+    fetchStudents(selectedClassId);
+  }
+}, [selectedClassId]);
+
+
+
+  // ======================= SEARCH ENQUIRY =======================
+  // const handleSearch = async () => {
+  //   const instId = localStorage.getItem("InstituteID");
+  //   const sesId = localStorage.getItem("SessionID");
+
+  //   if (!selectedClassId) {
+  //     alert("Please select class");
+  //     return;
+  //   }
+
+  //   try {
+  //     setLoading(true);
+  //     setSearched(true);
+
+  //     const res = await getStudentList(instId, sesId, selectedClassId);
+
+  //     // ✅ API returns data directly in Table
+  //     if (Array.isArray(res?.Table)) {
+  //       const mappedData = res.Table.map((item) => ({
+  //         id: item.Id,
+  //         name: item.Name,
+  //       }));
+
+  //       setStudentList(mappedData);
+  //       setFilteredList(mappedData);
+  //     } else {
+  //       setStudentList([]);
+  //       setFilteredList([]);
+  //     }
+  //   } catch (error) {
+  //     console.log("Student API Error:", error);
+  //     setStudentList([]);
+  //     setFilteredList([]);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const handleSearch = () => {
+  if (!selectedClassId) {
+    alert("Please select class");
+    return;
+  }
+
+  fetchStudents(selectedClassId);
+};
+
 
   // ======================= NAME FILTER =======================
   useEffect(() => {
@@ -113,55 +165,6 @@ function Create_Student() {
       </div>
 
       {/* TABLE */}
-      {/* {searched && (
-        <div className="mt-5">
-          <Table
-            columns={columns}
-            data={filteredList}
-            actions={(row) => (
-              <> */}
-                {/* Desktop buttons */}
-                {/* <Buttons
-                  label="Edit"
-                  style="hidden sm:inline"
-                  click={() =>
-                    navigate("/Create-Student", {
-                      state: { studId: row.id, classId: selectedClassId },
-                    })
-                  }
-                />
-
-                <Buttons
-                  label="Print"
-                  style="hidden sm:inline"
-                  click={() => window.print()}
-                /> */}
-
-                {/* Mobile icons */}
-                {/* <button
-                  // className="sm:hidden text-lg pt-2.5"
-                  className="sm:hidden text-lg"
-                  onClick={() =>
-                    navigate("/Create-Student", {
-                      state: { studId: row.id, classId: selectedClassId },
-                    })
-                  }
-                >
-                  ✏️
-                </button>
-
-                <button
-                  className="sm:hidden text-xl"
-                  onClick={() => window.print()}
-                >
-                  🖨️
-                </button>
-              </>
-            )}
-          />
-        </div>
-      )} */}
-
       {/* ===== Result Section ===== */}
 {searched && !loading && filteredList.length === 0 && (
   <p className="text-center text-gray-500 mt-4">

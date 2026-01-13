@@ -7,6 +7,7 @@ import Buttons from "../../../Components/Page_Forms/Buttons";
 import Table from "../../../Components/Page_Forms/Table";
 import { useNavigate } from "react-router-dom";
 import { getFeesDetails, getStudentReportDetail } from "../../../services/api";
+import Loader from "../../../Components/Page_Forms/Loader";
 
 function Students_Details() {
     const navigate = useNavigate();
@@ -20,6 +21,8 @@ function Students_Details() {
    const [search, setSearch] = useState("");
    const [studentData, setStudentData] = useState([]);
 const [selectedRows, setSelectedRows] = useState([]);
+const [searched, setSearched] = useState(false);
+const [showTable, setShowTable] = useState(false);
 
    // close
   const isAllSelected =
@@ -87,102 +90,6 @@ const toggleRow = (id) => {
       { Id: "6", Name: "Leave Student" },
    ];
 
-   
-
-
-//    const data = [
-//       {
-//          id: 1,
-//          serial: "01",
-//          name: "Ajay",
-//          fname: "Rman Thakur",
-//          mname: "Shreya",
-//          class: "Nur",
-//          dob: "10-Dec-2022",
-//          addate: "26-may-2024",
-//          add: "221, Shanti Nagar, Near Hanuman Mandir, Jaipur, Rajasthan – 302012",
-//          fno: "1234567890",
-//          mno: "1234567890",
-//          cat: "sc",
-//          gen: "Boy",
-//       },
-//       {
-//          id: 2,
-//          serial: "02",
-//          name: "Ajay",
-//          fname: "Rman",
-//          mname: "Priya",
-//          class: "Nur",
-//          dob: "01-jan-2021",
-//          addate: "10-Dec-2023",
-//          add: "Flat No. 14, Green Valley Apartments, Sector 21, Gandhinagar, Gujarat – 382021",
-//          fno: "1234567540",
-//          mno: "1234567890",
-//          cat: "gen",
-//          gen: "Boy",
-//       },
-//       {
-//          id: 3,
-//          serial: "03",
-//          name: "Viren",
-//          fname: "Devanh Bhalla",
-//          mname: "Kiya",
-//          class: "Nur",
-//          dob: "31-sep-2023",
-//          addate: "03-feb-2024",
-//          add: "3rd Floor, Lakeview Residency, Green Valley Apartments, Sector 21, Gandhinagar Whitefield, Bengaluru, Karnataka – 560066",
-//          fno: "1234567890",
-//          mno: "1234567890",
-//          cat: "st",
-//          gen: "Boy",
-//       },
-//       {
-//          id: 4,
-//          serial: "04",
-//          name: "anuj",
-//          fname: "aditya",
-//          mname: "Teena",
-//          class: "Nur",
-//          dob: "26-may-2023",
-//          addate: "10-Dec-2025",
-//          add: "House No. 77, Palm Avenue, Vyttila, Kochi, Kerala – 682019",
-//          fno: "1234567890",
-//          mno: "1234567890",
-//          cat: "obc",
-//          gen: "Boy",
-//       },
-//       {
-//          id: 5,
-//          serial: "05",
-//          name: "somya",
-//          fname: "Devanh",
-//          mname: "Shalini",
-//          class: "Nur",
-//          dob: "03-feb-2022",
-//          addate: "01-jan-2024",
-//          add: "Plot No. 9, Palm Avenue, Vyttila, Ocean Pearl Apartments, Juhu, Near Hanuman Mandir, Jaipur, Rose Garden Society, Alkapuri, Vadodara, Gujarat – 390007",
-//          fno: "1234567867",
-//          mno: "1234567890",
-//          cat: "sc",
-//          gen: "Boy",
-//       },
-//    ];
-
-   // useEffect(() => {
-   //     const instId = localStorage.getItem("InstituteID");  // ✅ Get dynamic ID
-   //     if (!instId) return;
-
-   //     async function fetchClasses() {
-   //         try {
-   //             const res = await getclass(instId);  // ✅ Pass selected Institute ID
-   //             setClassList(res.Table || []);
-   //         } catch (error) {
-   //             console.log("Class API Error:", error);
-   //         }
-   //     }
-   //     fetchClasses();
-   // }, []);
-
   useEffect(() => {
       const instId = localStorage.getItem("InstituteID");
       const sessionId = localStorage.getItem("SessionID");
@@ -199,35 +106,6 @@ const toggleRow = (id) => {
       })();
     }, []);
 
-//    useEffect(() => {
-//       const instId = localStorage.getItem("InstituteID");
-//       const sessionId = localStorage.getItem("SessionID");
-
-//       if (!instId) return;
-//       async function fetchStudentReport() {
-//          try {
-//             const res = await getStudentReportDetail(
-//                instId,
-//                sessionId,
-//                classId,
-//                searchType,
-//                search
-//             );
-//             // ✅ check API success
-//             if (res?.Table?.[0]?.ResultCode === "R100") {
-//                setClassList(res.Table1 || []);
-//             } else {
-//                setClassList([]);
-//             }
-//          } catch (error) {
-//             console.log("Class API Error:", error);
-//             setClassList([]);
-//          }
-//       }
-
-//       fetchStudentReport();
-//    }, []);
-
    const handleSearch = async () => {
    const instId = localStorage.getItem("InstituteID");
    const sessionId = localStorage.getItem("SessionID");
@@ -238,6 +116,8 @@ const toggleRow = (id) => {
    }
 
    try {
+      setSearched(true);
+      setShowTable(false);
       const res = await getStudentReportDetail(
          instId,
          sessionId,
@@ -249,27 +129,42 @@ const toggleRow = (id) => {
       if (Array.isArray(res?.Table)) {
    setStudentData(res.Table);
    setSelectedRows([]); // reset checkbox selection
+   setShowTable(true);
 } else {
    setStudentData([]);
+   setShowTable(false);
 }
 
    } catch (err) {
       console.log("Student Report Error:", err);
       setStudentData([]);
-   }
+      setShowTable(false);
+   } finally { 
+      setSearched(false); 
+    }
 };
+
+useEffect(() => {
+  if (classId) {
+    handleSearch();
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [classId]);
+
 
    return (
       <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+         <Loader show={searched} />
          <div className="flex justify-between items-center gap-x-4 mb-5">
             <Heading
                label={"Student Details"}
                style={"text-[22px] sm:text-3xl"}
             />
+{showTable && (
             <Buttons 
           label="Print" 
           click={() => { window.open("/pdf/2AddReportViewer.pdf", "_blank"); }} 
-        />
+        /> )}
          </div>
 
          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 mb-5 w-full">
@@ -328,6 +223,8 @@ const toggleRow = (id) => {
                                     
             </div>
 
+{showTable && (
+   <>
       <Table
    columns={columns}
    data={studentData}
@@ -345,7 +242,7 @@ const toggleRow = (id) => {
                <Buttons label={"Parent Signature"} style="px-6 py-2" />
                <Buttons label={"Addmission Form"} style="px-6 py-2" />
             </div>
-         </div>
+         </div> </> )}
          {/* ✅ Dynamic div for spacing */}
          {/* {rowDetailOpen && <div className='h-100'></div>} */}
          {rowDetailOpen && window.innerWidth < 768 && (
@@ -358,5 +255,3 @@ const toggleRow = (id) => {
 export default Students_Details;
 
 
-
-{/* */}

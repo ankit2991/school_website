@@ -11,6 +11,7 @@ import {
    getFeesDetails,
    getTransportFeeReport, 
 } from "../../../services/api";
+import Loader from "../../../Components/Page_Forms/Loader";
 
 function Transport_Fee_Details() {
    const navigate = useNavigate();
@@ -35,7 +36,7 @@ function Transport_Fee_Details() {
 
    const [feeData, setFeeData] = useState([]);
    const [selectedRows, setSelectedRows] = useState([]);
-   const [loading, setLoading] = useState(false);
+   const [searched, setSearched] = useState(false);
 
    /* ---------------- TABLE SELECTION ---------------- */
    const isAllSelected =
@@ -176,7 +177,7 @@ function Transport_Fee_Details() {
       const sessionId = localStorage.getItem("SessionID");
 
       try {
-         setLoading(true);
+         setSearched(true);
          setFeeData([]);
          setSelectedRows([]);
 
@@ -212,19 +213,20 @@ function Transport_Fee_Details() {
       } catch {
          setFeeData([]);
       } finally {
-         setLoading(false);
+         setSearched(false);
       }
    };
 
    /* ---------------- UI ---------------- */
    return (
       <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+         <Loader show={searched} />
          <div className="flex justify-between items-center mb-5">
             <Heading label="Transport Fee Details" />
             <Buttons label="Print" click={() => { window.open("/pdf/4TransportReportViewer.pdf", "_blank"); }}  />
          </div>
 
-         <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px_1fr] gap-6 mb-5">
+         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[200px_1fr_200px_1fr] gap-6 mb-5">
             <Options
                label="Class"
                optionMsg="Select Class"
@@ -297,7 +299,7 @@ function Transport_Fee_Details() {
          <Table
             columns={columns}
             data={dataWithFooter}
-            loading={loading}
+            loading={searched}
             onOverlayToggle={setRowDetailOpen}
             actions={(row) =>
                !row.isFooter && (
