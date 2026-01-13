@@ -183,7 +183,7 @@ function App() {
           <Route path='/Transport' element={<Transport_Fee />}/>
           <Route path='/Transport-Fee' element={<Transport_Fee2 />}/>
           <Route path='/Sibling-Fee' element={<Sibling_Fees />}/>
-          <Route path='/Sibling-Fee2' element={<Sibling_Fees2 />}/>
+          <Route path='/Sibling-Fee-Receipt' element={<Sibling_Fees2 />}/>
           <Route path='/Hostel' element={<Hostel_Fee />}/>
           <Route path='/Hostel-fee' element={<Hostel_Fee2 />}/>
           <Route path='/Expenditure' element={<Expenditure />}/>

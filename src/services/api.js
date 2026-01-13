@@ -4,6 +4,7 @@ import axios from "axios";
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://newschoolprojectapi.schoolsoftwaresolution.in";
 const API_URL = BASE_URL + "/MobApi.asmx/MobileApi";
 const AUTH_KEY = "SYS101";
+const scId = "scId";
 
 export const getlogin = async (name, pass) => {
   // Step 1 — Get Public IP

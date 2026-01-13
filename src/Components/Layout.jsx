@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Header from './Header'
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
+import Breadcrumbs from './Breadcrumbs';
 
 function Layout() {
   const [sidebarToggle, setSidebarToggle] = useState(false);
@@ -10,8 +11,10 @@ function Layout() {
     <>
       {/* Pass toggle handler to Header */}
       <Header onToggleSidebar={() => setSidebarToggle(!sidebarToggle)} />
+      <div className="flex flex-col mt-17 w-full">
+<Breadcrumbs />
 
-      <div className="flex mt-17 w-full">
+
         {/* Sidebar receives toggle state */}
        
 

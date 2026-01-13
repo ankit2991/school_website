@@ -100,7 +100,7 @@ function Addmission_Fee_Receipt2() {
 
   return (
     <div className='w-full h-full bg-white  px-4 py-2 flex flex-col'>
-      <Heading style={"mb-5"} label={"Pay Fees"}/>
+      <Heading style={"mb-5"} label={"Addmission Fees"}/>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-5 w-full">
         <FormInput label={"Name"} placeholder={"Enter Name"}/>
         <FormInput label={"Sr. No."} placeholder={" Enter Serial No."}/>

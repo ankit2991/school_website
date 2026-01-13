@@ -5,3 +5,23 @@
 .spinner::-webkit-outer-spin-button {
   -webkit-appearance: none;
 }
+
+
+.breadcrumb {
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.breadcrumb a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb .current {
+  color: #555;
+  font-weight: 500;
+}

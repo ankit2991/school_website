@@ -6,7 +6,7 @@ import FormInput from "../../Components/Page_Forms/FormInput";
 import Buttons from "../../Components/Page_Forms/Buttons";
 import { useNavigate } from "react-router-dom";
 import RadioButton from "../../Components/Page_Forms/RadioButton";
-import { getclass, getexam, getExamList, getExamTypeList, getStudentMarksList, getsubexam, getsubject, getSubjectList } from "../../services/api";
+import { getExamList, getExamTypeList, getStudentMarksList, getSubjectList } from "../../services/api";
 import useClassList from "../../hooks/useClassList";
 import Loader from "../../Components/Page_Forms/Loader";
 

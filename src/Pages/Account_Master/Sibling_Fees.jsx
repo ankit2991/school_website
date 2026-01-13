@@ -66,7 +66,7 @@ function Sibling_Fees() {
             </div>           
 
             <div className="flex justify-end">
-                <Buttons click={() => navigate("/Sibling-Fee2")} label={"Search"} />                    
+                <Buttons click={() => navigate("/Sibling-Fee-Receipt")} label={"Search"} />                    
             </div>
            
         </div>

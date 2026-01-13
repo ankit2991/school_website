@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { FaUserGraduate, FaBus, FaBed, FaTools } from "react-icons/fa";
 import { MdAccountBalance, MdReport, MdPayments } from "react-icons/md";
 import { NavLink } from "react-router-dom";
+import { menuTree } from "../config/menuTree";
+import { iconMap } from "../utils/iconMap";
 
 function Sidebar({ sidebarToggle, setSidebarToggle }) {
   const [openMenu, setOpenMenu] = useState(null);
@@ -18,232 +20,7 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
     };
   }, [sidebarToggle]);
 
-  const menu = [
-    {
-      name: "Student Master",
-      icon: <FaUserGraduate className="inline-block w-5 h-5 mr-2 -mt-1" />,
-      submenus: [
-        { name: "Enquiry Form", path: "/Enquiry" },
-        { name: "Create Student", path: "/Create" },
-        { name: "Add Sibling", path: "/Sibling" },
-        { name: "Student Summary", path: "/Summary" },
-      ],
-    },
-    {
-      name: "Account Master",
-      icon: <MdAccountBalance className="inline-block w-5 h-5 mr-2 -mt-1" />,
-      submenus: [
-        { name: "Addmission Fee Receipt", path: "/Addmission" },
-        { name: "Fee Receipt", path: "/Fees" },
-        { name: "Transport Fee", path: "/Transport" },
-        { name: "Sibling Fee", path: "/Sibling-Fee" },
-        { name: "Hostel Fee", path: "/Hostel" },
-        { name: "Expenditure", path: "/Expenditure" },
-        { name: "Income", path: "/Income" },
-        { name: "Adjustment", path: "/Adjustment" },
-        { name: "Cash In Hand", path: "/Cash-In-Hand" },
-        { name: "Year End Activity", path: "/Year-End-Activity" },
-      ],
-    },
-    {
-      name: "Transport Master",
-      icon: <FaBus className="inline-block w-5 h-5 mr-2 -mt-1" />,
-      submenus: [
-        { name: "Route Master", path: "/Route-Master" },
-        { name: "Add Stop", path: "/Add" },
-        { name: "Vehicle Type", path: "/Vehicle-Type" },
-        { name: "Vehicle Provider", path: "/Vehicle" },
-        { name: "Vehicle Master", path: "/Master" },
-        { name: "Assign Vehicle", path: "/Assign" },
-      ],
-    },
-    {
-      name: "Hostel Master",
-      icon: <FaBed className="inline-block w-5 h-5 mr-2 -mt-1" />,
-      submenus: [
-        { name: "Hostel Provider", path: "/Hostel-Provide" },
-        { name: "Assign Hostel", path: "/Assign-Hostels" },
-      ],
-    },
-    {
-      name: "Manage Exam",
-      icon: <FaBed className="inline-block w-5 h-5 mr-2 -mt-1" />,
-      submenus: [
-        {
-          name: "Subject",
-          submenus: [
-            { name: "Subject", path: "/Subject" },
-            { name: "Grade", path: "/Grade" },
-          ],
-        },
-        {
-          name: "Exam",
-          submenus: [
-            { name: "Exam Type", path: "/Exam-Type" },
-            { name: "Exam", path: "/Exam" },
-            { name: "Assign Roll No.", path: "/Assign-Roll" },
-            { name: "Exam Schedule", path: "/Schedule" },
-            { name: "Assign Exam Hole", path: "/Assign-Exam-Hole" },
-          ],
-        },
-        { name: "Student Attendance", path: "/Student-Attendance" },
-        { name: "Marks Entry", path: "/Marks-Entry" },
-      ],
-    },
-    // {
-    //   name: "Transfer Certificate",
-    //   icon: <MdReport className="inline-block w-5 h-5 mr-2 -mt-1" />,
-    //   submenus: [{ name: "Transfer Certificate (T.C.)", path: "/TC" }],
-    // },
-    {
-      name: "Utility",
-      icon: <MdReport className="inline-block w-5 h-5 mr-2 -mt-1" />,
-      submenus: [
-        { name: "Event SMS", path: "/SMS" },
-        { name: "User Creation", path: "/Creation" },
-        { name: "User SMS", path: "/User-SMS" },
-      ],
-    },
-    {
-      name: "Reports",
-      icon: <MdReport className="inline-block w-5 h-5 mr-2 -mt-1" />,
-      submenus: [
-        {
-          name: "Student",
-          submenus: [
-            { name: "Student Details", path: "/Details" },
-            { name: "Student Sibling Details", path: "/Sibling-Details" },
-            { name: "Student Fee Details", path: "/Fee-Details" },
-            { name: "Student Transport Details", path: "/Transport-Details" },
-            { name: "Transport Fee Details", path: "/Transport-Fee-Details" },
-            { name: "Hostel Student Details", path: "/Hostel-Stud-Details" },
-            { name: "Hostel Fee Details", path: "/Hostel-Fee-Details" },
-            { name: "Student TC Details", path: "/Student-TC-Details" },
-            { name: "Enquiry Details", path: "/Enquiry-Details" },
-            { name: "Caste Wise Report", path: "/Caste-Wise-Report" },
-            { name: "Student Age Wise", path: "/Student-Age-Wise" },
-            {
-              name: "Student Attendance Report",
-              path: "/Student-Attend-Report",
-            },
-            {
-              name: "Student Fee Detail Ledger Wise",
-              path: "/Student-Fee-Detail-Ledger-Wise",
-            },
-          ],
-        },
-        {
-          name: "Day Transaction",
-          submenus: [
-            { name: "Day Details", path: "/Day-Details" },
-            { name: "Day Book", path: "/Day-Book" },
-            { name: "Day Summary Book", path: "/Day-Summary-Book" },
-          ],
-        },
-        {
-          name: "Transaction",
-          submenus: [
-            { name: "Due Report", path: "/Due-Report" },
-            { name: "Transport Due Report", path: "/Transport-Due-Report" },
-            { name: "Hostel Due Report", path: "/Hostel-Due-Report" },
-            { name: "Other Fee Due Report", path: "/Other-Fee-Due-Report" },
-            { name: "Student Ledger Details", path: "/Student-Ledger-Details" },
-            { name: "Ledger Details", path: "/Ledger-Details" },
-            { name: "Profit And Loss", path: "/Profit-And-Loss" },
-            {
-              name: "Total Outstanding Report",
-              path: "/Total-Outstanding-Report",
-            },
-          ],
-        },
-        {
-          name: "Exam",
-          submenus: [
-            { name: "Exam Report", path: "/Exam-Report" },
-            { name: "Marksheet", path: "/Marksheet" },
-            { name: "Exam Admit Card", path: "/Exam-Admit-Card" },
-            { name: "Exam Hole Report", path: "/Exam-Hole-Report" },
-          ],
-        },
-        {
-          name: "MISC",
-          submenus: [
-            { name: "Id Card", path: "/Id-Card" },
-            { name: "Certificate", path: "/Certificate" },
-            { name: "Bank Challan", path: "/Bank-Challan" },
-          ],
-        },
-      ],
-    },
-    {
-      name: "Perm's",
-      icon: <FaUserGraduate className="inline-block w-5 h-5 mr-2 -mt-1" />,
-      submenus: [
-        { name: "Add Institute", path: "/Add-Institute" },
-        { name: "Add Session", path: "/Add-Session" },
-        { name: "Add Class", path: "/Add-Class" },
-        { name: "Subject Allocation", path: "/Subject-Allocation" },
-        { name: "Add Bank", path: "/Add-Bank" },
-        { name: "Add Room", path: "/Add-Room" },
-        { name: "Assign Other Income", path: "/Assign-Other-Income" },
-        { name: "Add Ledger", path: "/Add-Ledger" },
-        { name: "Fee Parameter", path: "/Fee-Parameter" },
-        { name: "SMS Templete", path: "/SMS-Templete" },
-      ],
-    },
-    {
-      name: "Tools",
-      icon: <FaTools className="inline-block w-5 h-5 mr-2 -mt-1" />,
-      submenus: [
-        { name: "GlobalPerameters", path: "/Global-Perameters" },
-        { name: "Promote Student", path: "/Promote-Student" },
-        { name: "Delete Receipt", path: "/Delete-Receipt" },
-      ],
-    },
-    {
-      name: "PayRoll",
-      icon: <MdPayments className="inline-block w-5 h-5 mr-2 -mt-1" />,
-      submenus: [
-        {
-          name: "Master",
-          submenus: [
-            { name: "Department", path: "/Department" },
-            { name: "Designation", path: "/Designation" },
-            { name: "Allowance Deducation", path: "/Allowance-Deducation" },
-            { name: "Event", path: "/Event" },
-            { name: "Shift", path: "/Shift" },
-            { name: "Allowance Parameter", path: "/Allowance-Parameter" },
-          ],
-        },
-        {
-          name: "Employee",
-          submenus: [
-            { name: "Employee", path: "/Employee" },
-            { name: "Employee Salary", path: "/Employee-Salary" },
-            { name: "Manage Attendance", path: "/Manage-Attendance" },
-            { name: "Update Attendance", path: "/Update-Attendance" },
-            { name: "Get Machine", path: "/Get-Machine" },
-          ],
-        },
-        {
-          name: "Transection",
-          submenus: [{ name: "Salary Process", path: "/Salary-Process" }],
-        },
-        {
-          name: "Report",
-          submenus: [
-            { name: "Employee Detail", path: "/Employee-Detail" },
-            {
-              name: "Employee Attendance Detail",
-              path: "/Employee-Attendance-Detail",
-            },
-            { name: "Employee Salary Detail", path: "/Employee-Salary-Detail" },
-            { name: "Due Report", path: "/Event-Detail" },
-          ],
-        },
-      ],
-    },
-  ];
+  const menu = menuTree;
 
   const handletoggle = () => {
     setSidebarToggle(!sidebarToggle);
@@ -256,51 +33,61 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
   const toggleSubMenu = (key) => {
     setOpenSubMenu(openSubMenu === key ? null : key);
   };
+const getVisibleSubmenus = (submenus = []) =>
+  submenus.filter(item => !item.hidden);
 
-  const renderSubmenus = (submenus, parentKey = "") => {
-    if (!Array.isArray(submenus)) return null;
-    return (
-      <ul className="ml-6 mt-2 text-sm font-semibold text-[#5a1c0a] overflow-y-auto">
-        {submenus.map((sub, j) => {
-          const key = `${parentKey}-${j}`;
-          return (
-            <li key={key} onClick={!sub.submenus ? handletoggle : undefined}>
-              {sub.submenus ? (
-                <>
-                  <button
-                    onClick={() => toggleSubMenu(key)}
-                    className={`flex justify-between w-full px-2 py-1 rounded ${
-                      openSubMenu === key
-                        ? "bg-blue-400 text-white"
-                        : "hover:bg-blue-400 hover:text-white"
-                    }`}
-                  >
-                    {sub.name}
-                    <span>{openSubMenu === key ? "−" : "▼"}</span>
-                  </button>
+ const renderSubmenus = (submenus, parentKey = "") => {
+  const visibleSubmenus = getVisibleSubmenus(submenus);
 
-                  {openSubMenu === key && renderSubmenus(sub.submenus, key)}
-                </>
-              ) : (
-                <NavLink
-                  to={sub.path}
-                  className={({ isActive }) =>
-                    `block mb-2 rounded-md px-2 py-2 transition cursor-pointer ${
-                      isActive
-                        ? "bg-blue-400 text-white"
-                        : "hover:bg-blue-400 hover:text-white"
-                    }`
-                  }
+  if (!visibleSubmenus.length) return null;
+
+  return (
+    <ul className="ml-6 mt-2 text-sm font-semibold text-[#5a1c0a]">
+      {visibleSubmenus.map((sub, j) => {
+        const key = `${parentKey}-${j}`;
+        const childVisible = getVisibleSubmenus(sub.submenus).length > 0;
+
+        return (
+          <li key={key} onClick={!childVisible ? handletoggle : undefined}>
+            {childVisible ? (
+              <>
+                <button
+                  onClick={() => toggleSubMenu(key)}
+                  className={`flex justify-between w-full px-2 py-1 rounded ${
+                    openSubMenu === key
+                      ? "bg-blue-400 text-white"
+                      : "hover:bg-blue-400 hover:text-white"
+                  }`}
                 >
                   {sub.name}
-                </NavLink>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    );
-  };
+                  <span>{openSubMenu === key ? "−" : "▼"}</span>
+                </button>
+
+                {openSubMenu === key &&
+                  renderSubmenus(sub.submenus, key)}
+              </>
+            ) : (
+              <NavLink
+                to={sub.path}
+                className={({ isActive }) =>
+                  `block mb-2 rounded-md px-2 py-2 transition ${
+                    isActive
+                      ? "bg-blue-400 text-white"
+                      : "hover:bg-blue-400 hover:text-white"
+                  }`
+                }
+              >
+                {sub.name}
+              </NavLink>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  );
+};
+
+
 
   return (
     <div
@@ -321,10 +108,11 @@ function Sidebar({ sidebarToggle, setSidebarToggle }) {
                   : "hover:bg-blue-500 hover:text-white"
               }`}
             >
-              <span className="flex items-center">
-                {item.icon}
-                {item.name}
-              </span>
+             <span className="flex items-center gap-2">
+  {item.icon && iconMap[item.icon]}
+  {item.name}
+</span>
+
             </button>
 
             {openMenu === i && renderSubmenus(item.submenus, `menu-${i}`)}

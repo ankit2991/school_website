@@ -52,7 +52,7 @@ function Addmission_Fee_Receipt() {
     return (
         <div className="w-full h-full bg-white flex flex-col px-4 py-2">
             <div className="flex justify-between mb-5">
-                <Heading label={"Pay Fees"} />                                   
+                <Heading label={"Addmission Master"} />                                   
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 mb-5 w-full">
