@@ -49,24 +49,37 @@ const getVisibleSubmenus = (submenus = []) =>
 
         return (
           <li key={key} onClick={!childVisible ? handletoggle : undefined}>
-            {childVisible ? (
-              <>
-                <button
-                  onClick={() => toggleSubMenu(key)}
-                  className={`flex justify-between w-full px-2 py-1 rounded ${
-                    openSubMenu === key
-                      ? "bg-blue-400 text-white"
-                      : "hover:bg-blue-400 hover:text-white"
-                  }`}
-                >
-                  {sub.name}
-                  <span>{openSubMenu === key ? "−" : "▼"}</span>
-                </button>
+           {childVisible ? (
+  <>
+    <div className="flex justify-between items-center">
+      {/* LABEL → NAVIGATE */}
+      {sub.path ? (
+        <NavLink
+          to={sub.path}
+          onClick={handletoggle}
+          className="flex-1 px-2 py-1 hover:underline"
+        >
+          {sub.name}
+        </NavLink>
+      ) : (
+        <span className="px-2 py-1">{sub.name}</span>
+      )}
 
-                {openSubMenu === key &&
-                  renderSubmenus(sub.submenus, key)}
-              </>
-            ) : (
+      {/* ARROW → TOGGLE */}
+      <button
+        onClick={() => toggleSubMenu(key)}
+        className="px-2"
+      >
+        {openSubMenu === key ? "−" : "▼"}
+      </button>
+    </div>
+
+    {openSubMenu === key && renderSubmenus(sub.submenus, key)}
+  </>
+) : (
+
+
+               
               <NavLink
                 to={sub.path}
                 className={({ isActive }) =>
@@ -99,24 +112,46 @@ const getVisibleSubmenus = (submenus = []) =>
     >
       <ul className="pt-3 text-[#a7230b] font-bold mb-30 no-scrollbar bg-[#f7edcfda] px-4 py-2">
         {menu.map((item, i) => (
-          <li key={i} className="mb-2">
-            <button
-              onClick={() => toggleMenu(i)}
-              className={`flex items-center justify-between w-full px-3 py-2 rounded transition ${
-                openMenu === i
-                  ? "bg-blue-500 text-white shadow"
-                  : "hover:bg-blue-500 hover:text-white"
-              }`}
-            >
-             <span className="flex items-center gap-2">
-  {item.icon && iconMap[item.icon]}
-  {item.name}
-</span>
+       <li key={i} className="mb-2">
+  {item.path && !item.submenus ? (
+    /* ✅ SIMPLE NAV ITEM (Dashboard, Logout etc.) */
+    <NavLink
+      to={item.path}
+      onClick={handletoggle}
+      className={({ isActive }) =>
+        `flex items-center gap-2 w-full px-3 py-2 rounded transition ${
+          isActive
+            ? "bg-blue-500 text-white shadow"
+            : "hover:bg-blue-500 hover:text-white"
+        }`
+      }
+    >
+      {item.icon && iconMap[item.icon]}
+      {item.name}
+    </NavLink>
+  ) : (
+    /* ✅ DROPDOWN MENU */
+    <>
+      <button
+        onClick={() => toggleMenu(i)}
+        className={`flex items-center justify-between w-full px-3 py-2 rounded transition ${
+          openMenu === i
+            ? "bg-blue-500 text-white shadow"
+            : "hover:bg-blue-500 hover:text-white"
+        }`}
+      >
+        <span className="flex items-center gap-2">
+          {item.icon && iconMap[item.icon]}
+          {item.name}
+        </span>
+        {/* <span>{openMenu === i ? "−" : "▼"}</span> */}
+      </button>
 
-            </button>
+      {openMenu === i && renderSubmenus(item.submenus, `menu-${i}`)}
+    </>
+  )}
+</li>
 
-            {openMenu === i && renderSubmenus(item.submenus, `menu-${i}`)}
-          </li>
         ))}
       </ul>
     </div>
