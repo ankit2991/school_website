@@ -4,7 +4,9 @@ import {
   FaBed,
   FaTools,
   FaClipboardList,
+  FaHome,
 } from "react-icons/fa";
+import { LuLogOut } from "react-icons/lu";
 
 import {
   MdAccountBalance,
@@ -12,8 +14,11 @@ import {
   MdPayments,
   MdSettings,
 } from "react-icons/md";
+import { RiLogoutBoxFill } from "react-icons/ri";
 
 export const iconMap = {
+  
+  home: <FaHome className="w-5 h-5" />,
   student: <FaUserGraduate className="w-5 h-5" />,
   account: <MdAccountBalance className="w-5 h-5" />,
   transport: <FaBus className="w-5 h-5" />,
@@ -24,4 +29,5 @@ export const iconMap = {
   perms: <FaUserGraduate className="w-5 h-5" />,
   tools: <FaTools className="w-5 h-5" />,
   payroll: <MdPayments className="w-5 h-5" />,
+  logout: <RiLogoutBoxFill  className="w-5 h-5 font-bold" />,
 };

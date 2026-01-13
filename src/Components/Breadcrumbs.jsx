@@ -41,7 +41,7 @@ const Breadcrumbs = () => {
                   to="/Home"
                   className="text-[#cf361b] font-semibold hover:underline text-[20px]"
                >
-                  Home
+                  Dashboard
                </Link>
 
                {crumbs.map((crumb, index) => (

@@ -1,5 +1,9 @@
 export const menuTree = [
   {
+    name: "Dashboard",
+    icon: "home",
+    path: "/Home"
+   }, {
     name: "Student Master",
     icon: "student",
     submenus: [
@@ -128,18 +132,79 @@ export const menuTree = [
   {
     name: "Reports",
     icon: "report",
+   
     submenus: [
       {
         name: "Student",
-        icon: "student",
         submenus: [
           { name: "Student Details", path: "/Details" },
+          { name: "Student Sibling Details", path: "/Sibling-Details" },
           { name: "Student Fee Details", path: "/Fee-Details" },
+          { name: "Student Transport Details", path: "/Transport-Details" },
+          { name: "Transport Fee Details", path: "/Transport-Fee-Details" },
+          { name: "Hostel Student Details", path: "/Hostel-Stud-Details" },
+          { name: "Hostel Fee Details", path: "/Hostel-Fee-Details" },
+          { name: "Student TC Details", path: "/Student-TC-Details" },
+          { name: "Enquiry Details", path: "/Enquiry-Details" },
+          { name: "Caste Wise Report", path: "/Caste-Wise-Report" },
+          { name: "Student Age Wise", path: "/Student-Age-Wise" },
+          {
+            name: "Student Attendance Report",
+            path: "/Student-Attend-Report",
+          },
+          {
+            name: "Student Fee Detail Ledger Wise",
+            path: "/Student-Fee-Detail-Ledger-Wise",
+          },
+        ],
+      },
+
+      {
+        name: "Day Transaction",
+        submenus: [
+          { name: "Day Details Report", path: "/Day-Details" },
+          { name: "Day Book Report", path: "/Day-Book" },
+          { name: "Day Summary Book Report", path: "/Day-Summary-Book" },
+        ],
+      },
+
+      {
+        name: "Transaction",
+        submenus: [
+          { name: "Due Report", path: "/Due-Report" },
+          { name: "Transport Due Report", path: "/Transport-Due-Report" },
+          { name: "Hostel Due Report", path: "/Hostel-Due-Report" },
+          { name: "Other Fee Due Report", path: "/Other-Fee-Due-Report" },
+          { name: "Student Ledger Details", path: "/Student-Ledger-Details" },
+          { name: "Ledger Details", path: "/Ledger-Details" },
+          { name: "Profit And Loss", path: "/Profit-And-Loss" },
+          {
+            name: "Total Outstanding Report",
+            path: "/Total-Outstanding-Report",
+          },
+        ],
+      },
+
+      {
+        name: "Exam",
+        submenus: [
+          { name: "Exam Report", path: "/Exam-Report" },
+          { name: "Marksheet", path: "/Marksheet" },
+          { name: "Exam Admit Card", path: "/Exam-Admit-Card" },
+          { name: "Exam Hole Report", path: "/Exam-Hole-Report" },
+        ],
+      },
+
+      {
+        name: "MISC",
+        submenus: [
+          { name: "Id Card", path: "/Id-Card" },
+          { name: "Certificate", path: "/Certificate" },
+          { name: "Bank Challan", path: "/Bank-Challan" },
         ],
       },
     ],
   },
-
   {
     name: "Perm's",
     icon: "perms",
@@ -176,8 +241,44 @@ export const menuTree = [
         submenus: [
           { name: "Department", path: "/Department" },
           { name: "Designation", path: "/Designation" },
+          { name: "Allowance Deducation", path: "/Allowance-Deducation" },
+          { name: "Event", path: "/Event" },
+          { name: "Shift", path: "/Shift" },
+          { name: "Allowance Parameter", path: "/Allowance-Parameter" },
+        ],
+      },
+      {
+        name: "Employee",
+        submenus: [
+          { name: "Employee", path: "/Employee" },
+          { name: "Employee Salary", path: "/Employee-Salary" },
+          { name: "Manage Attendance", path: "/Manage-Attendance" },
+          { name: "Update Attendance", path: "/Update-Attendance" },
+          { name: "Get Machine", path: "/Get-Machine" },
+        ],
+      },
+      {
+        name: "Transection",
+        submenus: [{ name: "Salary Process", path: "/Salary-Process" }],
+      },
+      {
+        name: "Report",
+        submenus: [
+          { name: "Employee Detail", path: "/Employee-Detail" },
+          {
+            name: "Employee Attendance Detail",
+            path: "/Employee-Attendance-Detail",
+          },
+          { name: "Employee Salary Detail", path: "/Employee-Salary-Detail" },
+          { name: "Due Report", path: "/Event-Detail" },
         ],
       },
     ],
   },
+{
+    name: "Logout",
+    icon: "logout",
+    path: "/"
+   },
+  
 ];
