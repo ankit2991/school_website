@@ -24,6 +24,7 @@ function Due_Report() {
   const [selectedStudents, setSelectedStudents] = useState([]); 
   const [ledgerList, setLedgerList] = useState([]); 
   const [selectedLedgerId, setSelectedLedgerId] = useState("");
+  const [showTable, setShowTable] = useState(false);
 
   const [agree, setAgree] = useState(false);
   const [agree2, setAgree2] = useState(false);
@@ -129,6 +130,7 @@ function Due_Report() {
     
     try { 
       setSearched(true); 
+      setShowTable(false); 
       const res = await getDueReport(
         instId, sessId, selectedClassId, agree ? 1 : 0, selectedMonthId || "", selectedLedgerId || "", 0
       ); 
@@ -141,15 +143,24 @@ function Due_Report() {
         })); 
         
         setDueData(mappedData); 
+        setShowTable(true); 
       } else { 
         setDueData([]); 
+        setShowTable(false); 
       } 
     } catch (error) { 
       console.error("Due Report API Error", error); 
+      setShowTable(false); 
     } finally { 
       setSearched(false); 
     } 
   }; 
+  useEffect(() => {
+  if (selectedClassId) {
+    handleSearch(); // 👈 auto call
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [selectedClassId]);
   
   /* ================= CLEAR ================= */ 
   const handleClear = () => { 
@@ -162,6 +173,7 @@ function Due_Report() {
     setAgree(false); 
     setAgree2(false); 
     setSearched(false); 
+    setShowTable(false); 
   };
 
   
@@ -170,7 +182,9 @@ function Due_Report() {
       <Loader show={searched} /> 
       <div className="flex justify-between mb-5"> 
         <Heading label={"Due Report"} /> 
-        <Buttons click={""} label={"Send SMS"} /> 
+        {showTable && ( 
+          <Buttons click={""} label={"Send SMS"} /> 
+        )} 
       </div> 
       
       {/* Ledger + Dates */} 
@@ -207,25 +221,27 @@ function Due_Report() {
         /> 
       </div> 
       
-      <Table 
-        columns={columns} data={dueData} onRowSelect={() => {}} 
-        disableFloatingRow={false} onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)} 
-        
-      />
-
+      {showTable && ( 
+        <> 
+          <Table 
+            columns={columns} data={dueData} onRowSelect={() => {}} 
+            disableFloatingRow={false} onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)} 
+          /> 
+          
+          <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5"> 
+            <Buttons 
+              click={() => { window.open("/pdf/feedue.pdf", "_blank"); }} label={"Summary Print"} 
+            /> 
+            
+            <Buttons 
+              label="Print" click={() => { window.open("/pdf/feedue.pdf", "_blank"); }} 
+              style="whitespace-nowrap h-10" 
+            /> 
+          </div> 
+        </> 
+      )} 
       
-      <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5"> 
-        <Buttons 
-          click={() => { window.open("/pdf/feedue.pdf", "_blank"); }} label={"Summary Print"} 
-        /> 
-        <Buttons 
-          label="Print" 
-          click={() => { window.open("/pdf/feedue.pdf", "_blank"); }} 
-         style="whitespace-nowrap h-10" /> 
-      </div> 
-      
-      {/* ✅ Dynamic div for spacing */} 
-      {rowDetailOpen && window.innerWidth < 768 && ( 
+      {/* ✅ Dynamic div for spacing */} {rowDetailOpen && window.innerWidth < 768 && ( 
         <div className="h-140"></div> 
       )} 
     </div> 

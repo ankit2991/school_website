@@ -5,6 +5,7 @@ import Options from '../../../Components/Page_Forms/Options'
 import CheckBox from '../../../Components/Page_Forms/CheckBox'
 import Table from '../../../Components/Page_Forms/Table'
 import { getclass, getExamList, getExamMarksReport } from '../../../services/api'
+import Loader from '../../../Components/Page_Forms/Loader'
 
 function Exam_Report() {
 
@@ -12,9 +13,10 @@ function Exam_Report() {
   const [examlist, setExamList] = useState([])
   const [selectedExamId, setSelectedExamId] = useState("")
   const [selectedClassId, setSelectedClassId] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [searched, setSearched] = useState(false)
   const [marksData, setMarksData] = useState([])
   const [rowDetailOpen, setRowDetailOpen] = useState(false)
+  const [showTable, setShowTable] = useState(false); 
 
   const columns = [
     { header: "ID", shortHeader: "ID", accessor: "Id" },
@@ -80,7 +82,8 @@ function Exam_Report() {
     }
 
     try {
-      setLoading(true)
+      setSearched(true)
+      setShowTable(false); 
 
       const res = await getExamMarksReport(
         instId,
@@ -93,23 +96,46 @@ function Exam_Report() {
 
       // ✅ FIXED HERE
       setMarksData(res?.Table || [])
+      setShowTable(true);
 
     } catch (error) {
       setMarksData([])
       console.log("Error:",error);
+      setShowTable(false);
     } finally {
-      setLoading(false)
+      setSearched(false)
     }
-  }
+  } 
+
+  useEffect(() => {
+    if (selectedExamId) {
+      handleSearch();
+    }
+  }, [selectedClassId, selectedExamId]);
+
+  const handleClear = () => {
+  setSelectedClassId("");
+  setSelectedExamId("");
+  setAgree(false);
+
+  setMarksData([]);
+  setShowTable(false);
+  setRowDetailOpen(false);
+  setSearched(false);
+};
+
 
   return (
     <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+      <Loader show={searched} />
       <div className="flex justify-between items-center gap-x-4 mb-5">
         <Heading label={"Exam Report"} />
-        <Buttons 
-          label="Print" 
-          click={() => { window.open("/pdf/1EnqReportViewer.pdf", "_blank"); }} 
-         style="whitespace-nowrap h-10" /> 
+        {showTable && ( 
+          <Buttons 
+            label="Print" style="whitespace-nowrap h-10" 
+            click={() => { window.open("/pdf/1EnqReportViewer.pdf", "_blank"); }} 
+          /> 
+        )}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-3 mb-5 w-full">
@@ -142,20 +168,19 @@ function Exam_Report() {
       </div>
 
       <div className="flex justify-between sm:justify-end sm:gap-x-5 mb-5">
-        <Buttons click={""} label={"Clear"} />
+        <Buttons click={handleClear} label={"Clear"} />
         <Buttons
-          label={loading ? "Loading..." : "Search"}
+          label={"Search"}
           click={handleSearch}
         />
       </div>
 
-      <Table
-        columns={columns}
-        data={marksData}
-        onRowSelect={() => {}}
-        disableFloatingRow={false}
-        onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)}
-      />
+      {showTable && ( 
+        <Table 
+          columns={columns} data={marksData} onRowSelect={() => {}} 
+          disableFloatingRow={false} onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)} 
+        /> 
+      )}
 
 
       {rowDetailOpen && window.innerWidth < 768 && <div className='h-140'></div>}

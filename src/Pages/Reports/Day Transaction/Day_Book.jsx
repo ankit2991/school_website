@@ -5,13 +5,15 @@ import Options from "../../../Components/Page_Forms/Options";
 import FormInput from "../../../Components/Page_Forms/FormInput";
 import Table from "../../../Components/Page_Forms/Table";
 import { getDayBookReport, getinstitute } from "../../../services/api";
+import Loader from "../../../Components/Page_Forms/Loader";
 
 function Day_Book() {
   const [institutes, setInstitutes] = useState([]);
   const [selectedInstituteId, setSelectedInstituteId] = useState("");
   const [fromDate, setFromDate] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [searched,setSearched] = useState(false);
   const [tableData, setTableData] = useState([]);
+  const [showTable, setShowTable] = useState(false);
 
   /* ---------- date format: 12/Dec/2026 ---------- */
   const formatDateForAPI = (dateStr) => {
@@ -51,7 +53,7 @@ function Day_Book() {
     const sessionId = localStorage.getItem("SessionID");
     if (!selectedInstituteId || !sessionId || !fromDate) return;
 
-    setLoading(true);
+    setSearched(true);
     setTableData([]);
 
     try {
@@ -63,15 +65,19 @@ function Day_Book() {
 
       // ✅ use API data AS-IS
       setTableData(res?.Table || []);
+      setShowTable(true);
     } catch (e) {
       console.log("DayBook API error", e);
     } finally {
-      setLoading(false);
+      setSearched(false);
     }
   };
 
+   
+
   return (
     <div className="w-full h-full bg-white px-4 py-2">
+      <Loader show={searched} />
       <Heading label="Day Book Report" />
 
       {/* ---------- Filters ---------- */}
@@ -100,17 +106,19 @@ function Day_Book() {
        <div className="flex justify-between sm:justify-end sm:gap-x-5 mb-5">
        
         <Buttons
-          label={loading ? "Loading..." : "Search"}
+          label={"Search"}
           click={handleSearch}
         />
       </div>
 
       {/* ---------- SINGLE DAY BOOK TABLE ---------- */}
+      {showTable && (
       <Table
         columns={columns}
         data={tableData}
         disableFloatingRow={false}
       />
+      )}
     </div>
   );
 }

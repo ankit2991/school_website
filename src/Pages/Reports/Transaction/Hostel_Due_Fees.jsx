@@ -21,7 +21,10 @@ function Hostel_Due_Fees() {
   const [searched, setSearched] = useState(false);
   const [selectAll, setSelectAll] = useState(false); 
   const [selectedStudents, setSelectedStudents] = useState([]);
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState([]); 
+  const [showTable, setShowTable] = useState(false); 
+  const [noData, setNoData] = useState(false); 
+
 
 
   const [agree, setAgree] = useState(false);
@@ -102,13 +105,16 @@ function Hostel_Due_Fees() {
     } 
   }; 
   
-  const fetchHostelDueReport = async () => { 
+  // =================== SEARCH ====================== 
+  const HandleSearch = async () => { 
     if (!selectedMonthId) { 
       alert("Please select Month"); 
       return; 
     } 
     try { 
       setSearched(true); 
+      setShowTable(false); 
+      setNoData(false); 
       const res = await getHostelDueReport( instId, sessId, selectedClassId || "", selectedMonthId ); 
       if (res?.Table) { 
         const formatted = res.Table.map((item, index) => ({ 
@@ -119,13 +125,28 @@ function Hostel_Due_Fees() {
         setTableData(formatted); 
         setSelectedStudents([]); 
         setSelectAll(false); 
-      } 
+        setShowTable(true); 
+        setNoData(false); 
+      } else { 
+        setTableData([]); 
+        setNoData(true); 
+        setShowTable(false); 
+      }
     } catch (error) { 
       console.error("Hostel Due API Error", error); 
+      setShowTable(false); 
+      setNoData(true); 
     } finally { 
       setSearched(false); 
     } 
   }; 
+
+  useEffect(() => {
+  if (selectedMonthId) {
+    HandleSearch();
+  }
+}, [selectedClassId, selectedMonthId]);
+
 
   /* ================= DATE FORMATTER ================= */ 
   const handleClear = () => { 
@@ -145,10 +166,12 @@ function Hostel_Due_Fees() {
           style={"text-[22px] sm:text-3xl"} 
         /> 
         
-        <Buttons 
-          click={() => navigate("")} label={"Send SMS"} 
-          style="whitespace-nowrap h-10" 
-        /> 
+        {showTable && ( 
+          <Buttons 
+            click={() => navigate("")} label={"Send SMS"} 
+            style="whitespace-nowrap h-10" 
+          /> 
+        )} 
       </div> 
       
       {/* Ledger + Dates */} 
@@ -170,19 +193,34 @@ function Hostel_Due_Fees() {
         /> 
         
         <Buttons 
-          click={fetchHostelDueReport} label={"Search"} 
+          click={HandleSearch} label={"Search"} 
         /> 
       </div> 
       
-      <Table 
-        columns={columns} data={tableData} disableFloatingRow={false} 
-        onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)} 
-      /> 
-      
-      <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5"> 
-        <Buttons label="Summary Print" click={() => { window.open("/pdf/5HostelReportViewer.pdf", "_blank"); }}  />
-        <Buttons label="Print" click={() => { window.open("/pdf/5HostelReportViewer.pdf", "_blank"); }}  /> 
-      </div> 
+      {showTable && ( 
+        <> 
+          <Table 
+            columns={columns} data={tableData} disableFloatingRow={false} 
+            onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)} 
+          /> 
+          
+          <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5"> 
+            <Buttons 
+              label="Summary Print" click={() => { window.open("/pdf/5HostelReportViewer.pdf", "_blank"); }} 
+            /> 
+            <Buttons 
+              label="Print" click={() => { window.open("/pdf/5HostelReportViewer.pdf", "_blank"); }} 
+            /> 
+          </div> 
+        </> 
+      )} 
+
+      {noData && !searched && ( 
+        <div className="w-full text-center py-10 text-gray-500 font-semibold"> 
+          Data not available 
+        </div> 
+      )} 
+
       
       {/* ✅ Dynamic div for spacing */} 
       {rowDetailOpen && window.innerWidth < 768 && ( 

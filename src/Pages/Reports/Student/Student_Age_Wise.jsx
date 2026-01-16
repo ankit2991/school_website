@@ -6,13 +6,15 @@ import Options from "../../../Components/Page_Forms/Options";
 import Table from "../../../Components/Page_Forms/Table";
 
 import { getclass, getStudentAgeWiseReport } from "../../../services/api";
+import Loader from "../../../Components/Page_Forms/Loader";
 
 function Student_Age_Wise() {
    const [rowDetailOpen, setRowDetailOpen] = useState(false);
    const [classList, setClassList] = useState([]);
    const [selectedClass, setSelectedClass] = useState("");
    const [tableData, setTableData] = useState([]);
-   const [loading, setLoading] = useState(false);
+   const [searched, setSearched] = useState(false);
+   const [showTable, setShowTable] = useState(false);
 
    // ===================== TABLE =====================
 
@@ -55,7 +57,8 @@ function Student_Age_Wise() {
 
       if (!instId || !sessionId) return;
 
-      setLoading(true);
+      setSearched(true);
+      setShowTable(false);
       setTableData([]);
 
       try {
@@ -74,18 +77,26 @@ function Student_Age_Wise() {
             girl: row.Girl,
             tot: row.Total,
          }));
+         setShowTable(true);
 
          setTableData(formatted);
       } finally {
-         setLoading(false);
+         setSearched(false);
       }
    };
 
+   useEffect(() => {
+   if (selectedClass) {
+      fetchAgeWiseReport(selectedClass);
+   }
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [selectedClass]);
+
    // ===================== AUTO LOAD ON PAGE RELOAD =====================
 
-   useEffect(() => {
-      fetchAgeWiseReport(""); // load all classes initially
-   }, []);
+   // useEffect(() => {
+   //    fetchAgeWiseReport(""); // load all classes initially
+   // }, []);
 
    // ===================== SEARCH =====================
 
@@ -98,12 +109,14 @@ function Student_Age_Wise() {
    const handleClear = () => {
       setSelectedClass("");
       setTableData([]);
+      setShowTable(false); 
    };
 
    // ===================== UI =====================
 
    return (
       <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+         <Loader show={searched} />
          <div className="flex justify-between mb-5">
             <Heading label={"Student Age Wise Report"} />
          </div>
@@ -123,12 +136,14 @@ function Student_Age_Wise() {
             <div className="flex justify-end items-center">
                <Buttons
                   click={handleSearch}
-                  label={loading ? "Loading..." : "Search"}
+                  label={"Search"}
                />
             </div>
          </div>
 
-         <Table
+         {showTable && (
+            <>
+            <Table
             columns={columns}
             data={tableData}
             onRowSelect={() => {}}
@@ -139,6 +154,8 @@ function Student_Age_Wise() {
          <div className="flex justify-center sm:justify-end space-x-0 sm:space-x-10 mt-5">
             <Buttons label={"Clear"} click={handleClear} />
          </div>
+         </>
+         )}
 
          {rowDetailOpen && window.innerWidth < 768 && (
             <div className="h-140"></div>

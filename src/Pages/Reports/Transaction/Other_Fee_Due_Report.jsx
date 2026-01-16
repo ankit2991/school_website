@@ -22,6 +22,7 @@ function Other_Fee_Due_Report() {
   const [selectAll, setSelectAll] = useState(false); 
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [tableData, setTableData] = useState([]);
+  const [showTable, setShowTable] = useState(false);
 
 
 
@@ -53,68 +54,6 @@ function Other_Fee_Due_Report() {
     { header: "Total Fees", shortHeader: "Total Fees", accessor: "tot" },
     { header: "Deposit Fees", shortHeader: "Deposit Fees", accessor: "dep" },
     { header: "Due Fees", shortHeader: "Due Fees", accessor: "due" },
-  ];
-  const data = [
-    {
-      id: 1,
-      serial: "01",
-      name: "Ajay",
-      class: "Nur",
-      fname: "Rman Thakur",
-      fno: "1234567890",
-      mno: "1234567890",
-      tot: "1000",
-      dep: "500",
-      due: "500",
-    },
-    {
-      id: 2,
-      serial: "02",
-      name: "Ajay",
-      class: "Nur",
-      fname: "Rman",
-      fno: "1234567540",
-      mno: "1234567540",
-      tot: "1000",
-      dep: "500",
-      due: "500",
-    },
-    {
-      id: 3,
-      serial: "03",
-      name: "Viren",
-      class: "Nur",
-      fname: "Devanh Bhalla",
-      fno: "1234567890",
-      mno: "1234567890",
-      tot: "1000",
-      dep: "500",
-      due: "500",
-    },
-    {
-      id: 4,
-      serial: "04",
-      name: "anuj",
-      class: "Nur",
-      fname: "aditya",
-      fno: "1234567890",
-      mno: "1234567890",
-      tot: "1000",
-      dep: "500",
-      due: "500",
-    },
-    {
-      id: 5,
-      serial: "05",
-      name: "somya",
-      class: "Nur",
-      fname: "Devanh",
-      fno: "1234567867",
-      mno: "1234567867",
-      tot: "1000",
-      dep: "500",
-      due: "5000",
-    },
   ];
 
 
@@ -169,7 +108,8 @@ function Other_Fee_Due_Report() {
     // =================== SEARCH ====================== 
     const handleSearch = async () => {
   try {
-    setSearched(true);
+    setSearched(true); 
+    setShowTable(false);
     const res = await getOtherDueReport(
       instId,
       sessId,
@@ -195,13 +135,26 @@ function Other_Fee_Due_Report() {
       setSelectedStudents([]);
       setSelectAll(false);
       setSearched(true);
+      setShowTable(true);
+    } else {
+      setShowTable(false);
     }
   } catch (error) {
-    console.error("Other Due Report Error", error);
+    console.error("Other Due Report Error", error); 
+    setShowTable(false);
   } finally {
     setSearched(false);
   }
 };
+
+
+useEffect(() => {
+  if (selectedClassId) {
+    handleSearch(true); // auto call
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [selectedClassId]);
+
 
 // =================== CLEAR ====================== 
 const handleClear = () => {
@@ -211,6 +164,7 @@ const handleClear = () => {
   setSelectedStudents([]);
   setSelectAll(false);
   setSearched(false);
+  setShowTable(false);
 };
 
 
@@ -241,18 +195,19 @@ const handleClear = () => {
 
       </div>
 
-      <Table
-  columns={columns}
-  data={tableData}
-  disableFloatingRow={false}
-  onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)}
-/>
-
-
-      <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5">
-        <Buttons click={""} label={"Clear"} />
-        <Buttons label="Summary Print" click={() => { window.open("/pdf/Summary.pdf", "_blank"); }}  />
-      </div>
+      {showTable && ( 
+        <> 
+          <Table 
+            columns={columns} data={tableData} disableFloatingRow={false} 
+            onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)} 
+          /> 
+          
+          <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5"> 
+            <Buttons click={""} label={"Clear"} /> 
+            <Buttons label="Summary Print" click={() => { window.open("/pdf/Summary.pdf", "_blank"); }}  /> 
+          </div> 
+        </> 
+      )} 
 
       {/* ✅ Dynamic div for spacing */}
       {rowDetailOpen && window.innerWidth < 768 && (

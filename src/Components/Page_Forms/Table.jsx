@@ -254,14 +254,14 @@ function Table({
   const overlayRef = useRef(null);
 
   // 🔹 Lock/unlock body scroll on mobile when overlay is open
-  useEffect(() => {
-    if (window.innerWidth < 768) {
-      document.body.style.overflow = expandedRow !== null ? "hidden" : "auto";
-      return () => {
-        document.body.style.overflow = "auto";
-      };
-    }
-  }, [expandedRow]);
+  // useEffect(() => {
+  //   if (window.innerWidth < 768) {
+  //     document.body.style.overflow = expandedRow !== null ? "hidden" : "auto";
+  //     return () => {
+  //       document.body.style.overflow = "auto";
+  //     };
+  //   }
+  // }, [expandedRow]);
 
   // 🔹 Notify parent about overlay & scroll to expanded row
   useEffect(() => {
@@ -288,11 +288,12 @@ function Table({
       className={`relative rounded-lg shadow-md border border-slate-300 overflow-hidden ${className} w-full`}
     >
       <div
-        className={`overflow-y-auto no-scrollbar ${
+        className={`overflow-auto  ${
           style || "max-h-[35vh] sm:max-h-[35vh]"
         }`}
       >
-        <table className="w-full table-auto border-collapse">
+        {/* <table className="w-full table-auto border-collapse"> */}
+          <table className="min-w-max w-full table-auto border-collapse">
           {/* Header */}
           <thead className="sticky top-0 z-10 bg-gradient-to-b from-[#df7f6e] via-[#e4321b] to-[#f30202] text-white">
             <tr>
@@ -388,11 +389,20 @@ function Table({
                         key={colIndex}
                         className="px-3 py-2 text-sm max-[380px]:text-[14px] align-top"
                       >
-                        <div
+                        {/* <div
                           className={`w-full text-center ${colStyle} ${
                             col.cellStyle ? col.cellStyle : "truncate"
                           }`}
-                        >
+                        > */}
+                        <div
+  className={`w-full text-center ${colStyle} ${
+    col.cellStyle
+      ? col.cellStyle
+      : col.header === "Address" || col.accessor === "Address"
+      ? "max-w-[160px] truncate sm:whitespace-normal sm:break-words sm:max-w-xs sm:line-clamp-2 md:max-w-md"
+      : "truncate"
+  }`}
+>
                           {col.cell ? col.cell(row) : row[col.accessor]}
                         </div>
                       </td>

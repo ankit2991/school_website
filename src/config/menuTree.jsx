@@ -25,7 +25,12 @@ export const menuTree = [
             path: "/AddSibling",
             hidden: true,
           }] },
-      { name: "Student Summary", path: "/Summary" },
+      { name: "Student Summary", path: "/Summary", submenus: [
+          {
+            name: "Summary Form",
+            path: "/Student-Summary",
+            hidden: true,
+          }] },
     ],
   },
 //more pages
@@ -60,7 +65,7 @@ export const menuTree = [
       { name: "Hostel Fee", path: "/Hostel"  , submenus: [
           {
             name: "Hostel Fee Receipt",
-            path: "/Hostel-Fees",
+            path: "/Hostel-Fee",
             hidden: true,
           }]},
       { name: "Expenditure", path: "/Expenditure" },
@@ -76,11 +81,31 @@ export const menuTree = [
     icon: "transport",
     submenus: [
       { name: "Route Master", path: "/Route-Master" },
-      { name: "Add Stop", path: "/Add" },
+      { name: "Add Stop", path: "/Add", submenus: [
+          {
+            name: "Add Stop Form",
+            path: "/Add-Stop",
+            hidden: true,
+          }] },
       { name: "Vehicle Type", path: "/Vehicle-Type" },
-      { name: "Vehicle Provider", path: "/Vehicle" },
-      { name: "Vehicle Master", path: "/Master" },
-      { name: "Assign Vehicle", path: "/Assign" },
+      { name: "Vehicle Provider", path: "/Vehicle", submenus: [
+          {
+            name: "Vehicle Provider Form",
+            path: "/Vehicle-Provider",
+            hidden: true,
+          }] },
+      { name: "Vehicle Master", path: "/Master", submenus: [
+          {
+            name: "Vehicle Master Form",
+            path: "/Vehicle-Master",
+            hidden: true,
+          }] },
+      { name: "Assign Vehicle", path: "/Assign", submenus: [
+          {
+            name: "Assign Vehicle Form",
+            path: "/Assign-Vehicle",
+            hidden: true,
+          }] },
     ],
   },
 
@@ -88,11 +113,21 @@ export const menuTree = [
     name: "Hostel Master",
     icon: "hostel",
     submenus: [
-      { name: "Hostel Provider", path: "/Hostel-Provide" },
-      { name: "Assign Hostel", path: "/Assign-Hostels" },
+      { name: "Hostel Provider", path: "/Hostel-Provide", submenus: [
+          {
+            name: "Hostel Provider Form",
+            path: "/Hostel-Provider",
+            hidden: true,
+          }] },
+      { name: "Assign Hostel", path: "/Assign-Hostels", submenus: [
+          {
+            name: "Assign Hostel Form",
+            path: "/Assign-Hostel",
+            hidden: true,
+          }] },
     ],
   },
-
+  
   {
     name: "Manage Exam",
     icon: "exam",
@@ -100,14 +135,29 @@ export const menuTree = [
       {
         name: "Subject",
         submenus: [
-          { name: "Subject", path: "/Subject" },
-          { name: "Grade", path: "/Grade" },
+          { name: "Subject ", path: "/Subject", submenus: [
+          {
+            name: "Subject Form",
+            path: "/Subject2",
+            hidden: true,
+          }] },
+          { name: "Grade", path: "/Grade", submenus: [
+          {
+            name: "Grade Form",
+            path: "/Grade2",
+            hidden: true,
+          }] },
         ],
       },
       {
         name: "Exam",
         submenus: [
-          { name: "Exam Type", path: "/Exam-Type" },
+          { name: "Exam Type", path: "/Exam-Type", submenus: [
+          {
+            name: "Exam Type Form",
+            path: "/Exam-Type2",
+            hidden: true,
+          }] },
           { name: "Exam", path: "/Exam" },
           { name: "Assign Roll No.", path: "/Assign-Roll" },
           { name: "Exam Schedule", path: "/Schedule" },
@@ -124,7 +174,12 @@ export const menuTree = [
     icon: "utility",
     submenus: [
       { name: "Event SMS", path: "/SMS" },
-      { name: "User Creation", path: "/Creation" },
+      { name: "User Creation", path: "/Creation", submenus: [
+          {
+            name: "User Creation Form",
+            path: "/User-Creation",
+            hidden: true,
+          }] },
       { name: "User SMS", path: "/User-SMS" },
     ],
   },
@@ -275,10 +330,11 @@ export const menuTree = [
       },
     ],
   },
-{
+
+  {
     name: "Logout",
     icon: "logout",
-    path: "/"
-   },
-  
+    action: "logout"
+  },
+
 ];

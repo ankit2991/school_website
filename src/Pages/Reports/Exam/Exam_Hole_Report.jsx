@@ -3,12 +3,13 @@ import Heading from '../../../Components/Page_Forms/Heading'
 import Buttons from '../../../Components/Page_Forms/Buttons'
 import Table from '../../../Components/Page_Forms/Table'
 import { getExamHallReport } from '../../../services/api'
+import Loader from '../../../Components/Page_Forms/Loader'
 
 function Exam_Hole_Report() {
 
   const [rowDetailOpen, setRowDetailOpen] = useState(false)
   const [data, setData] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [searched, setSearched] = useState(false)
 
   const columns = [
     { header: "Room No.", shortHeader: "Room No.", accessor: "RoomNo" },
@@ -26,7 +27,7 @@ function Exam_Hole_Report() {
     if (!instId || !sessionId) return
 
     try {
-      setLoading(true)
+      setSearched(true)
       const res = await getExamHallReport(instId, sessionId)
       console.log("Exam Hall Report:", res)
 
@@ -36,7 +37,7 @@ function Exam_Hole_Report() {
 
       setData([])
     } finally {
-      setLoading(false)
+      setSearched(false)
     }
   }
 
@@ -47,6 +48,7 @@ function Exam_Hole_Report() {
 
   return (
     <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+      <Loader show={searched} />
 
       <div className="flex justify-between items-center gap-x-4 mb-5">
         <Heading label={"Exam Hole Report"} />
@@ -54,7 +56,7 @@ function Exam_Hole_Report() {
 
       <div className="flex justify-between items-center gap-x-4 mb-5">
         <Buttons click={() => setData([])} label={"Clear"} />
-        <Buttons click={fetchReport} label={loading ? "Loading..." : "Search"} />
+        <Buttons click={fetchReport} label={"Search"} />
         
       </div>
 

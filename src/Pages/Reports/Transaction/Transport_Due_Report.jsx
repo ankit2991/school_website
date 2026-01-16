@@ -23,7 +23,8 @@ function Transport_Due_Report() {
   const [selectAll, setSelectAll] = useState(false); 
   const [selectedStudents, setSelectedStudents] = useState([]); 
   const [ledgerList, setLedgerList] = useState([]); 
-  const [selectedLedgerId, setSelectedLedgerId] = useState("");
+  const [selectedLedgerId, setSelectedLedgerId] = useState(""); 
+  const [showTable, setShowTable] = useState(false);
 
   const [agree, setAgree] = useState(false);
   const [agree2, setAgree2] = useState(false);
@@ -129,6 +130,7 @@ function Transport_Due_Report() {
     
     try { 
       setSearched(true); 
+      setShowTable(false); 
       const res = await getDueReport( 
         instId, sessId, selectedClassId, agree ? 1 : 0, selectedMonthId || "", selectedLedgerId || "", 1 
       ); 
@@ -143,15 +145,25 @@ function Transport_Due_Report() {
         })); 
         
         setDueData(mappedData); 
+        setShowTable(true); 
       } else { 
         setDueData([]); 
+        setShowTable(false); 
       } 
     } catch (error) { 
-      console.error("Due Report API Error", error);
+      console.error("Due Report API Error", error); 
+      setShowTable(false); 
     } finally { 
       setSearched(false); 
     } 
   }; 
+
+  useEffect(() => {
+  if (selectedClassId) {
+    handleSearch(); // 👈 auto call
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [selectedClassId]);
 
   // =================== CLEAR ====================== 
   const handleClear = () => { 
@@ -164,6 +176,7 @@ function Transport_Due_Report() {
     setSelectedStudents([]); 
     setSelectAll(false); 
     setSearched(false); 
+    setShowTable(false); 
   };
 
   
@@ -172,7 +185,9 @@ function Transport_Due_Report() {
       <Loader show={searched} /> 
       <div className="flex justify-between mb-5"> 
         <Heading label={"Transport Due Report"} /> 
-        <Buttons click={""} label={"Send SMS"} /> 
+        {showTable && ( 
+          <Buttons click={""} label={"Send SMS"} /> 
+        )} 
       </div> 
       
       {/* Ledger + Dates */} 
@@ -210,17 +225,23 @@ function Transport_Due_Report() {
         /> 
       </div> 
       
-      <Table 
-        columns={columns} data={dueData} onRowSelect={() => {}} 
-        disableFloatingRow={false} onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)} 
-      />
-
-      
-      <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5"> 
-        
-        <Buttons label="Summary Print" click={() => { window.open("/pdf/4TransportReportViewer.pdf", "_blank"); }}  />
-        <Buttons label="Print" click={() => { window.open("/pdf/4TransportReportViewer.pdf", "_blank"); }}  />
-      </div> 
+      {showTable && (
+        <>
+          <Table 
+            columns={columns} data={dueData} onRowSelect={() => {}} 
+            disableFloatingRow={false} onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)} 
+          /> 
+          
+          <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5"> 
+            <Buttons 
+              label="Summary Print" click={() => { window.open("/pdf/4TransportReportViewer.pdf", "_blank"); }} 
+            /> 
+            <Buttons 
+              label="Print" click={() => { window.open("/pdf/4TransportReportViewer.pdf", "_blank"); }} 
+            /> 
+          </div> 
+        </>
+      )} 
       
       {/* ✅ Dynamic div for spacing */} 
       {rowDetailOpen && window.innerWidth < 768 && ( 

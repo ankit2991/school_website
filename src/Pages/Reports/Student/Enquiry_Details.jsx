@@ -9,6 +9,7 @@ import {
    getEnquiryReportDetail,
    getEnquiryTypeList,
 } from "../../../services/api";
+import Loader from "../../../Components/Page_Forms/Loader";
 
 function Enquiry_Details() {
    /* ---------------- STATE ---------------- */
@@ -21,8 +22,9 @@ function Enquiry_Details() {
    const [name, setName] = useState("");
 
    const [tableData, setTableData] = useState([]);
-   const [loading, setLoading] = useState(false);
+   const [searched, setSearched] = useState(false);
    const [rowDetailOpen, setRowDetailOpen] = useState(false);
+   const [showTable, setShowTable] = useState(false);
 
    /* ---------------- TABLE COLUMNS ---------------- */
    const columns = [
@@ -96,7 +98,8 @@ function Enquiry_Details() {
       const sessionId = localStorage.getItem("SessionID");
 
       try {
-         setLoading(true);
+         setSearched(true);
+         setShowTable(false);
          setTableData([]);
 
          const res = await getEnquiryReportDetail(
@@ -123,17 +126,27 @@ function Enquiry_Details() {
                }))
             );
          }
+         setShowTable(true);
       } catch (error) {
          console.log("Enquiry Report API Error:", error);
          setTableData([]);
+         setShowTable(false);
       } finally {
-         setLoading(false);
+         setSearched(false);
       }
    };
+
+   useEffect(() => {
+   if (selectedClassId) {
+      handleSearch();
+   }
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [selectedClassId]);
 
    /* ---------------- UI ---------------- */
    return (
       <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+         <Loader show={searched} />
          <div className="flex justify-between mb-5">
             <Heading label="Enquiry Details" />
          </div>
@@ -173,10 +186,12 @@ function Enquiry_Details() {
             <Buttons label="Search" click={handleSearch} />
          </div>
 
+         {showTable && (
+            <>
          <Table
             columns={columns}
             data={tableData}
-            loading={loading}
+            loading={searched}
             onRowSelect={() => {}}
             disableFloatingRow={false}
             onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)}
@@ -193,6 +208,8 @@ function Enquiry_Details() {
                }}
             />
          </div>
+         </>
+            )}
 
          {rowDetailOpen && window.innerWidth < 768 && <div className="h-140" />}
       </div>

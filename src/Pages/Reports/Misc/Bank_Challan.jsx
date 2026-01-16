@@ -10,17 +10,19 @@ import {
   getclass,
   getMonthList,
 } from "../../../services/api";
+import Loader from "../../../Components/Page_Forms/Loader";
 
 function Bank_Challan() {
   const navigate = useNavigate();
 
   const [selectedMonthId, setSelectedMonthId] = useState("");
   const [selectedClassId, setSelectedClassId] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
   const [marksData, setMarksData] = useState([]);
   const [monthList, setMonthList] = useState([]);
   const [classList, setClassList] = useState([]);
   const [rowDetailOpen, setRowDetailOpen] = useState(false);
+  const [showTable, setShowTable] = useState(false);
 
   // 🔍 Search states
   const [searchBy, setSearchBy] = useState("");
@@ -92,7 +94,8 @@ function Bank_Challan() {
     }
 
     try {
-      setLoading(true);
+      setSearched(true); 
+      setShowTable(false);
       const res = await getBankChallanReport(
         instId,
         sessionId,
@@ -100,14 +103,22 @@ function Bank_Challan() {
         selectedMonthId
       );
 
-      setMarksData(res?.Table || []);
+      setMarksData(res?.Table || []); 
+      setShowTable(true);
     } catch (error) {
       console.log("Error:", error);
       setMarksData([]);
+      setShowTable(false);
     } finally {
-      setLoading(false);
+      setSearched(false);
     }
-  };
+  }; 
+
+  useEffect(() => {
+    if (selectedMonthId) {
+      handleSearch();
+    }
+  }, [selectedClassId, selectedMonthId]);
 
   // ✅ FILTER DATA (NAME / ROLL NO)
   const filteredData = marksData.filter((row) => {
@@ -128,9 +139,12 @@ function Bank_Challan() {
 
   return (
     <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+      <Loader show={searched} />
       <div className="flex justify-between items-center mb-5">
         <Heading label="Bank Challan" style="text-[22px] sm:text-3xl" />
+        {showTable && (
         <Buttons label="Print Challan" click={() => { window.open("/pdf/challan.pdf", "_blank"); }} />
+        )}
       </div>
 
       {/* 🔽 FILTERS */}
@@ -176,9 +190,11 @@ function Bank_Challan() {
       </div>
 
       <div className="flex justify-end mb-5">
-        <Buttons label={loading ? "Loading..." : "Search"} click={handleSearch} />
+        <Buttons label={"Search"} click={handleSearch} />
       </div>
 
+      {showTable && ( 
+        <>
       {/* 📊 TABLE */}
       <Table
         columns={columns}
@@ -189,8 +205,10 @@ function Bank_Challan() {
       />
 
       <div className="flex justify-end mt-5">
-        <Buttons label="Clear" click={() => setMarksData([])} />
+        <Buttons label="Clear" click={""} />
       </div>
+      </>
+      )}
 
       {rowDetailOpen && window.innerWidth < 768 && <div className="h-140"></div>}
     </div>

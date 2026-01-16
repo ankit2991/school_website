@@ -258,7 +258,7 @@ const handleSearch = () => {
 
       <Loader show={searched}/> 
 
-      <Heading label={"Exam Master"} style={"mb-5"} /> 
+      <Heading label={"Assign Roll No. Master"} style={"mb-5"} /> 
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 mb-5 w-full"> 
         <Options 

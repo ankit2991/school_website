@@ -149,7 +149,7 @@ function Home() {
                 }`}
               >
                 <div
-                  className={`absolute bottom-0 left-0 w-full h-20 rounded-2xl p-4 flex flex-col
+                  className={`absolute bottom-0 left-0 w-full h-22 md:h-20 rounded-2xl p-2 sm:p-4 flex flex-col
                   ${
                     isEven
                       ? "bg-amber-100 text-[#CC3015]"
@@ -166,7 +166,7 @@ function Home() {
       </div>
 
       {/* ==== Charts Section ==== */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 w-full">
         <Chart_Card
           title="Fee Collection Monthwise"
           color="#007bff"

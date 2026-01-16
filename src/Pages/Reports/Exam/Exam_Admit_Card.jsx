@@ -6,6 +6,7 @@ import CheckBox from '../../../Components/Page_Forms/CheckBox'
 import Buttons from '../../../Components/Page_Forms/Buttons'
 import Table from '../../../Components/Page_Forms/Table'
 import { getAdmitCardReport, getclass, getExamList } from '../../../services/api'
+import Loader from '../../../Components/Page_Forms/Loader'
 
 function Exam_Admit_Card() {
 
@@ -17,7 +18,8 @@ function Exam_Admit_Card() {
   const [classList, setClassList] = useState([])
   const [selectedClassId, setSelectedClassId] = useState("")
   const [marksData, setMarksData] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [searched, setSearched] = useState(false)
+  const [showTable, setShowTable] = useState(false);
 
   // ✅ SEARCH STATES
   const [searchBy, setSearchBy] = useState("")
@@ -87,7 +89,8 @@ function Exam_Admit_Card() {
     }
 
     try {
-      setLoading(true)
+      setSearched(true); 
+      setShowTable(false);
       const res = await getAdmitCardReport(
         instId,
         sessionId,
@@ -95,13 +98,24 @@ function Exam_Admit_Card() {
         selectedExamId
       )
       setMarksData(res?.Table || [])
-    } finally {
-      setLoading(false)
+      setShowTable(true);
+    } catch (error) {
+    console.error("Error fetching student list:", error);
+    setShowTable(false);
+  } finally {
+      setSearched(false)
     }
   }
 
+  useEffect(() => {
+    if (selectedExamId) {
+      handleSearch();
+    }
+  }, [selectedClassId, selectedExamId]);
+
   return (
     <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+      <Loader show={searched} />
 
       <Heading label={"Exam Admit Card"} />
 
@@ -158,9 +172,10 @@ function Exam_Admit_Card() {
       </div>
 
       <div className="flex justify-end mb-5">
-        <Buttons label={loading ? "Loading..." : "Search"} click={handleSearch} />
+        <Buttons label={"Search"} click={handleSearch} />
       </div>
 
+      {showTable && (
       <Table
         columns={columns}
         data={filteredData}
@@ -170,6 +185,7 @@ function Exam_Admit_Card() {
           <CheckBox checked={agree} onChange={e => setAgree(e.target.checked)} />
         )}
       />
+      )}
 
       {rowDetailOpen && window.innerWidth < 768 && <div className="h-140"></div>}
     </div>

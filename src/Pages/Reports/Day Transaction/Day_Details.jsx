@@ -7,6 +7,7 @@ import Table from "../../../Components/Page_Forms/Table";
 import { useNavigate } from "react-router-dom";
 
 import { getDayBookDetailReport } from "../../../services/api";
+import Loader from "../../../Components/Page_Forms/Loader";
 
 function Day_Details() {
     const navigate = useNavigate();
@@ -17,7 +18,8 @@ function Day_Details() {
     const [fromDate, setFromDate] = useState("");
     const [toDate, setToDate] = useState("");
     const [tableData, setTableData] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [searched, setSearched] = useState(false);
+    const [showTable, setShowTable] = useState(false);
 
     // ===================== TABLE COLUMNS =====================
 
@@ -63,7 +65,7 @@ function Day_Details() {
 
         if (!instId || !sessionId || !fromDate || !toDate) return;
 
-        setLoading(true);
+        setSearched(true);
         setTableData([]);
 
         try {
@@ -131,8 +133,9 @@ function Day_Details() {
             });
 
             setTableData(finalData);
+            setShowTable(true); 
         } finally {
-            setLoading(false);
+            setSearched(false);
         }
     };
 
@@ -143,18 +146,23 @@ function Day_Details() {
         setToDate("");
         setAgree(false);
         setTableData([]);
+        setShowTable(false);
     };
 
     // ===================== UI =====================
 
     return (
         <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+            <Loader show={searched} />
             <div className="flex justify-between items-center gap-x-4 mb-5">
                 <Heading label={"Day Detail Report"} style={"text-[22px] sm:text-3xl"} />
+                {showTable && (
+  
                 <Buttons 
           label="Print" 
           click={() => { window.open("/pdf/DayDetails.pdf", "_blank"); }} 
          style="whitespace-nowrap h-10" />
+                )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 mb-5 w-full">
@@ -183,10 +191,12 @@ function Day_Details() {
             <div className="flex justify-end mb-5">
                 <Buttons
                     click={handleSearch}
-                    label={loading ? "Loading..." : "Search"}
+                    label={"Search"}
                 />
             </div>
 
+            {showTable && (
+  <>
             <Table
                 columns={columns}
                 data={tableData}
@@ -207,6 +217,9 @@ function Day_Details() {
             <div className="flex justify-center sm:justify-end mt-5">
                 <Buttons label={"Clear"} click={handleClear} />
             </div>
+
+            </>
+            )}
         </div>
     );
 }

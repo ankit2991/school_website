@@ -6,6 +6,7 @@ import Buttons from '../../../Components/Page_Forms/Buttons'
 import Table from '../../../Components/Page_Forms/Table'
 
 import { getDayBookSummaryReport } from '../../../services/api'
+import Loader from '../../../Components/Page_Forms/Loader'
 
 function Day_Summary_Book() {
 
@@ -15,7 +16,9 @@ function Day_Summary_Book() {
     const [fromDate, setFromDate] = useState("")
     const [toDate, setToDate] = useState("")
     const [tableData, setTableData] = useState([])
-    const [loading, setLoading] = useState(false)
+    const [searched, setSearched] = useState(false)
+    const [showTable, setShowTable] = useState(false);
+const [noData, setNoData] = useState(false);
 
     // ===================== TABLE =====================
 
@@ -47,7 +50,7 @@ function Day_Summary_Book() {
 
         if (!instId || !sessionId || !fromDate || !toDate) return
 
-        setLoading(true)
+        setSearched(true)
         setTableData([])
 
         try {
@@ -58,7 +61,12 @@ function Day_Summary_Book() {
                 formatDateForAPI(toDate)
             )
 
-            if (!res?.Table) return
+            // if (!res?.Table) return
+             if (!res?.Table || res.Table.length === 0) {
+            setNoData(true);       // ✅ no data case
+            setShowTable(true);   // show message area
+            return;
+        }
 
             const formatted = res.Table.map((row) => ({
                 date: row.ReceiptDate,
@@ -67,24 +75,34 @@ function Day_Summary_Book() {
             }))
 
             setTableData(formatted)
+             setShowTable(true);
         } finally {
-            setLoading(false)
+            setSearched(false)
         }
     }
 
     // ===================== CLEAR =====================
 
+    // const handleClear = () => {
+    //     setFromDate("")
+    //     setToDate("")
+    //     setAgree(false)
+    //     setTableData([])
+    // }
     const handleClear = () => {
-        setFromDate("")
-        setToDate("")
-        setAgree(false)
-        setTableData([])
-    }
+    setFromDate("");
+    setToDate("");
+    setAgree(false);
+    setTableData([]);
+    setShowTable(false);
+    setNoData(false);
+};
 
     // ===================== UI =====================
 
     return (
         <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+            <Loader show={searched} />
             <div className="flex justify-between mb-5">
                 <Heading label={"Day Summary Report"} />
             </div>
@@ -119,11 +137,11 @@ function Day_Summary_Book() {
             <div className="flex justify-end mb-5">
                 <Buttons
                     click={handleSearch}
-                    label={loading ? "Loading..." : "Search"}
+                    label={"Search"}
                 />
             </div>
 
-            <Table
+            {/* <Table
                 columns={columns}
                 data={tableData}
                 onRowSelect={() => {}}
@@ -133,7 +151,34 @@ function Day_Summary_Book() {
 
             <div className="flex justify-center sm:justify-end space-x-0 sm:space-x-10 mt-5">
                 <Buttons label={"Clear"} click={handleClear} />
+            </div> */}
+
+            {showTable && (
+    <>
+        {noData ? (
+            <div className="text-center text-gray-500 text-lg py-10">
+                Data not available
             </div>
+        ) : (
+            <>
+            <Table
+                columns={columns}
+                data={tableData}
+                onRowSelect={() => {}}
+                disableFloatingRow={false}
+                onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)}
+            />
+
+            <div className="flex justify-center sm:justify-end mt-5">
+            <Buttons label={"Clear"} click={handleClear} />
+        </div>
+            </>
+        )}
+
+        
+    </>
+)}
+
 
             {rowDetailOpen && window.innerWidth < 768 && (
                 <div className='h-140'></div>

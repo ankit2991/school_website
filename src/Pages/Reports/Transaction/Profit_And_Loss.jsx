@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Heading from '../../../Components/Page_Forms/Heading';
 import FormInput from '../../../Components/Page_Forms/FormInput';
 import CheckBox from '../../../Components/Page_Forms/CheckBox';
@@ -17,6 +17,7 @@ function Profit_And_Loss() {
     const [tableData, setTableData] = useState([]); 
     const [searched, setSearched] = useState(false); 
     const [rowDetailOpen, setRowDetailOpen] = useState(false); // ✅ track overlay open/close
+    const [showTable, setShowTable] = useState(false); 
     const columns = [
         { header: "Debit", accessor: "dr" }, 
         { header: "Debit Amount", accessor: "dramt" },
@@ -69,6 +70,7 @@ function Profit_And_Loss() {
         
         try { 
             setSearched(true); 
+            setShowTable(false); 
             const res = await getPLReport( instId, sessId, apiDate ); 
             const rows = res?.Table || []; 
             // map API keys → table keys 
@@ -81,14 +83,23 @@ function Profit_And_Loss() {
             })); 
             
             setTableData(mappedData); 
+            setShowTable(true);
         } catch (err) { 
             console.error(err); 
             alert("Failed to load report"); 
+            setShowTable(false);
         } finally { 
             setSearched(false); 
         } 
     }; 
     
+    useEffect(() => { 
+        if (date) { 
+            handleSearch(); // 👈 auto call on date select 
+        } 
+        // eslint-disable-next-line react-hooks/exhaustive-deps 
+    }, [date]); 
+
     /* ================= DATE FORMATTER ================= */ 
     const handleClear = () => { 
         setDate(""); 
@@ -96,6 +107,7 @@ function Profit_And_Loss() {
         setTableData([]); 
         setSearched(false); 
         setRowDetailOpen(false); 
+        setShowTable(false);
     };
 
 
@@ -124,10 +136,12 @@ function Profit_And_Loss() {
                 <Buttons click={handleSearch} label="Search" /> 
             </div> 
             
-            <Table 
-                columns={columns} data={dataWithFooter} onRowSelect={() => {}} 
-                disableFloatingRow={false} onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)} 
-            /> 
+            {showTable && ( 
+                <Table 
+                    columns={columns} data={dataWithFooter} onRowSelect={() => {}} 
+                    disableFloatingRow={false} onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)} 
+                /> 
+            )} 
             
             {/* ✅ Dynamic div for spacing */} 
             {rowDetailOpen && window.innerWidth < 768 && <div className='h-140'></div>} 

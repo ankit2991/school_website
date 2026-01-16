@@ -88,6 +88,7 @@ import Buttons from "../../../Components/Page_Forms/Buttons";
 import Table from "../../../Components/Page_Forms/Table";
 
 import { getStudentCasteWiseReport } from "../../../services/api";
+import Loader from "../../../Components/Page_Forms/Loader";
 
 function Caste_Wise_Report() {
 
@@ -98,7 +99,7 @@ function Caste_Wise_Report() {
     const [showTable2, setShowTable2] = useState(false);
     const [tableData, setTableData] = useState([]);
     const [rowDetailOpen, setRowDetailOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [searched, setSearched] = useState(false);
 
     // ===================== TABLE DEFINITIONS =====================
 
@@ -133,14 +134,14 @@ function Caste_Wise_Report() {
 
     const fetchReport = async (IsOnlyGirl) => {
     setShowTable2(IsOnlyGirl === 1);
-    setLoading(true);
+    setSearched(true);
     setTableData([]);
 
     const instId = localStorage.getItem("InstituteID");
     const sessionId = localStorage.getItem("SessionID");
 
     if (!instId || !sessionId) {
-        setLoading(false);
+        setSearched(false);
         return;
     }
 
@@ -185,7 +186,7 @@ function Caste_Wise_Report() {
             setTableData(formatted);
         }
     } finally {
-        setLoading(false);
+        setSearched(false);
     }
 };
 useEffect(() => {
@@ -212,6 +213,7 @@ useEffect(() => {
 
     return (
         <div className="w-full h-full bg-white flex flex-col px-4 py-2">
+            <Loader show={searched} />
             <div className="flex justify-between mb-5">
                 <Heading label="Caste Wise Report" />
             </div>
@@ -226,7 +228,7 @@ useEffect(() => {
 
                 <Buttons
                     click={handleSearch}
-                    label={loading ? "Loading..." : "Search"}
+                    label={"Search"}
                     style="whitespace-nowrap h-10"
                 />
             </div>

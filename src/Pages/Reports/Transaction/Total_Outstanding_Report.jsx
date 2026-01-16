@@ -21,6 +21,7 @@ function Total_Outstanding_Report() {
   const [selectAll, setSelectAll] = useState(false); 
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [tableData, setTableData] = useState([]);
+  const [showTable, setShowTable] = useState(false); 
   
 
 
@@ -208,6 +209,7 @@ function Total_Outstanding_Report() {
 
   try {
     setSearched(true);
+    setShowTable(false);
 
     const res = await getTotalOutStandingReport(
       instId,
@@ -235,14 +237,25 @@ function Total_Outstanding_Report() {
 
       setTableData(formattedData);
       setSelectedStudents([]);
-      setSelectAll(false);
+      setSelectAll(false); 
+      setShowTable(true);
+    } else {
+      setShowTable(false);
     }
   } catch (error) {
-    console.error("Outstanding API Error:", error);
+    console.error("Outstanding API Error:", error); 
+    setShowTable(false); 
   } finally {
     setSearched(false);
   }
 };
+
+useEffect(() => {
+  if (selectedClassId && selectedMonthId) {
+    handleSearch(); // 👈 auto API call
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [selectedClassId, selectedMonthId]);
 
 // =================== CLEAR ====================== 
 const handleClear = () => {
@@ -250,7 +263,8 @@ const handleClear = () => {
     setSelectedMonthId("");
     setTableData([]);
     setSelectedStudents([]);
-    setSelectAll(false);
+    setSelectAll(false); 
+    setShowTable(false);
 };
 
 
@@ -267,7 +281,11 @@ const handleClear = () => {
           label={"Total Outstanding Report"}
           style={"text-[22px] sm:text-3xl"}
         />
-        <Buttons click={""} label={"Send SMS"} style="whitespace-nowrap h-10" />
+        {showTable && ( 
+          <Buttons 
+            click={""} label={"Send SMS"} style="whitespace-nowrap h-10" 
+          /> 
+        )} 
       </div>
 
       {/* Ledger + Dates */}
@@ -290,24 +308,25 @@ const handleClear = () => {
 
       </div>
 
-      <Table
-        columns={columns}
-        data={tableData}
-        onRowSelect={() => {}}
-        disableFloatingRow={false}
-        onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)}
-       
-      />
-
-      <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5">
-       <Buttons 
-          click={() => { window.open("/pdf/feedue.pdf", "_blank"); }} label={"Summary Print"} 
-        /> 
-        <Buttons 
-          label="Print" 
-          click={() => { window.open("/pdf/feedue.pdf", "_blank"); }} 
-         style="whitespace-nowrap h-10" /> 
-      </div>
+      {showTable && ( 
+        <> 
+          <Table 
+            columns={columns} data={tableData} onRowSelect={() => {}} 
+            disableFloatingRow={false} onOverlayToggle={(isOpen) => setRowDetailOpen(isOpen)} 
+          /> 
+          
+          <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5"> 
+            <Buttons 
+              click={() => { window.open("/pdf/feedue.pdf", "_blank"); }} label={"Summary Print"} 
+            /> 
+            
+            <Buttons 
+              label="Print" click={() => { window.open("/pdf/feedue.pdf", "_blank"); }} 
+              style="whitespace-nowrap h-10" 
+            /> 
+          </div> 
+        </> 
+      )} 
 
       {/* ✅ Dynamic div for spacing */}
       {rowDetailOpen && window.innerWidth < 768 && (

@@ -145,6 +145,7 @@ import Event_Detail from './Pages/PayRoll/Report/Event_Detail'
 import Marks_Entry from './Pages/Manage_Exam/Marks_Entry'
 import Marks_entry2 from './Pages/Manage_Exam/Marks_entry2'
 import PDF_Viewer from './Components/Page_Forms/PDF_Viewer'
+import ProtectedRoutes from './Pages/ProtectedRoutes/ProtectedRoutes'
 
 
 function App() {
@@ -153,7 +154,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         
-        <Route path='/PDF-Viewer' element={<PDF_Viewer />} />
+        {/* <Route path='/PDF-Viewer' element={<PDF_Viewer />} /> */}
 
 
 
@@ -163,7 +164,8 @@ function App() {
           < Route path='/Selection' element={<Selection />}/>
           
           {/* {Student Master} */}
-          <Route path='/' element={<Layout/>}>
+          <Route element={<ProtectedRoutes />}>
+      <Route element={<Layout />}>
           <Route path='/Home' element={<Home />}/>
           <Route path='/Enquiry' element={<Enquiry />}/>
           <Route path='/AddEnquiry' element={<Add_Enquiry />}/>
@@ -333,6 +335,7 @@ function App() {
             <Route path='/Event-Detail' element={<Event_Detail />}/>
 
 
+        </Route>
         </Route>
       </Routes>
     </BrowserRouter> 

@@ -9,6 +9,7 @@ import { getclass } from "../../../services/api";
 function Student_Ledger_Details() {
   const navigate = useNavigate();
   const [rowDetailOpen, setRowDetailOpen] = useState(false); // ✅ track overlay open/close
+  
   const columns = [
     { header: "Receipt Date", shortHeader: "Receipt Date", accessor: "rdate" },
     { header: "Receipt No.", shortHeader: "Receipt No.", accessor: "receipt" },

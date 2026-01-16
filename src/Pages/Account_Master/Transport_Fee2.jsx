@@ -5,14 +5,7 @@ import Options from "../../Components/Page_Forms/Options";
 import CheckBox from "../../Components/Page_Forms/CheckBox";
 import Table from "../../Components/Page_Forms/Table";
 import Buttons from "../../Components/Page_Forms/Buttons";
-import {
-   deleteTransportReceipt,
-   getFeesDetails,
-   getNewReceiptNumber,
-   getStudentDetails,
-   getTransportFeesDetails,
-   transportFeesInsert,
-} from "../../services/api";
+import { deleteTransportReceipt, getFeesDetails, getNewReceiptNumber, getStudentDetails, getTransportFeesDetails, transportFeesInsert, } from "../../services/api";
 import { useLocation } from "react-router-dom";
 import { IoIosAdd, IoMdRemove } from "react-icons/io";
 
@@ -51,21 +44,17 @@ function Transport_Fee2() {
    const [autoAdjust, setAutoAdjust] = useState(true);
 
    const receiptCurrentDate = new Date()
-      .toLocaleDateString("en-GB", {
-         day: "2-digit",
-         month: "short",
-         year: "numeric",
-      })
-      .replace(/ /g, "/");
-
-   /* ---------------- TABLE COLUMNS ---------------- */
-   const columns = [
+      .toLocaleDateString("en-GB", { 
+         day: "2-digit", month: "short", year: "numeric", 
+      }).replace(/ /g, "/"); 
+      
+      /* ---------------- TABLE COLUMNS ---------------- */ 
+      const columns = [
       { header: "Month", accessor: "month" },
       { header: "Category", accessor: "category" },
       { header: "Amount", accessor: "amount" },
       {
-         header: "Paid Amount",
-         accessor: "paidAmount",
+         header: "Paid Amount", accessor: "paidAmount",
          cell: (row) => (
             <input
                type="number"

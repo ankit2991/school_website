@@ -1,164 +1,440 @@
+// import React, { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { getlogin } from "../../services/api";
+
+// function Login() {
+//    const [email, setEmail] = useState("");
+//    const [password, setPassword] = useState("");
+//    const navigate = useNavigate();
+//    console.log({ email, password });
+//    const handleEmail = (e) => {
+//       setEmail(e.target.value);
+//    };
+//    const handlePassword = (e) => {
+//       setPassword(e.target.value);
+//    };
+//    const website = () => {
+//       window.open("https://systranstechnology.com/", "_blank");
+//    };
+
+//    const handlelogin = async (e) => {
+//       e.preventDefault();
+//       if (!email || !password) {
+//          alert("Please enter Login Id and Password");
+//          return;
+//       }
+
+//       try {
+//          const response = await getlogin(email, password);
+//          console.log("Login API Response:", response);
+//          const user = response?.Table?.[0];
+//          // ✅ SUCCESS CONDITION
+//          if (user && user.ID) {
+//             // ✅ Store required values
+//             localStorage.setItem("UserId", user.ID);
+//             localStorage.setItem("InstituteID", user.F_InstId);
+//             localStorage.setItem("UserName", user.UserName);
+//             localStorage.setItem("InstituteName", user.InstituteName);
+//             localStorage.setItem("IsSuperAdmin", user.IsSuperAdmin);
+//             localStorage.setItem("LoggedIn", "logged");
+//             console.log("Login :", localStorage.getItem("LoggedIn"));
+//             console.log("Login Success:", user);
+
+//             navigate("/Selection");
+//          } else {
+//             alert("Invalid Login Id or Password");
+//          }
+//       } catch (error) {
+//          console.error("Login Error:", error);
+//          alert("Something went wrong. Try again!");
+//       }
+//    };
+
+//    return (
+//       <div className="min-h-screen w-full flex items-center justify-center bg-cover bg-no-repeat bg-[url(/background_poster2.png)]">
+//          <div className="w-[90%] max-w-6xl flex flex-col md:flex-row rounded-4xl overflow-hidden shadow-2xl bg-white">
+//             {/* Left Side (hidden below 700px / md breakpoint) */}
+//             <div className="hidden md:flex w-3/4 bg-gradient-to-b from-[#E46343] via-[#CC3015] to-[#772109] flex-col justify-center">
+//                <div className="p-6 flex flex-col justify-between bg-[url(/background.jpg)] bg-cover bg-center rounded-r-4xl">
+//                   {/* Logo */}
+//                   <div className="flex items-center gap-3">
+//                      <img
+//                         src="/systrans.png"
+//                         alt="SysTrans Logo"
+//                         className="h-22"
+//                      />
+//                      <h1 className="cursor-default text-3xl font-[600] text-[#CC3015] mb-4">
+//                         SysTrans
+//                      </h1>
+//                   </div>
+
+//                   {/* Illustration */}
+//                   <div className="flex justify-center my-4">
+//                      <img
+//                         src="/school management.png"
+//                         alt="School Management System"
+//                         className="max-h-[350px]"
+//                      />
+//                   </div>
+
+//                   {/* Footer */}
+//                   <div className="text-sm text-gray-600">
+//                      <p className="cursor-default text-2xl text-[#CC3015] font-semibold pb-2">
+//                         Systrans SoftTech Solution
+//                      </p>
+//                      <p className="cursor-default text-lg">
+//                         © Powered By{" "}
+//                         <span
+//                            onClick={website}
+//                            className="cursor-pointer text-blue-400"
+//                         >
+//                            Systrans Technology Pvt. Ltd.
+//                         </span>
+//                      </p>
+//                      <p className="cursor-default text-lg mt-1 text-[#CC3015] font-medium">
+//                         +91 9414155589
+//                      </p>
+//                   </div>
+//                </div>
+//             </div>
+
+//             {/* Right Side */}
+//             <div className="w-full md:w-1/2 bg-gradient-to-b from-[#E46343] via-[#CC3015] to-[#772109] p-8 flex flex-col justify-center">
+//                {/* Show Logo only on small screens */}
+//                <div className="flex items-center gap-3  mb-6 md:hidden">
+//                   <img
+//                      src="/Systrans_Logo.jpeg"
+//                      alt="School Logo"
+//                      className="h-15 w-15 object-cover rounded-full border-2 border-white flex-shrink-0"
+//                   />
+//                   <h1 className="cursor-default text-2xl font-[600] text-white">
+//                      SysTrans
+//                   </h1>
+//                </div>
+
+//                {/* Login Form */}
+//                <h2 className="text-4xl font-bold text-white mb-6 text-center md:text-left">
+//                   Login
+//                </h2>
+//                <div className="flex flex-col gap-4 animate-fadeIn">
+
+//                <form onSubmit={handlelogin}>
+//                   <div className="flex flex-col gap-4">
+//                      <input
+//                         type="text"
+//                         placeholder="Login Id"
+//                         value={email}
+//                         onChange={handleEmail}
+//                     className="
+//   bg-white/95 p-3 rounded-md outline-none
+//   text-gray-700 placeholder:text-gray-500 caret-[#CC3015]
+
+//   transition-all duration-300 ease-out shadow-gray-700/80
+//   hover:shadow-lg hover:-translate-y-[1px]
+
+//   focus:ring-2 focus:ring-yellow-300/80
+//   focus:shadow-yellow-300/40
+//   focus:shadow-2xl
+//   focus:scale-[1.03]
+// "
+
+//                      />
+//                      <input
+//                         type="password"
+//                         placeholder="Password"
+//                         value={password}
+//                         onChange={handlePassword}
+//                        className="
+//   bg-white/95 p-3 rounded-md outline-none
+//   text-gray-700 placeholder:text-gray-500 caret-[#CC3015]
+
+//   transition-all duration-300 ease-out shadow-gray-700/80
+//   hover:shadow-lg hover:-translate-y-[1px]
+
+//   focus:ring-2 focus:ring-yellow-300/80
+//   focus:shadow-yellow-300/40
+//   focus:shadow-2xl
+//   focus:scale-[1.03]
+// "
+//                     />
+//                      <button
+//                         type="submit"
+//                        className="
+//   bg-gradient-to-r from-yellow-400 to-yellow-500
+//   text-white text-xl font-semibold py-2 rounded-md
+//   shadow-md
+//   transition-all duration-300 ease-out
+//   hover:shadow-yellow-400/60 hover:shadow-2xl
+//   hover:scale-[1.03]
+//   active:scale-[0.97]
+  
+// "
+//    >
+//                         Login
+//                      </button>
+//                   </div>
+//                </form>
+//                   </div>
+
+//                {/* Footer */}
+//                <div className="mt-6 text-left md:hidden text-sm text-white">
+//                   {/* Full footer (from left side) for small screens */}
+//                   <p className="cursor-default text-xl font-semibold pb-2">
+//                      Systrans SoftTech Solution
+//                   </p>
+//                   <p className="cursor-default text-md">
+//                      © Powered By{" "}
+//                      <span
+//                         onClick={website}
+//                         className="cursor-pointer text-yellow-300"
+//                      >
+//                         Systrans Technology Pvt. Ltd.
+//                      </span>
+//                   </p>
+//                   <p className="cursor-default text-md mt-1 font-medium">
+//                      +91 9414155589
+//                   </p>
+//                </div>
+
+//                {/* Small © footer only for larger screens */}
+//                <p className="hidden md:block cursor-default text-md text-yellow-400 mt-6 text-center">
+//                   © Powered By{" "}
+//                   <span onClick={website} className="cursor-pointer text-white">
+//                      Systrans Technology Pvt. Ltd.
+//                   </span>
+//                </p>
+//             </div>
+//          </div>
+//       </div>
+//    );
+// }
+
+// export default Login;
 
 
-import React, { useState } from "react";
+
+
+
+
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getlogin } from "../../services/api";
+import Loader from "../../Components/Page_Forms/Loader";
 
-function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-  console.log({ email, password });
-  const handleEmail = (e) => {setEmail(e.target.value);};
-  const handlePassword = (e) => {setPassword(e.target.value);};
-  const website = () => { 
-    window.open("https://systranstechnology.com/", "_blank"); 
-  }; 
+function Login() { 
+   const [loginForm, setLoginForm] = useState({Id: "", Password: "",}); 
+   const [searched, setSearched] = useState(false); 
+   const navigate = useNavigate(); 
+   
+   const authToken = localStorage.getItem("authToken"); 
+   const tokenParsed = JSON.parse(authToken); 
+   console.log("CONSOLE", tokenParsed); 
 
-  const handlelogin = async (e) => { 
-    e.preventDefault();  
-    if (!email || !password) { 
-      alert("Please enter Login Id and Password"); 
-      return; 
-    } 
-    
-    try { 
-      const response = await getlogin(email, password); 
-      console.log("Login API Response:", response); 
-      const user = response?.Table?.[0]; 
-      // ✅ SUCCESS CONDITION 
-      if (user && user.ID) { 
-        // ✅ Store required values 
-        localStorage.setItem("UserId", user.ID); 
-        localStorage.setItem("InstituteID", user.F_InstId); 
-        localStorage.setItem("UserName", user.UserName); 
-        localStorage.setItem("InstituteName", user.InstituteName); 
-        localStorage.setItem("IsSuperAdmin", user.IsSuperAdmin); 
-        console.log("Login Success:", user); 
-        
-        navigate("/Selection"); 
-      } else { 
-        alert("Invalid Login Id or Password"); 
+   useEffect(() => {
+      if(tokenParsed){
+         navigate("/Home"); 
       } 
-    } catch (error) { 
-      console.error("Login Error:", error); 
-      alert("Something went wrong. Try again!"); 
-    } 
-  }; 
-  
-  return ( 
-    <div className="min-h-screen w-full flex items-center justify-center bg-cover bg-no-repeat bg-[url(/background_poster2.png)]"> 
-      <div className="w-[90%] max-w-6xl flex flex-col md:flex-row rounded-4xl overflow-hidden shadow-2xl bg-white"> 
-        {/* Left Side (hidden below 700px / md breakpoint) */} 
-        <div className="hidden md:flex w-3/4 bg-gradient-to-b from-[#E46343] via-[#CC3015] to-[#772109] flex-col justify-center"> 
-          <div className="p-6 flex flex-col justify-between bg-[url(/background.jpg)] bg-cover bg-center rounded-r-4xl"> 
-          
-            {/* Logo */} 
-            <div className="flex items-center gap-3"> 
-              <img 
-                src="/systrans.png" alt="SysTrans Logo" className="h-22" 
-              /> 
-              <h1 className="cursor-default text-3xl font-[600] text-[#CC3015] mb-4"> 
-                SysTrans 
-              </h1> 
-            </div> 
-          
-            {/* Illustration */} 
-            <div className="flex justify-center my-4"> 
-              <img 
-                src="/school management.png" alt="School Management System" className="max-h-[350px]" 
-              /> 
-            </div> 
-          
-            {/* Footer */} 
-            <div className="text-sm text-gray-600"> 
-              <p className="cursor-default text-2xl text-[#CC3015] font-semibold pb-2"> 
-                Systrans SoftTech Solution 
-              </p> 
-              <p className="cursor-default text-lg"> 
-                © Powered By{" "} 
-                <span 
-                  onClick={website} className="cursor-pointer text-blue-400" 
-                > 
-                  Systrans Technology Pvt. Ltd. 
-                </span> 
-              </p> 
-              <p className="cursor-default text-lg mt-1 text-[#CC3015] font-medium"> 
-                +91 9414155589 
-              </p> 
-            </div> 
+   }, [tokenParsed]);
+   
+   const handleChange = (e) => { 
+      const {name, value} = e.target; 
+      setLoginForm({...loginForm, [name]:value}); 
+   };
+   
+   // console.log("LoginForm:",loginForm)
 
-          </div> 
-        </div> 
-      
-        {/* Right Side */} 
-        <div className="w-full md:w-1/2 bg-gradient-to-b from-[#E46343] via-[#CC3015] to-[#772109] p-8 flex flex-col justify-center"> 
-          {/* Show Logo only on small screens */} 
-          <div className="flex items-center gap-3  mb-6 md:hidden"> 
-            <img 
-              src="/Systrans_Logo.jpeg" alt="School Logo" 
-              className="h-15 w-15 object-cover rounded-full border-2 border-white flex-shrink-0" 
-            /> 
-            <h1 className="cursor-default text-2xl font-[600] text-white"> 
-              SysTrans 
-            </h1> 
-          </div> 
-        
-          {/* Login Form */} 
-          <h2 className="text-4xl font-bold text-white mb-6 text-center md:text-left"> 
-            Login 
-          </h2> 
-          <form onSubmit={handlelogin}> 
-            <div className="flex flex-col gap-4"> 
-              <input 
-                type="text" placeholder="Login Id" value={email} onChange={handleEmail} 
-                className="bg-white p-3 rounded-md outline-none text-gray-700 placeholder:text-gray-400" 
-              /> 
-              <input 
-                type="password" placeholder="Password" value={password} onChange={handlePassword} 
-                className="bg-white p-3 rounded-md outline-none text-gray-700 placeholder:text-gray-400" 
-              /> 
-              <button 
-                type="submit" 
-                className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white text-xl font-semibold py-2 rounded-md shadow-md hover:opacity-90" 
-              > 
-                Login 
-              </button> 
-            </div> 
-          </form> 
-        
-          {/* Footer */} 
-          <div className="mt-6 text-left md:hidden text-sm text-white"> 
-            {/* Full footer (from left side) for small screens */} 
-            <p className="cursor-default text-xl font-semibold pb-2"> 
-              Systrans SoftTech Solution 
-            </p> 
-            <p className="cursor-default text-md"> 
-              © Powered By{" "} 
-              <span 
-                onClick={website} className="cursor-pointer text-yellow-300" 
-              > 
-                Systrans Technology Pvt. Ltd. 
-              </span> 
-            </p> 
-            <p className="cursor-default text-md mt-1 font-medium"> 
-              +91 9414155589 
-            </p> 
-          </div> 
-        
-          {/* Small © footer only for larger screens */} 
-          <p className="hidden md:block cursor-default text-md text-yellow-400 mt-6 text-center"> 
-            © Powered By{" "} 
-            <span 
-              onClick={website} className="cursor-pointer text-white"
-            > 
-              Systrans Technology Pvt. Ltd. 
-            </span> 
-          </p> 
-        </div> 
-      </div> 
-    </div> 
-  ); 
-} 
+   const handlelogin = async() => {
+      // debugger;
+      if(!loginForm?.Id || !loginForm.Password){
+         alert("Please enter Login Id and Password");
+         return null;
+      }
+      try {
+         setSearched(true);
+         const response = await getlogin(loginForm.Id, loginForm.Password);
+         console.log("Login API Response:", response);
+         const user = response?.Table?.[0];
 
-export default Login; 
+         if(user && user.ID) {
+            localStorage.setItem("IsSuperAdmin", user.IsSuperAdmin); 
+            localStorage.setItem("UserId", user.ID); 
+            localStorage.setItem("UserName", user.UserName); 
+            localStorage.setItem("InstituteID", user.F_InstId); 
+            localStorage.setItem("InstituteName", user.InstituteName); 
+            localStorage.setItem("authToken", JSON.stringify(loginForm))
+
+            navigate("/Selection");
+         } else {
+            alert("Invalid Login Id or Password");
+         }
+      } catch (error) {
+         console.error("Login Error", error)
+         alert("Something went wrong. Try again!")
+      } finally {
+         setSearched(false);
+      }
+   };
+
+   /* ================= WEBSITE URL ================= */ 
+   const website = () => {
+      window.open("https://systranstechnology.com/", "_blank");
+   };
+
+   return (
+      <div className="min-h-screen w-full flex items-center justify-center bg-cover bg-no-repeat bg-[url(/background_poster2.png)]">
+         <Loader show={searched} />
+         <div className="w-[90%] max-w-6xl flex flex-col md:flex-row rounded-4xl overflow-hidden shadow-2xl bg-white">
+            {/* Left Side (hidden below 700px / md breakpoint) */}
+            <div className="hidden md:flex w-3/4 bg-gradient-to-b from-[#E46343] via-[#CC3015] to-[#772109] flex-col justify-center">
+               <div className="p-6 flex flex-col justify-between bg-[url(/background.jpg)] bg-cover bg-center rounded-r-4xl">
+                  {/* Logo */}
+                  <div className="flex items-center gap-3">
+                     <img
+                        src="/systrans.png" alt="SysTrans Logo"
+                        className="h-22"
+                     />
+                     <h1 className="cursor-default text-3xl font-[600] text-[#CC3015] mb-4">
+                        SysTrans
+                     </h1>
+                  </div>
+
+                  {/* Illustration */}
+                  <div className="flex justify-center my-4">
+                     <img
+                        src="/school management.png"
+                        alt="School Management System"
+                        className="max-h-[350px]"
+                     />
+                  </div>
+
+                  {/* Footer */}
+                  <div className="text-sm text-gray-600">
+                     <p className="cursor-default text-2xl text-[#CC3015] font-semibold pb-2">
+                        Systrans SoftTech Solution
+                     </p>
+                     <p className="cursor-default text-lg">
+                        © Powered By{" "}
+                        <span
+                           onClick={website}
+                           className="cursor-pointer text-blue-400"
+                        >
+                           Systrans Technology Pvt. Ltd.
+                        </span>
+                     </p>
+                     <p className="cursor-default text-lg mt-1 text-[#CC3015] font-medium">
+                        +91 9414155589
+                     </p>
+                  </div>
+               </div>
+            </div>
+
+            {/* Right Side */}
+            <div className="w-full md:w-1/2 bg-gradient-to-b from-[#E46343] via-[#CC3015] to-[#772109] p-8 flex flex-col justify-center">
+               {/* Show Logo only on small screens */}
+               <div className="flex items-center gap-3  mb-6 md:hidden">
+                  <img
+                     src="/Systrans_Logo.jpeg"
+                     alt="School Logo"
+                     className="h-15 w-15 object-cover rounded-full border-2 border-white flex-shrink-0"
+                  />
+                  <h1 className="cursor-default text-2xl font-[600] text-white">
+                     SysTrans
+                  </h1>
+               </div>
+
+               {/* Login Form */}
+               <h2 className="text-4xl font-bold text-white mb-6 text-center md:text-left">
+                  Login
+               </h2>
+               <div className="flex flex-col gap-4 animate-fadeIn">
+
+               {/* <form onSubmit={handlelogin}> */}
+                  <div className="flex flex-col gap-4">
+                     <input
+                        type="text"
+                        placeholder="Login Id"
+                        // value={email}
+                        value={loginForm?.Id}
+                        name="Id"
+                        onChange={handleChange}
+                        // onChange={handleEmail} 
+                        className="
+                           bg-white/95 p-3 rounded-md outline-none 
+                           text-gray-700 placeholder:text-gray-500 caret-[#CC3015] 
+                           transition-all duration-300 ease-out shadow-gray-700/80 
+                           hover:shadow-lg hover:-translate-y-[1px] 
+                           focus:ring-2 focus:ring-yellow-300/80 
+                           focus:shadow-yellow-300/40 focus:shadow-2xl 
+                           focus:scale-[1.03] 
+                        " 
+                     />
+                     <input
+                        type="password"
+                        placeholder="Password"
+                        // value={password}
+                        value={loginForm?.Password}
+                        name="Password"
+                        onChange={handleChange}
+                        // onChange={handlePassword}
+                       className=" 
+                           bg-white/95 p-3 rounded-md outline-none 
+                           text-gray-700 placeholder:text-gray-500 caret-[#CC3015] 
+                           transition-all duration-300 ease-out shadow-gray-700/80 
+                           hover:shadow-lg hover:-translate-y-[1px] 
+                           focus:ring-2 focus:ring-yellow-300/80 
+                           focus:shadow-yellow-300/40 
+                           focus:shadow-2xl focus:scale-[1.03] 
+                        " 
+                     /> 
+                     
+                     <button 
+                        type="submit" 
+                        className=" 
+                           bg-gradient-to-r from-yellow-400 to-yellow-500 
+                           text-white text-xl font-semibold py-2 rounded-md 
+                           shadow-md transition-all duration-300 ease-out 
+                           hover:shadow-yellow-400/60 hover:shadow-2xl 
+                           hover:scale-[1.03] active:scale-[0.97] 
+                        " 
+                        onClick={handlelogin}
+                     > 
+                        Login 
+                     </button>
+                  </div>
+               {/* </form> */}
+                  </div>
+
+               {/* Footer */}
+               <div className="mt-6 text-left md:hidden text-sm text-white">
+                  {/* Full footer (from left side) for small screens */}
+                  <p className="cursor-default text-xl font-semibold pb-2">
+                     Systrans SoftTech Solution
+                  </p>
+                  <p className="cursor-default text-md">
+                     © Powered By{" "}
+                     <span
+                        onClick={website}
+                        className="cursor-pointer text-yellow-300"
+                     >
+                        Systrans Technology Pvt. Ltd.
+                     </span>
+                  </p>
+                  <p className="cursor-default text-md mt-1 font-medium">
+                     +91 9414155589
+                  </p>
+               </div>
+
+               {/* Small © footer only for larger screens */}
+               <p className="hidden md:block cursor-default text-md text-yellow-400 mt-6 text-center">
+                  © Powered By{" "}
+                  <span onClick={website} className="cursor-pointer text-white">
+                     Systrans Technology Pvt. Ltd.
+                  </span>
+               </p>
+            </div>
+         </div>
+      </div>
+   );
+}
+
+export default Login;
