@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Heading from "../../Components/Page_Forms/Heading";
 import FormInput from "../../Components/Page_Forms/FormInput";
 import Options from "../../Components/Page_Forms/Options";
@@ -14,6 +14,7 @@ import {
 } from "../../services/api";
 
 function Vehicle_Master2() {
+  const navigate = useNavigate(); 
   const location = useLocation();
   const vehicleId = location.state || null;
 
@@ -26,20 +27,25 @@ function Vehicle_Master2() {
   const [searched, setSearched] = useState(false);
 
   const [formData, setFormData] = useState({
-    provider: "",
-    vehicleType: "",
-    route: "",
-    vehicleNo: "",
-    noOfSeat: "",
-    strength: "",
-    purchaseDate: "",
-    insuranceDate: "",
-    expireDate: "",
-    driverName: "",
-    contactNo: "",
-    licenceNo: "",
-    address: "",
+    provider: "", vehicleType: "", route: "", vehicleNo: "", noOfSeat: "", 
+    strength: "", purchaseDate: "", insuranceDate: "", expireDate: "", 
+    driverName: "", contactNo: "", licenceNo: "", address: "", 
   });
+  const [errors, setErrors] = useState({});
+
+
+  /* ================= VALIDATION ================= */ 
+  const validateForm = () => { 
+    const newErrors = {}; 
+    
+    if (!formData.provider) newErrors.provider = "Required"; 
+    if (!formData.vehicleType) newErrors.vehicleType = "Required"; 
+    if (!formData.route) newErrors.route = "Required"; 
+    if (!formData.vehicleNo.trim()) newErrors.vehicleNo = "Required"; 
+    if (!formData.noOfSeat.trim()) newErrors.noOfSeat = "Required"; 
+    setErrors(newErrors); 
+    return Object.keys(newErrors).length === 0; 
+  };
 
   /* ================= DATE FORMAT ================= */
   const apiDateToInput = (apiDate) => {
@@ -111,13 +117,31 @@ function Vehicle_Master2() {
   };
 
   /* ================= CHANGE HANDLER ================= */
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prev) => ({ ...prev, [name]: value }));
+  // };
+
+  const handleChange = (e) => { 
+    const { name, value } = e.target; 
+    
+    setFormData((prev) => ({ 
+      ...prev, [name]: value, 
+    })); 
+    
+    // 🔥 clear error while typing / selecting 
+    if (errors[name]) { 
+      setErrors((prev) => ({ 
+        ...prev, [name]: "", 
+      })); 
+    } 
   };
+
 
   /* ================= SAVE ================= */
   const handleSave = async () => {
+    if (!validateForm()) return;
+
     try {
       setSearched(true);
       const userId = localStorage.getItem("UserId") || 1;
@@ -162,25 +186,77 @@ function Vehicle_Master2() {
         <Heading label="Vehicle Master" style="mb-5" />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-5 w-full">
-          <Options label="Provider" optionMsg="Select Provider" options={providerList} value={formData.provider} valueKey="Id" labelKey="Name" onChange={handleChange} name="provider" />
-          <Options label="Vehicle Type" optionMsg="Select Vehicle Type" options={typeList} value={formData.vehicleType} valueKey="Id" labelKey="VehicleType" onChange={handleChange} name="vehicleType" />
-          <Options label="Route" optionMsg="Select Route" options={routeList} value={formData.route} valueKey="Id" labelKey="RouteName" onChange={handleChange} name="route" />
+          <Options 
+            label="Provider" optionMsg="Select Provider" options={providerList} 
+            value={formData.provider} valueKey="Id" labelKey="Name" 
+            onChange={handleChange} name="provider" error={errors.provider} 
+          /> 
 
-          <FormInput label="Vehicle Number" name="vehicleNo" value={formData.vehicleNo} onChange={handleChange} />
-          <FormInput label="Number Of Seat" name="noOfSeat" value={formData.noOfSeat} onChange={handleChange} />
-          <FormInput label="Strength" name="strength" value={formData.strength} onChange={handleChange} />
-          <FormInput type="date" label="Purchase Date" name="purchaseDate" value={formData.purchaseDate} onChange={handleChange} />
-          <FormInput type="date" label="Insurance Date" name="insuranceDate" value={formData.insuranceDate} onChange={handleChange} />
-          <FormInput type="date" label="Tns. Expire Date" name="expireDate" value={formData.expireDate} onChange={handleChange} />
-          <FormInput label="Driver Name" name="driverName" value={formData.driverName} onChange={handleChange} />
-          <FormInput label="Contact Number" name="contactNo" value={formData.contactNo} onChange={handleChange} />
-          <FormInput label="Driver License Number" name="licenceNo" value={formData.licenceNo} onChange={handleChange} />
-        </div>
+          <Options 
+            label="Vehicle Type" optionMsg="Select Vehicle Type" options={typeList} 
+            value={formData.vehicleType} valueKey="Id" labelKey="VehicleType" 
+            onChange={handleChange} name="vehicleType" error={errors.vehicleType} 
+          /> 
 
-        <FormInput label="Address" name="address" value={formData.address} onChange={handleChange} inputStyle="mb-5" />
+          <Options 
+            label="Route" optionMsg="Select Route" options={routeList} 
+            value={formData.route} valueKey="Id" labelKey="RouteName" 
+            onChange={handleChange} name="route" error={errors.route} 
+          /> 
+
+          <FormInput 
+            label="Vehicle Number" name="vehicleNo" value={formData.vehicleNo} 
+            onChange={handleChange} error={errors.vehicleNo} 
+          /> 
+
+          <FormInput 
+            label="Number Of Seat" name="noOfSeat" value={formData.noOfSeat} 
+            onChange={handleChange} error={errors.noOfSeat} 
+          /> 
+
+          <FormInput 
+            label="Strength" name="strength" value={formData.strength} 
+            onChange={handleChange} 
+          /> 
+
+          <FormInput 
+            type="date" label="Purchase Date" name="purchaseDate" 
+            value={formData.purchaseDate} onChange={handleChange} 
+          /> 
+
+          <FormInput 
+            type="date" label="Insurance Date" name="insuranceDate" 
+            value={formData.insuranceDate} onChange={handleChange} 
+          /> 
+
+          <FormInput 
+            type="date" label="Tns. Expire Date" name="expireDate" 
+            value={formData.expireDate} onChange={handleChange} 
+          /> 
+
+          <FormInput 
+            label="Driver Name" name="driverName" 
+            value={formData.driverName} onChange={handleChange} 
+          /> 
+
+          <FormInput 
+            label="Contact Number" name="contactNo" 
+            value={formData.contactNo} onChange={handleChange} 
+          /> 
+
+          <FormInput 
+            label="Driver License Number" name="licenceNo" 
+            value={formData.licenceNo} onChange={handleChange} 
+          /> 
+        </div> 
+        
+        <FormInput 
+          label="Address" name="address" value={formData.address} 
+          onChange={handleChange} inputStyle="mb-5" 
+        /> 
 
         <div className="flex justify-end space-x-6">
-          <Buttons label="Cancel" />
+          <Buttons label="Cancel" click={() => navigate("/Master")} />
           <Buttons label={"Save"} click={handleSave} />
         </div>
       </div>

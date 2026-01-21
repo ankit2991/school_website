@@ -96,7 +96,7 @@ const handleSearch = () => {
       <div className="flex justify-between mb-5"> 
         <Heading label="Exam Schedule" /> 
         <Buttons 
-          label="Add" click={() => navigate("/Exam-Schedule")} 
+          label="Add" click={() => navigate("/Exam-Schedule", { replace: true })} 
         /> 
       </div> 
       
@@ -127,6 +127,7 @@ const handleSearch = () => {
                     listId: row.Id, examId: row.F_ExamMaster, 
                     classId: selectedClassId, 
                   }, 
+                  replace: true, 
                 }) } 
               /> 
               <Buttons 
@@ -141,6 +142,7 @@ const handleSearch = () => {
                     listId: row.Id, examId: row.F_ExamMaster, 
                     classId: selectedClassId, 
                   }, 
+                  replace: true, 
                 }) } 
                 className="sm:hidden text-lg pt-2.5" 
               > 

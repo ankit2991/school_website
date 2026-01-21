@@ -661,10 +661,10 @@ export const getVehicleTypeInsertUpdate = async (vehid, vehitype, userid, insid,
 
 
 // --------------------------------------This is Vehicle Type Delete api function -----------------------------------------
-export const getVehicleTypeDelete = async (stopid) => {
+export const getVehicleTypeDelete = async (vehid) => {
     const params = {
         ParmCriteria: JSON.stringify({
-            StopId: stopid,
+            VehId: vehid,
             ApiAdd: "VehicleTypeDelete",
             CallBy: "MobileApi",
             AuthKey: AUTH_KEY,
@@ -1723,8 +1723,7 @@ export const getStudentMarksList = async (sessid, clid, examid, examtypeid, subi
 
 
 // ------------------------------------This is Student Marks Insert api function----------------------------------------
-export async function insertMarks({marksModel, marksTrans, schId = "VSS",
-}) {
+export async function insertMarks({marksModel, marksTrans, schId = "VSS",}) {
   const url = "https://schoolappapi.schoolsoftwaresolution.in/MobApi.asmx/MarksInsert";
 
   const formData = new FormData();

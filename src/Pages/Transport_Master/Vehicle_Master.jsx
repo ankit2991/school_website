@@ -107,7 +107,7 @@ function Vehicle_Master() {
             <Loader show={searched}/>
             <div className="flex justify-between items-center gap-x-4 mb-5">
                 <Heading label={"Vehicle Master"} style={"text-[22px] sm:text-3xl"} />
-                <Buttons click={() => navigate("/Vehicle-Master")} label={"Add"} style='whitespace-nowrap h-10'/>                    
+                <Buttons click={() => navigate("/Vehicle-Master", { replace: true })} label={"Add"} style='whitespace-nowrap h-10'/>                    
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2  gap-6 mb-5 w-full">
@@ -131,10 +131,10 @@ function Vehicle_Master() {
             <div className="w-full sm:w-6xl mt-5">
                 <Table columns={columns} data={filteredList} actions={(row) => (
                     <>
-                        <Buttons label={"Edit"} click={() => navigate("/Vehicle-Master", { state: row.Id }) } style="hidden sm:inline" />
+                        <Buttons label={"Edit"} click={() => navigate("/Vehicle-Master", { state: row.Id }, { replace: true }) } style="hidden sm:inline" />
                         <Buttons label={"Delete"} click={() => handleDelete(row.Id)} style="hidden sm:inline" />
                         {/* Mobile icons */}
-                        <button className="sm:hidden text-lg pt-2.5" onClick={() => navigate("/Vehicle-Master", { state: row.Id })} >✏️</button>
+                        <button className="sm:hidden text-lg pt-2.5" onClick={() => navigate("/Vehicle-Master", { state: row.Id, replace: true  })} >✏️</button>
                         <button className="sm:hidden text-xl pt-2.5"  onClick={() => handleDelete(row.Id)} >🗑️</button>
                     </>
                 )}/>

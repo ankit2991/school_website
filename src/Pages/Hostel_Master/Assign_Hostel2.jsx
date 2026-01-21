@@ -26,6 +26,8 @@ function Assign_Hostel2() {
   const instId = localStorage.getItem("InstituteID");
   const sessId = localStorage.getItem("SessionID");
   const userId = localStorage.getItem("UserId") 
+  const [errors, setErrors] = useState({});
+
 
   // =================== SET DATA ======================
   const [formData, setFormData] = useState({
@@ -51,6 +53,20 @@ function Assign_Hostel2() {
       ...prev,
       [name]: value,
     }));
+  };
+
+  // =================== VALIDATION ====================== 
+  const validateForm = () => { 
+    const newErrors = {}; 
+    
+    if (!formData.class) newErrors.class = "Class is required"; 
+    if (!formData.roomno) newErrors.roomno = "Room Number is required"; 
+    if (!formData.hostel) newErrors.hostel = "Hostel Provider is required"; 
+    if (!formData.cost || Number(formData.cost) <= 0) 
+      newErrors.cost = "Valid cost is required"; 
+    
+    setErrors(newErrors); 
+    return Object.keys(newErrors).length === 0; 
   };
 
   // =================== ASSIGN HOSTEL DETAIL ======================
@@ -175,6 +191,7 @@ useEffect(() => {
 
   /* ================= SAVE ================= */
   const handleSave = async () => {
+    if (!validateForm()) return;
   try {
     setSearched(true);
 
@@ -254,25 +271,32 @@ const handleDelete = async (id) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-5 w-full">
         <FormInput
           label={"Sr. No."}
-          name="srno"
+          // name="srno"
           value={formData.srno}
           onChange={handleChange}
         />
         <FormInput
           label={"Name"}
-          name="name"
+          // name="name"
           value={formData.name}
           onChange={handleChange}
         />
         <FormInput
           label={"Class"}
-          name="class"
+          // name="class"
           value={formData.class}
-          onChange={handleChange}
+          // onChange={handleChange}
+          error={errors.class}
+  onChange={(e) => {
+    handleChange(e);
+    if (errors.class) {
+      setErrors((prev) => ({ ...prev, class: "" }));
+    }
+  }}
         />
         <FormInput
           label={"Father Name"}
-          name="fathername"
+          // name="fathername"
           value={formData.fathername}
           onChange={handleChange}
         />
@@ -290,7 +314,14 @@ const handleDelete = async (id) => {
           options={roomList}
           valueKey="Id"
           labelKey="Name"
-          onChange={handleChange}
+          // onChange={handleChange}
+          error={errors.roomno}
+  onChange={(e) => {
+    handleChange(e);
+    if (errors.roomno) {
+      setErrors((prev) => ({ ...prev, roomno: "" }));
+    }
+  }}
         />
         <Options
           label="Hostel Provider"
@@ -299,7 +330,14 @@ const handleDelete = async (id) => {
           options={providerList}
           valueKey="Id"
           labelKey="Name"
-          onChange={handleChange}
+          // onChange={handleChange}
+          error={errors.hostel}
+  onChange={(e) => {
+    handleChange(e);
+    if (errors.hostel) {
+      setErrors((prev) => ({ ...prev, hostel: "" }));
+    }
+  }}
         />
         <FormInput
           type="date"
@@ -324,9 +362,16 @@ const handleDelete = async (id) => {
 
         <FormInput
           label={"Cost"}
-          name="cost"
+          // name="cost"
           value={formData.cost}
-          onChange={handleChange}
+          // onChange={handleChange}
+          error={errors.cost}
+  onChange={(e) => {
+    handleChange(e);
+    if (errors.cost) {
+      setErrors((prev) => ({ ...prev, cost: "" }));
+    }
+  }}
         />
       </div>
       <div className="w-full gap-6 mb-5 grid grid-cols-1 ">

@@ -358,7 +358,9 @@ function Assign_Vehicle2() {
     const [vehicleList, setVehicleList] = useState([]); 
     const [selectedVehicleTypeId, setSelectedVehicleTypeId] = useState(""); 
     const [selectedVehicleId, setSelectedVehicleId] = useState(""); 
-    const [studentInfo, setStudentInfo] = useState({});
+    const [studentInfo, setStudentInfo] = useState({}); 
+    const [errors, setErrors] = useState({}); 
+
 
     // ================= FETCH ROUTE, VEHICLETYPE, VEHICLE, STOPROUTE DETAIL ================= 
     useEffect(() => { 
@@ -428,6 +430,18 @@ function Assign_Vehicle2() {
         { header: "Vechile Number", shortHeader: "Number", accessor: "no" },
     ] 
 
+    // ================= VALIDATION ================= 
+    const validateForm = () => {
+    const newErrors = {};
+
+    if (!studentInfo?.Class) newErrors.class = "Required";
+    if (!vehicleHistory[0]?.joinDateInput) newErrors.joinDate = "Required";
+    if (!selectedStopId) newErrors.stop = "Required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+};
+
     // ================= ASSIGN VEHICLE DETAIL ================= 
     useEffect(() => { 
         if (studentId) fetchAssignVehicleDetail(); 
@@ -482,6 +496,7 @@ function Assign_Vehicle2() {
     
     // ================= SAVE =================
     const handleSave = async () => {
+        if (!validateForm()) return; 
         try {
             setSearched(true);
             const payload = {
@@ -559,14 +574,22 @@ function Assign_Vehicle2() {
             <Loader show={searched}/>
             <Heading style={"mb-5"} label={"Assign Vehicle"}/>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-5 w-full">
-                <FormInput label={"Class"} value={studentInfo?.Name || ""} />  
+                <FormInput label={"Class"} value={studentInfo?.Class || ""} error={errors.class} />  
                 <FormInput label={"Name"} value={studentInfo?.Name || ""} /> 
                 <FormInput label={"Sr. No."} value={studentInfo?.EnrollmentNo || ""} /> 
                 <FormInput label={"Father Name"} value={studentInfo?.FatherName || ""} /> 
                 <FormInput 
                     label="Join Date" type="date" 
                     value={vehicleHistory[0]?.joinDateInput || ""} 
-                    onChange={(e) => updateVehicleHistory("joinDateInput", e.target.value)}
+                    // onChange={(e) => updateVehicleHistory("joinDateInput", e.target.value)}
+                    error={errors.joinDate}
+    onChange={(e) => {
+        updateVehicleHistory("joinDateInput", e.target.value);
+
+        if (errors.joinDate) {
+            setErrors((prev) => ({ ...prev, joinDate: "" }));
+        }
+    }}
                 /> 
                 <Options 
                     label="Route" optionMsg="Select Route" options={routeList} 
@@ -586,7 +609,15 @@ function Assign_Vehicle2() {
                 <Options 
                     label="Stop" optionMsg="Select Stop" options={stopList} 
                     valueKey="Id" labelKey="Name" value={selectedStopId} 
-                    onChange={(e) => setSelectedStopId(e.target.value)} 
+                    // onChange={(e) => setSelectedStopId(e.target.value)} 
+                    error={errors.stop}
+    onChange={(e) => {
+        setSelectedStopId(e.target.value);
+
+        if (errors.stop) {
+            setErrors((prev) => ({ ...prev, stop: "" }));
+        }
+    }}
                 /> 
                 <Options 
                     label="Vehicle Type" optionMsg="Select Vehicle Type" 

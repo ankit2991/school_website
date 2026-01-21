@@ -158,15 +158,12 @@ function Grade2() {
 
             </div>
 
-            <div className="flex flex-col sm:flex-row sm:justify-between gap-y-6 mb-5">
+            <div className="flex flex-col sm:flex-row sm:justify-end gap-y-6 mb-5">
                 <div className="flex justify-around sm:justify-end space-x-0 sm:space-x-10 pt-2">
-                    <Buttons label="Cancel" style="px-6 py-2" click={() => navigate()} />
-                  <Buttons label={"Save"} style='px-6 py-2' click={handleSave} />
+                    <Buttons label="Cancel" click={() => navigate()} />
+                  <Buttons label={"Save"} click={handleSave} />
                 </div>
-                <div className="flex justify-around sm:justify-end space-x-0 sm:space-x-10 pt-2">
-                    <Buttons label="Delete" style="px-6 py-2" />
-                    <Buttons label="Print" style="px-6 py-2" />
-                </div>
+                
             </div>
         </div>
     )

@@ -125,7 +125,7 @@ const handleSearch = async () => {
             <Loader show={searched}/>
             <div className="flex justify-between mb-5">
                 <Heading label={"User Master"} />
-                <Buttons click={() => navigate("/User-Creation")} label={"Add"} />                    
+                <Buttons click={() => navigate("/User-Creation", { replace: true })} label={"Add"} />                    
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5 w-full">
@@ -148,10 +148,10 @@ const handleSearch = async () => {
             <div className="mt-5">
                 <Table columns={columns} data={userList} actions={(row) => (
                     <>
-                        <Buttons label={"Edit"} click={() => console.log("Edit:", row)} style="hidden sm:inline" />
+                        <Buttons label={"Edit"} click={() => navigate("/User-Creation", { replace: true })} style="hidden sm:inline" />
                         <Buttons label={"Delete"} click={() => console.log("Print:", row)} style="hidden sm:inline" />
                         {/* Mobile icons */}
-                        <button className="sm:hidden text-lg pt-2.5" onClick={() => console.log("Edit:", row)} >✏️</button>
+                        <button className="sm:hidden text-lg pt-2.5" onClick={() => navigate("/User-Creation", { replace: true })} >✏️</button>
                         <button className="sm:hidden text-xl pt-2.5" onClick={() => console.log("Print:", row)} >🖨️</button>
                     </>
                 )}/>

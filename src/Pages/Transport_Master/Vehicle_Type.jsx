@@ -124,6 +124,8 @@ function Vehicle_Type() {
 
     const [vehicleName, setVehicleName] = useState("");
     const [editvehicleTypeId, setEditVehicleTypeId] = useState(0);
+    const [errors, setErrors] = useState({});
+
 
     const columns = [
         { header: "Vehicle Type", shortHeader: "Vehicle", accessor: "VehicleType" },
@@ -179,36 +181,73 @@ function Vehicle_Type() {
     };
 
     // =================== SAVE / UPDATE ====================== 
-    const handleSave = async () => { 
-        if (!vehicleName.trim()) return 
+    // const handleSave = async () => { 
+    //     if (!vehicleName.trim()) return 
         
-        try { 
-            setSearched(true) 
-            const res = await getVehicleTypeInsertUpdate( 
-                editvehicleTypeId, vehicleName, userId, instId, sessId, 
-            ) 
+    //     try { 
+    //         setSearched(true) 
+    //         const res = await getVehicleTypeInsertUpdate( 
+    //             editvehicleTypeId, vehicleName, userId, instId, sessId, 
+    //         ) 
             
-            const msg = res?.Table?.[0]?.Column1 || "" 
-            const code = msg.split("|")[0] 
-            const text = msg.split("|")[1] 
-            if (code === "M101" || code === "M102") { 
-                alert(text) 
-            } 
-            else if (code === "M200") { 
-                alert(text) 
-            } 
-            else { 
-                alert("Something went wrong") 
-            } 
+    //         const msg = res?.Table?.[0]?.Column1 || "" 
+    //         const code = msg.split("|")[0] 
+    //         const text = msg.split("|")[1] 
+    //         if (code === "M101" || code === "M102") { 
+    //             alert(text) 
+    //         } 
+    //         else if (code === "M200") { 
+    //             alert(text) 
+    //         } 
+    //         else { 
+    //             alert("Something went wrong") 
+    //         } 
             
-            setOpen(false) 
-            fetchVehicleTypeList() 
-        } catch (error) { 
-            console.error("Insert/Update Error:", error) 
-        } finally { 
-            setSearched(false) 
-        } 
-    } 
+    //         setOpen(false) 
+    //         fetchVehicleTypeList() 
+    //     } catch (error) { 
+    //         console.error("Insert/Update Error:", error) 
+    //     } finally { 
+    //         setSearched(false) 
+    //     } 
+    // } 
+    const handleSave = async () => {
+  const newErrors = {};
+
+  if (!vehicleName.trim()) {
+    newErrors.vehicleName = "Vehicle is required";
+  }
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
+
+  try {
+    setSearched(true);
+    const res = await getVehicleTypeInsertUpdate(
+      editvehicleTypeId,
+      vehicleName,
+      userId,
+      instId,
+      sessId
+    );
+
+    const msg = res?.Table?.[0]?.Column1 || "";
+    const code = msg.split("|")[0];
+    const text = msg.split("|")[1];
+
+    alert(text);
+    setOpen(false);
+    setErrors({});
+    fetchVehicleTypeList();
+  } catch (error) {
+    console.error("Insert/Update Error:", error);
+  } finally {
+    setSearched(false);
+  }
+};
+
 
     // =================== ROUTE DELETE ====================== 
     const handleDelete = async (vehicleid) => { 
@@ -225,7 +264,7 @@ function Vehicle_Type() {
                 console.log(msg) 
                 
                 if (msg.startsWith("M103")) { 
-                    fetchRoutes() 
+                    fetchVehicleTypeList();  
                     alert("Vehicle Type Deleted")  
                 } 
             } 
@@ -268,8 +307,16 @@ function Vehicle_Type() {
                 <FormInput
                     label={"Vehicle"}
                     placeholder={"Enter Vehicle"}
-                    value={vehicleName}
-                    onChange={(e) => setVehicleName(e.target.value)}
+                    value={vehicleName} 
+                     error={errors.vehicleName}
+                    onChange={(e) => { 
+                        setVehicleName(e.target.value); 
+                        if (errors.vehicleName) { 
+                            setErrors((prev) => ({ 
+                                ...prev, vehicleName: "", 
+                            })); 
+                        } 
+                    }} 
                 />
 
                 <div className="flex justify-end gap-3 mt-5">

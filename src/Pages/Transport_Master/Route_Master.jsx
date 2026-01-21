@@ -89,7 +89,9 @@ function Route_Master() {
     const data = routeList
     const instId = localStorage.getItem("InstituteID");
     const sessId = localStorage.getItem("SessionID");
-    const userId = localStorage.getItem("UserId")
+    const userId = localStorage.getItem("UserId"); 
+    const [routeError, setRouteError] = useState("");
+
 
     // =================== ROUTE LIST ======================
     useEffect(() => { 
@@ -136,7 +138,10 @@ function Route_Master() {
     
     // =================== ROUTE SAVE ====================== 
     const handleSave = async () => { 
-        if (!routeName.trim()) return 
+        if (!routeName.trim()) { 
+            setRouteError("Route name is required"); 
+            return; 
+        } 
         
         try { 
             setSearched(true) 
@@ -149,8 +154,10 @@ function Route_Master() {
                 console.log(message) 
             } 
             
-            setOpen(false) 
-            fetchRoutes() 
+            setOpen(false); 
+            setRouteName(""); 
+            setRouteError("");
+            fetchRoutes(); 
         } catch (error) { 
             console.error("Insert/Update Error:", error) 
         } finally { 
@@ -184,6 +191,7 @@ function Route_Master() {
         } 
     } 
     
+    
     return ( 
         <div className='w-full h-full bg-white flex flex-col px-4 py-2'> 
             
@@ -202,8 +210,13 @@ function Route_Master() {
                 children={ 
                     <> 
                         <FormInput 
-                            label={"Route"} placeholder={"Enter Route"} value={routeName} 
-                            onChange={(e) => setRouteName(e.target.value)} 
+                            label={"Route"} placeholder={"Enter Route"} 
+                            value={routeName} error={routeError} 
+                            onChange={(e) => {
+                                setRouteName(e.target.value); 
+                                // ✅ clear error while typing 
+                                if (routeError) setRouteError("");
+                            }} 
                         /> 
                         
                         <div className="flex justify-end gap-3 mt-5"> 

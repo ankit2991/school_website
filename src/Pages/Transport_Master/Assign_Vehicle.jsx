@@ -242,7 +242,6 @@ const handleSearch = () => {
       {/* Header */}
       <div className="flex justify-between mb-5">
         <Heading label={"Assign Vehicle"} />
-        <Buttons click={() => navigate("/Assign-Vehicle")} label={"Add"} />
       </div>
 
       {/* Filters */}
@@ -296,7 +295,8 @@ const handleSearch = () => {
               click={() => {
                 if (!isAssigned) {
                   navigate("/Assign-Vehicle", {
-                    state: { studentId: row.id },
+                    state: { studentId: row.id }, 
+                    replace: true, 
                   });
                 }
               }}
@@ -311,7 +311,8 @@ const handleSearch = () => {
               click={() => {
                 if (isAssigned) {
                   navigate("/Assign-Vehicle", {
-                    state: { studentId: row.id },
+                    state: { studentId: row.id }, 
+                    replace: true
                   });
                 }
               }}
@@ -331,6 +332,7 @@ const handleSearch = () => {
                 !isAssigned &&
                 navigate("/Assign-Vehicle", {
                   state: { studentId: row.id },
+                  replace: true, 
                 })
               }
             >
@@ -345,7 +347,8 @@ const handleSearch = () => {
               onClick={() =>
                 isAssigned &&
                 navigate("/Assign-Vehicle", {
-                  state: { studentId: row.id },
+                  state: { studentId: row.id }, 
+                  replace: true, 
                 })
               }
             >

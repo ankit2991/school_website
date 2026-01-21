@@ -20,3 +20,7 @@ export const flattenMenu = (menu, parentTrail = []) => {
 
   return routes;
 };
+
+
+
+

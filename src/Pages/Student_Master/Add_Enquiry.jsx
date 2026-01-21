@@ -19,6 +19,8 @@ function Add_Enquiry() {
   const [casteList, setCasteList] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
   const [EnqNo, setEnqNo] = useState(null);
+  const [errors, setErrors] = useState({});
+
 
   const [formData, setFormData] = useState({ 
     eqid: 0, eqno: 0, enqDate: "", ffees: "", classId: "", casteId: "", name: "", gender: "", dob: "", father: "", fatherOcc: "", 
@@ -27,11 +29,63 @@ function Add_Enquiry() {
     lastschool: "", lastclass: "", percent: "", 
   }); 
   
+  /* ================= VALIDATION ================= */ 
+  const validate = () => { 
+    const newErrors = {}; 
+    if (!formData.name.trim()) { 
+      newErrors.name = "First name is required"; 
+    } 
+    
+    if (!formData.gender) { 
+      newErrors.gender = "Gender is required"; 
+    } 
+    
+    if (!formData.father.trim()) { 
+      newErrors.father = "Father's name is required"; 
+    } 
+    
+    if (!formData.fatherOcc.trim()) { 
+      newErrors.fatherOcc = "Father's occupation is required"; 
+    } 
+    
+    if (!formData.fatherMobile.trim()) { 
+      newErrors.fatherMobile = "Father's mobile number is required"; 
+    } else if (!/^[0-9]{10}$/.test(formData.fatherMobile)) { 
+      newErrors.fatherMobile = "Enter valid 10 digit mobile number"; 
+    } 
+    
+    if (!formData.mother.trim()) { 
+      newErrors.mother = "Mother's name is required"; 
+    } 
+    
+    if (!formData.address.trim()) { 
+      newErrors.address = "Address is required"; 
+    } 
+    
+    if (!formData.lastschool.trim()) { 
+      newErrors.lastschool = "Last school name is required"; 
+    } 
+    
+    setErrors(newErrors); 
+    return Object.keys(newErrors).length === 0; 
+  };
+
+
   /* ================= CHANGE HANDLER ================= */ 
-  const handleChange = (e) => { 
-    const { name, value } = e.target; 
-    setFormData((p) => ({ ...p, [name]: value })); 
-  }; 
+  // const handleChange = (e) => { 
+  //   const { name, value } = e.target; 
+  //   setFormData((p) => ({ ...p, [name]: value })); 
+  // }; 
+  const handleChange = (e) => {
+  const { name, value } = e.target;
+
+  setFormData((p) => ({ ...p, [name]: value }));
+
+  if (errors[name]) {
+    setErrors((p) => ({ ...p, [name]: "" }));
+  }
+};
+
   
   /* ================= CLEAR FORM ================= */ 
   const clearForm = () => { 
@@ -114,6 +168,10 @@ function Add_Enquiry() {
   
   /* ================= SAVE ================= */ 
   const handleSave = async () => { 
+    if (!validate()) { 
+      return; 
+    } 
+    
     if (!instId || !userId || !sessId) { 
       alert("Session expired"); 
       return; 
@@ -122,12 +180,8 @@ function Add_Enquiry() {
     setPageLoading(true); 
     try { 
       const res = await getEnquiryInsert({ 
-        instId, 
-        sessId, 
-        userId, 
-        ...formData, 
-        enqDate: formatDateForApi(formData.enqDate), 
-        dob: formatDateForApi(formData.dob), 
+        instId, sessId, userId, ...formData, 
+        enqDate: formatDateForApi(formData.enqDate), dob: formatDateForApi(formData.dob), 
       }); 
       
       const msg = res?.Table?.[0]?.Msg || ""; 
@@ -190,14 +244,14 @@ function Add_Enquiry() {
         <Heading2 label="Student Details" /> 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-5"> 
           <FormInput 
-            label="First Name" name={"name"} 
-            value={formData.name} onChange={handleChange} 
+            label="First Name" name={"name"} value={formData.name} 
+            onChange={handleChange} error={errors.name}
           /> 
           
           <Options 
             label="Gender" name="gender" value={formData.gender} 
             optionMsg="Select Gender" options={["Boy", "Girl"]} 
-            onChange={handleChange} 
+            onChange={handleChange} error={errors.gender} 
           /> 
           
           <FormInput 
@@ -217,23 +271,23 @@ function Add_Enquiry() {
         <Heading2 label={"Personal Details"} /> 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6 w-full"> 
           <FormInput 
-            label={"Father's Name"} placeholder={"Enter Father's Name"} 
-            name={"father"} value={formData.father} onChange={handleChange} 
+            label={"Father's Name"} placeholder={"Enter Father's Name"} name={"father"} 
+            value={formData.father} onChange={handleChange} error={errors.father} 
           /> 
           
           <FormInput 
-            label={"Occupation"} placeholder={"Enter Father's Occupation"} 
-            name={"fatherOcc"} value={formData.fatherOcc} onChange={handleChange} 
+            label={"Occupation"} placeholder={"Enter Father's Occupation"} name={"fatherOcc"} 
+            value={formData.fatherOcc} onChange={handleChange} error={errors.fatherOcc} 
           /> 
           
           <FormInput 
-            label={"Mobile No."} placeholder={"Enter Father's Mobile No."} 
-            name={"fatherMobile"} value={formData.fatherMobile} onChange={handleChange} 
+            label={"Mobile No."} placeholder={"Enter Father's Mobile No."} name={"fatherMobile"} 
+            value={formData.fatherMobile} onChange={handleChange} error={errors.fatherMobile}
           /> 
           
           <FormInput 
-            label={"Mother's Name"} placeholder={"Enter Mother's Name"} 
-            name={"mother"} value={formData.mother} onChange={handleChange} 
+            label={"Mother's Name"} placeholder={"Enter Mother's Name"} name={"mother"} 
+            value={formData.mother} onChange={handleChange} error={errors.mother} 
           /> 
           
           <FormInput 
@@ -297,7 +351,7 @@ function Add_Enquiry() {
         <div className="space-y-5 w-full mb-6"> 
           <FormInput 
             label={"Address"} placeholder={"Enter Address"} name={"address"} 
-            value={formData.address} onChange={handleChange} 
+            value={formData.address} onChange={handleChange} error={errors.address} 
           /> 
           
           <FormInput 
@@ -331,7 +385,7 @@ function Add_Enquiry() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-5 w-full"> 
           <FormInput 
             label={"Last School"} placeholder={"Enter School Name"} name={"lastschool"} 
-            value={formData.lastschool} onChange={handleChange} 
+            value={formData.lastschool} onChange={handleChange} error={errors.lastschool} 
           /> 
           
           <FormInput 

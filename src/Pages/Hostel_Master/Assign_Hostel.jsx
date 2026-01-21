@@ -122,7 +122,6 @@ useEffect(() => {
       <Loader show={searched}/> 
       <div className="flex justify-between mb-5"> 
         <Heading label={"Assign Hostel"} /> 
-        <Buttons click={() => navigate("/Assign-Hostel")} label={"Add"} /> 
       </div> 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 mb-5 w-full"> 
         <Options 
@@ -153,14 +152,14 @@ useEffect(() => {
             <Buttons 
               label={"Add"} 
               click={() => { if (!isAssigned) 
-                {navigate("/Assign-Hostel", { state: row.Id, });} 
+                {navigate("/Assign-Hostel", { state: row.Id, replace: true });} 
               }} 
               disabled={isAssigned} 
               style={`hidden sm:inline ${isAssigned ? "opacity-50 cursor-not-allowed" : ""}`} 
             /> 
             <Buttons 
               label={"Edit"} click={() => { if (isAssigned) 
-                {navigate("/Assign-Hostel", { state: row.Id }); } 
+                {navigate("/Assign-Hostel", { state: row.Id, replace: true }); } 
               }} 
               disabled={!isAssigned} 
               style={`hidden sm:inline ${!isAssigned ? "opacity-50 cursor-not-allowed" : ""}`} 
@@ -171,7 +170,7 @@ useEffect(() => {
             <button 
               className={`sm:hidden text-xl pt-2.5 ${isAssigned ? "opacity-50 cursor-not-allowed" : ""}`} 
               disabled={isAssigned} 
-              onClick={() => !isAssigned && navigate("/Assign-Hostel", {state: row.Id,}) } 
+              onClick={() => !isAssigned && navigate("/Assign-Hostel", {state: row.Id, replace: true }) } 
             > 
               ➕ 
             </button> 
@@ -179,7 +178,7 @@ useEffect(() => {
             <button 
               className={`sm:hidden text-lg pt-2.5 ${!isAssigned ? "opacity-50 cursor-not-allowed" : ""}`} 
               disabled={!isAssigned} 
-              onClick={() => isAssigned && navigate("/Assign-Hostel", {state: row.Id ,}) } 
+              onClick={() => isAssigned && navigate("/Assign-Hostel", {state: row.Id, replace: true }) } 
             > 
               ✏️ 
             </button> 

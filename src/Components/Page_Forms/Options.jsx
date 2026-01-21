@@ -40,7 +40,7 @@
 
 // export default Options
 
-import React from "react";
+
 
 function Options({
   label,
@@ -48,12 +48,13 @@ function Options({
   labelstyle,
   name,
   bool = false,
-  style,
+  style = "",
   options = [],
   onChange,
   value,
   valueKey = "Id",
   labelKey = "Name",
+  error, // ✅
 }) {
   const hasData = Array.isArray(options) && options.length > 0;
   const isDisabled = bool || !hasData;
@@ -71,21 +72,23 @@ function Options({
         disabled={isDisabled}
         onChange={onChange}
         value={value}
-        className={`${style} w-full p-1 rounded-lg border border-gray-400
-          ${isDisabled ? "bg-gray-200 cursor-not-allowed" : "bg-gray-100"}`}
+        className={`
+          w-full p-1 rounded-lg shadow-md
+          border-2 ${error ? "border-red-500" : "border-gray-400"}
+          ${isDisabled ? "bg-gray-200 cursor-not-allowed" : "bg-gray-100"}
+          focus:outline-none
+          ${error ? "focus:ring-2 focus:ring-red-400" : "focus:ring-2 focus:ring-blue-500"}
+          ${style}
+        `}
       >
-        {/* Default / Status option */}
         {!hasData ? (
-          <option value="">
-            No data available
-          </option>
+          <option value="">No data available</option>
         ) : (
           <option value="" hidden>
             {optionMsg}
           </option>
         )}
 
-        {/* Options */}
         {hasData &&
           options.map((opt, i) => (
             <option
@@ -96,8 +99,87 @@ function Options({
             </option>
           ))}
       </select>
+
+      {/* 🔴 ERROR TEXT */}
+      {error && (
+        <span className="text-red-500 text-xs mt-1">
+          {error}
+        </span>
+      )}
     </div>
   );
 }
 
 export default Options;
+
+
+
+
+// import React from "react";
+
+// function Options({
+//   label,
+//   optionMsg = "---Select---",
+//   labelstyle,
+//   name,
+//   bool = false,
+//   style,
+//   options = [],
+//   onChange,
+//   value,
+//   valueKey = "Id",
+//   labelKey = "Name",
+//   error,
+// }) {
+//   const hasData = Array.isArray(options) && options.length > 0;
+//   const isDisabled = bool || !hasData;
+
+//   return (
+//     <div className="flex flex-col w-full">
+//       {label && (
+//         <h2 className={`text-md font-medium mb-1 text-gray-700 ${labelstyle}`}>
+//           {label}
+//         </h2>
+//       )}
+
+//       <select
+//         name={name}
+//         disabled={isDisabled}
+//         onChange={onChange}
+//         value={value}
+//         className={`${style} w-full p-1 rounded-lg border border-gray-400
+//           ${isDisabled ? "bg-gray-200 cursor-not-allowed" : "bg-gray-100"}`}
+//       >
+//         {/* Default / Status option */}
+//         {!hasData ? (
+//           <option value="">
+//             No data available
+//           </option>
+//         ) : (
+//           <option value="" hidden>
+//             {optionMsg}
+//           </option>
+//         )}
+
+//         {/* Options */}
+//         {hasData &&
+//           options.map((opt, i) => (
+//             <option
+//               key={i}
+//               value={typeof opt === "object" ? opt[valueKey] : opt}
+//             >
+//               {typeof opt === "object" ? opt[labelKey] : opt}
+//             </option>
+//           ))}
+//       </select>
+//       {/* ✅ ERROR MESSAGE */}
+//       {error && (
+//         <span className="text-red-500 text-xs mt-1">
+//           {error}
+//         </span>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default Options;

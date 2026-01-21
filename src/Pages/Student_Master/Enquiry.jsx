@@ -376,7 +376,7 @@ function Enquiry() {
 
       <div className="flex justify-between mb-5">
         <Heading label="Enquiry Master" />
-        <Buttons click={() => navigate("/AddEnquiry")} label="Add" />
+        <Buttons click={() => navigate("/AddEnquiry", { replace: true })} label="Add" />
       </div>
 
       <div className="grid sm:grid-cols-2 gap-6 mb-5">
@@ -416,7 +416,7 @@ function Enquiry() {
                   label="Edit"
                   style="hidden sm:inline"
                   click={() =>
-                    navigate("/AddEnquiry", { state: { eqid: row.id } })
+                    navigate("/AddEnquiry", { state: { eqid: row.id }, replace: true  })
                   }
                 />
 

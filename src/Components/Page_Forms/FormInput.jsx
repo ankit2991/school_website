@@ -68,6 +68,7 @@
 
 
 
+
 function FormInput({
   label,
   labelStyle = "",
@@ -79,11 +80,12 @@ function FormInput({
   value,
   onChange,
   rows = 4,
+  error, // ✅
 }) {
   return (
     <div className="flex flex-col w-full">
       {label && (
-        <h2 className={`cursor-default text-md font-medium mb-1 ${labelStyle} text-gray-700`}>
+        <h2 className={`text-md font-medium mb-1 text-gray-700 ${labelStyle}`}>
           {label}
         </h2>
       )}
@@ -96,9 +98,13 @@ function FormInput({
             onChange={onChange}
             placeholder={placeholder}
             rows={rows}
-            className={`w-full bg-gray-100 border border-gray-400 p-1 rounded-lg shadow-md resize-y
-              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-              text-start align-top ${inputStyle}`}
+            className={`
+              w-full p-1 rounded-lg shadow-md resize-y bg-gray-100
+              border-2 ${error ? "border-red-500" : "border-gray-400"}
+              focus:outline-none
+              ${error ? "focus:ring-2 focus:ring-red-400" : "focus:ring-2 focus:ring-blue-500"}
+              ${inputStyle}
+            `}
           />
         ) : (
           <input
@@ -107,9 +113,14 @@ function FormInput({
             value={value ?? ""}
             onChange={onChange}
             placeholder={placeholder}
-            className={`w-full bg-gray-100 border border-gray-400 p-1 rounded-lg shadow-md
-              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-              ${type === "date" ? "pr-10" : ""} ${inputStyle}`}
+            className={`
+              w-full p-1 rounded-lg shadow-md bg-gray-100
+              border-2 ${error ? "border-red-500" : "border-gray-400"}
+              focus:outline-none
+              ${error ? "focus:ring-2 focus:ring-red-400" : "focus:ring-2 focus:ring-blue-500"}
+              ${type === "date" ? "pr-10" : ""}
+              ${inputStyle}
+            `}
           />
         )}
 
@@ -119,8 +130,83 @@ function FormInput({
           </span>
         )}
       </div>
+
+      {/* 🔴 ERROR TEXT */}
+      {error && (
+        <span className="text-red-500 text-xs mt-1">
+          {error}
+        </span>
+      )}
     </div>
   );
 }
 
 export default FormInput;
+
+
+
+
+
+// function FormInput({
+//   label,
+//   labelStyle = "",
+//   type = "text",
+//   as = "input",
+//   name,
+//   placeholder,
+//   inputStyle = "",
+//   value,
+//   onChange,
+//   rows = 4,
+//   error,
+// }) {
+//   return (
+//     <div className="flex flex-col w-full">
+//       {label && (
+//         <h2 className={`cursor-default text-md font-medium mb-1 ${labelStyle} text-gray-700`}>
+//           {label}
+//         </h2>
+//       )}
+
+//       <div className="relative w-full">
+//         {as === "textarea" ? (
+//           <textarea
+//             name={name}
+//             value={value ?? ""}
+//             onChange={onChange}
+//             placeholder={placeholder}
+//             rows={rows}
+//             className={`w-full bg-gray-100 border border-gray-400 p-1 rounded-lg shadow-md resize-y
+//               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+//               text-start align-top ${inputStyle}`}
+//           />
+//         ) : (
+//           <input
+//             type={type}
+//             name={name}
+//             value={value ?? ""}
+//             onChange={onChange}
+//             placeholder={placeholder}
+//             className={`w-full bg-gray-100 border border-gray-400 p-1 rounded-lg shadow-md
+//               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+//               ${type === "date" ? "pr-10" : ""} ${inputStyle}`}
+//           />
+//         )}
+
+//         {type === "date" && (
+//           <span className="md:hidden absolute inset-y-0 right-3 flex items-center text-gray-500 pointer-events-none">
+//             📅
+//           </span>
+//         )}
+//       </div>
+//       {/* ✅ ERROR MESSAGE */}
+//       {error && (
+//         <span className="text-red-500 text-xs mt-1">
+//           {error}
+//         </span>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default FormInput;

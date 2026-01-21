@@ -96,7 +96,6 @@ function Exam_Type2() {
                 <div className="flex justify-around sm:justify-end space-x-0 sm:space-x-10 pt-2"> 
                     <Buttons label={"Cancel"} style='px-6 py-2'/> 
                     <Buttons label={"Save"} style='px-6 py-2' click={handleSave} /> 
-                    <Buttons label={"Print"} style='px-6 py-2'/> 
                 </div> 
             </div> 
         </div> 

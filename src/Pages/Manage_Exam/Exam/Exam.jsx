@@ -177,6 +177,8 @@ function Exam_Type() {
     const [examName, setExamName] = useState("")
     const [examAlias, setExamAlias] = useState("")
     const [editExamId, setEditExamId] = useState(0)
+    const [errors, setErrors] = useState({});
+
 
     const columns = [
         { header: "Exam Name", shortHeader: "Exam", accessor: "Name" },
@@ -200,6 +202,19 @@ function Exam_Type() {
             setSearched(false)
         }
     }
+
+    // =================== VALIDATION =================== 
+    const validateForm = () => {
+    const newErrors = {};
+
+    if (!examName.trim()) {
+        newErrors.examName = "Exam name is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+};
+
 
     // =================== FILTER ===================
     const filteredExams = examList.filter(exam =>
@@ -228,7 +243,8 @@ function Exam_Type() {
 
     // =================== SAVE ===================
     const handleSave = async () => {
-        if (!examName.trim()) return
+        // if (!examName.trim()) return
+        if (!validateForm()) return;
 
         try {
             setSearched(true)
@@ -314,7 +330,16 @@ function Exam_Type() {
                             label={"Exam Name"}
                             placeholder={"Enter Exam Name"}
                             value={examName}
-                            onChange={(e) => setExamName(e.target.value)}
+                            // onChange={(e) => setExamName(e.target.value)}
+                            error={errors.examName}
+    onChange={(e) => {
+        setExamName(e.target.value);
+
+        // clear error while typing
+        if (errors.examName) {
+            setErrors(prev => ({ ...prev, examName: "" }));
+        }
+    }}
                         />
 
                         <FormInput

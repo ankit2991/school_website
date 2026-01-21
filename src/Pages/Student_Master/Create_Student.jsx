@@ -138,7 +138,7 @@ useEffect(() => {
       {/* HEADER */}
       <div className="flex justify-between mb-5">
         <Heading label="Create Student" />
-        <Buttons click={() => navigate("/Create-Student")} label="Add" />
+        <Buttons click={() => navigate("/Create-Student", { replace: true })} label="Add" />
       </div>
 
       {/* FILTERS */}
@@ -185,7 +185,8 @@ useEffect(() => {
             style="hidden sm:inline"
             click={() =>
               navigate("/Create-Student", {
-                state: { studId: row.id, classId: selectedClassId },
+                state: { studId: row.id, classId: selectedClassId }, 
+                replace: true, 
               })
             }
           />
@@ -201,7 +202,8 @@ useEffect(() => {
             className="sm:hidden text-lg"
             onClick={() =>
               navigate("/Create-Student", {
-                state: { studId: row.id, classId: selectedClassId },
+                state: { studId: row.id, classId: selectedClassId }, 
+                replace: true, 
               })
             }
           >
