@@ -91,31 +91,50 @@ function Hostel_Due_Fees() {
   useEffect(() => { 
     fetchMonthList(); 
   }, []); 
-  const fetchMonthList = async () => { 
-    try { 
-      setSearched(true); 
-      const res = await getMonthList(); 
-      if (res?.Table) { 
-        setMonthList(res.Table); 
-      } 
-    } catch (error) { 
-      console.error("Stop API Error:", error); 
-    } finally { 
-      setSearched(false); 
-    } 
-  }; 
+  // const fetchMonthList = async () => { 
+  //   try { 
+  //     setSearched(true); 
+  //     const res = await getMonthList(); 
+  //     if (res?.Table) { 
+  //       setMonthList(res.Table); 
+  //     } 
+  //   } catch (error) { 
+  //     console.error("Stop API Error:", error); 
+  //   } finally { 
+  //     setSearched(false); 
+  //   } 
+  // }; 
+
+  const fetchMonthList = async () => {
+  try {
+    setSearched(true);
+    const res = await getMonthList();
+
+    if (res?.Table && res.Table.length > 0) {
+      setMonthList(res.Table);
+
+      // ✅ Auto select first month
+      setSelectedMonthId(res.Table[0].ID);
+    }
+  } catch (error) {
+    console.error("Month API Error:", error);
+  } finally {
+    setSearched(false);
+  }
+};
+
   
   // =================== SEARCH ====================== 
   const HandleSearch = async () => { 
-    if (!selectedMonthId) { 
-      alert("Please select Month"); 
-      return; 
-    } 
+    // if (!selectedMonthId) { 
+    //   alert("Please select Month"); 
+    //   return; 
+    // } 
     try { 
       setSearched(true); 
       setShowTable(false); 
       setNoData(false); 
-      const res = await getHostelDueReport( instId, sessId, selectedClassId || "", selectedMonthId ); 
+      const res = await getHostelDueReport( instId, sessId, selectedClassId || "0", selectedMonthId || "0" ); 
       if (res?.Table) { 
         const formatted = res.Table.map((item, index) => ({ 
           id: item.Id, serial: index + 1, name: item.Name, class: item.Class, fname: item.FatherName, 
@@ -205,12 +224,41 @@ function Hostel_Due_Fees() {
           /> 
           
           <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5"> 
-            <Buttons 
+            {/* <Buttons 
               label="Summary Print" click={() => { window.open("/pdf/5HostelReportViewer.pdf", "_blank"); }} 
-            /> 
-            <Buttons 
+            />  */}
+           <Buttons
+  label="Summary Print"
+  click={() => {
+    navigate("/Hostel-Due-Summary-Print", {
+  state: {
+    classId: selectedClassId || "0",
+    monthId: selectedMonthId || "0",
+  },
+});
+
+  }}
+/>
+            {/* <Buttons 
               label="Print" click={() => { window.open("/pdf/5HostelReportViewer.pdf", "_blank"); }} 
-            /> 
+            />  */}
+
+            <Buttons
+  label="Print"
+  click={() => {
+    const selected = tableData.filter(d =>
+      selectedStudents.includes(d.id)
+    );
+
+    // ✅ if nothing selected → send ALL data
+    const dataToPrint = selected.length ? selected : tableData;
+
+    navigate("/Hostel-Due-Print", {
+      state: { receipts: dataToPrint },
+    });
+  }}
+  style="whitespace-nowrap h-10"
+/>
           </div> 
         </> 
       )} 

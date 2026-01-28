@@ -378,11 +378,6 @@ function Sibling_Details() {
       {/* HEADER */}
       <div className="flex justify-between items-center mb-5">
         <Heading label="Sibling Details" style="text-[22px] sm:text-3xl" />
-        {showTable && (
-          <Buttons 
-          label="Print" 
-          click={() => { window.open("/pdf/2AddReportViewer.pdf", "_blank"); }} 
-        /> )}
       </div>
 
       {/* FILTERS */}

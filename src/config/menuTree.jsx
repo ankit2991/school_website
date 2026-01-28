@@ -529,7 +529,13 @@ export const menuTree = [
           }] },
           { name: "Exam", path: "/Exam", resetToHome: true, },
           { name: "Assign Roll No.", path: "/Assign-Roll", resetToHome: true, },
-          { name: "Exam Schedule", path: "/Schedule", resetToHome: true, },
+          { name: "Exam Schedule", path: "/Schedule", resetToHome: true, ubmenus: [
+          {
+            name: "Exam Schedule Form",
+            path: "/Exam-Schedule",
+            hidden: true,
+            resetToHome: true,
+          }] },
           { name: "Assign Exam Hole", path: "/Assign-Exam-Hole", resetToHome: true, },
         ],
       },

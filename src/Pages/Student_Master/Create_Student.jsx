@@ -191,11 +191,24 @@ useEffect(() => {
             }
           />
 
-          <Buttons
+          {/* <Buttons
             label="Print"
             style="hidden sm:inline"
             click={() => { window.open("/pdf/2AddReportViewer.pdf", "_blank"); }}
-          />
+          /> */}
+          <Buttons
+  label="Print"
+  click={() =>
+    navigate("/Create-Student-Print", {
+      state: {
+        studId: row.id,              // selected student
+        classId: selectedClassId
+        // instituteName,             // 👈 from API
+        // sessionName,               // 👈 from API
+      },
+    })
+  }
+/>
 
           {/* Mobile icons */}
           <button

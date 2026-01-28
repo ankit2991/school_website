@@ -341,9 +341,8 @@ function Subject() {
                 <>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5">
                         <FormInput
-                            label="Name"
-                            value={form.name}
-                            error={errors.name}
+                            label="Name" placeholder={"Enter  Name "} 
+                            value={form.name} error={errors.name} 
                             onChange={(e) => {
                                 setForm(prev => ({ ...prev, name: e.target.value }))
                                 if (errors.name) setErrors(prev => ({ ...prev, name: "" }))
@@ -351,8 +350,7 @@ function Subject() {
                         />
 
                         <FormInput
-                            label="Alias"
-                            value={form.alias}
+                            label="Alias" placeholder={"Enter Alias "} value={form.alias} 
                             onChange={(e) =>
                                 setForm(prev => ({ ...prev, alias: e.target.value }))
                             }
@@ -360,8 +358,7 @@ function Subject() {
                     </div>
 
                     <FormInput
-                        label="Order No"
-                        value={form.orderno}
+                        label="Order No" placeholder={"Enter Order No. "} value={form.orderno} 
                         onChange={(e) =>
                             setForm(prev => ({ ...prev, orderno: e.target.value }))
                         }

@@ -236,12 +236,17 @@ useEffect(() => {
 
          <div className="flex flex-col sm:flex-row sm:justify-between gap-y-6 mb-5">
             <div className="flex justify-center sm:justify-end space-x-0 sm:space-x-10 pt-5">
-               <Buttons label={"Clear"} style="px-6 py-2" />
+               <Buttons label={"Clear"} />
             </div>
-            <div className="flex justify-around sm:justify-end space-x-0 sm:space-x-10 mt-5 ">
-               <Buttons label={"Parent Signature"} style="px-6 py-2" />
-               <Buttons label={"Addmission Form"} style="px-6 py-2" />
-            </div>
+            {/* <div className="flex justify-around sm:justify-end space-x-0 sm:space-x-10  ">
+               <Buttons label={"Parent Signature"} />
+               <Buttons label={"Addmission Form"} />
+            </div> */}
+            <div className="flex flex-col [@media(min-width:370px)]:flex-row justify-around sm:justify-end gap-3 sm:gap-10 sm:mt-5">
+  <Buttons label={"Parent Signature"} />
+  <Buttons label={"Admission Form"} />
+</div>
+
          </div> </> )}
          {/* ✅ Dynamic div for spacing */}
          {/* {rowDetailOpen && <div className='h-100'></div>} */}

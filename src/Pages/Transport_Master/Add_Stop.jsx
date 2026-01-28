@@ -378,7 +378,7 @@ function Add_Stop() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5 w-full"> 
                             <FormInput 
                                 label="Destination" value={form.destination} 
-                                error={errors.destination} 
+                                placeholder={"Enter Destination"} error={errors.destination} 
                                 onChange={(e) => {
                                     setForm({ ...form, destination: e.target.value }); 
                                     if (errors.destination) { 
@@ -391,6 +391,7 @@ function Add_Stop() {
                             
                             <FormInput 
                                 label="Cost" value={form.cost} error={errors.cost} 
+                                placeholder={"Enter Cost"} 
                                 onChange={(e) => { 
                                     setForm({ ...form, cost: e.target.value }); 
                                     if (errors.cost) { 
@@ -403,12 +404,13 @@ function Add_Stop() {
                             
                             <Options 
                                 label="Route" options={routeList} labelKey="RouteName" 
-                                valueKey="Id" value={form.routeId} 
+                                optionMsg="Select Route" valueKey="Id" value={form.routeId} 
                                 onChange={(e) => setForm({ ...form, routeId: e.target.value })} 
                             /> 
                             
                             <FormInput 
                                 label="Route Order No." value={form.orderNo} error={errors.orderNo} 
+                                placeholder={"Enter Route Order No."} 
                                 onChange={(e) => { 
                                     setForm({ ...form, orderNo: e.target.value }); 
                                     if (errors.orderNo) { 

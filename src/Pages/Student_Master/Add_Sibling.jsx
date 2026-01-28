@@ -123,7 +123,7 @@ const handleSearch = () => {
       <Loader show={loading} />
       <div className="flex justify-between mb-5">
         <Heading label={"Add Sibling"} />
-        <Buttons click={() => navigate("/AddSibling", { replace: true })} label={"Add"} />
+        {/* <Buttons click={() => navigate("/AddSibling", { replace: true })} label={"Add"} /> */}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2  gap-6 mb-5 w-full">
         <Options

@@ -221,10 +221,57 @@ function Fee_Details() {
       <div className="w-full h-full bg-white flex flex-col px-4 py-2">
          <div className="flex justify-between items-center mb-5">
             <Heading label="Student Fee Details" />
-            <Buttons 
+            {/* <Buttons 
           label="Print" 
           click={() => { window.open("/pdf/3AddReportViewer.pdf", "_blank"); }} 
-        />
+        /> */}
+        {/* <Buttons
+  label="Print"
+  click={() => {
+    if (selectedRows.length === 0) {
+      alert("Please select at least one receipt");
+      return;
+    }
+
+    const selectedData = feeData.filter((r) =>
+      selectedRows.includes(r.id)
+    );
+
+    navigate("/Fee-Receipt-Print", {
+      state: { receipts: selectedData },
+    });
+  }}
+/> */}
+<Buttons
+  label="Print"
+  click={() => {
+    if (selectedRows.length === 0) {
+      alert("Please select at least one receipt");
+      return;
+    }
+
+    const selectedData = feeData.filter(r =>
+      selectedRows.includes(r.id)
+    );
+
+    navigate("/Fee-Receipt-Print", {
+      state: { receipts: selectedData },
+    });
+  }}
+/>
+
+
+{/* <Buttons
+  label="Print"
+  click={() => {
+   navigate("/Fee-Receipt-Print");
+    if (selectedRows.length === 0) {
+      alert("Please select at least one receipt");
+      return;
+    }
+  }}
+/> */}
+
          </div>
 
          <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px_1fr] gap-6 mb-5">

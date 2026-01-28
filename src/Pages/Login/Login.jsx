@@ -220,6 +220,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getlogin } from "../../services/api";
 import Loader from "../../Components/Page_Forms/Loader";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 
 function Login() { 
    const [loginForm, setLoginForm] = useState({Id: "", Password: "",}); 
@@ -228,6 +230,8 @@ function Login() {
    
    const authToken = localStorage.getItem("authToken"); 
    const tokenParsed = JSON.parse(authToken); 
+   const [showPassword, setShowPassword] = useState(false);
+
    console.log("CONSOLE", tokenParsed); 
 
    useEffect(() => {
@@ -368,7 +372,7 @@ function Login() {
                            focus:scale-[1.03] 
                         " 
                      />
-                     <input
+                     {/* <input
                         type="password"
                         placeholder="Password"
                         // value={password}
@@ -385,7 +389,46 @@ function Login() {
                            focus:shadow-yellow-300/40 
                            focus:shadow-2xl focus:scale-[1.03] 
                         " 
-                     /> 
+                     />  */}
+                    <div className="relative">
+   <input
+      type={showPassword ? "text" : "password"}
+      placeholder="Password"
+      value={loginForm?.Password}
+      name="Password"
+      onChange={handleChange}
+      className="
+         w-full
+         bg-white/95 p-3 pr-12 rounded-md outline-none
+         text-gray-700 placeholder:text-gray-500 caret-[#CC3015]
+         transition-all duration-300 ease-out shadow-gray-700/80
+         hover:shadow-lg hover:-translate-y-[1px]
+         focus:ring-2 focus:ring-yellow-300/80
+         focus:shadow-yellow-300/40
+         focus:shadow-2xl focus:scale-[1.03]
+      "
+   />
+
+   {/* Eye icon inside input */}
+   <span
+      onClick={() => setShowPassword(!showPassword)}
+      className="
+         absolute right-4 top-1/2 -translate-y-1/2
+         cursor-pointer text-gray-700
+         hover:text-[#CC3015]
+         transition-colors
+      "
+   >
+      {showPassword ? (
+         <FaEyeSlash size={22} />
+      ) : (
+         <FaEye size={22} />
+      )}
+   </span>
+</div>
+
+
+
                      
                      <button 
                         type="submit" 

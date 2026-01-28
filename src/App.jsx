@@ -146,6 +146,19 @@ import Marks_Entry from './Pages/Manage_Exam/Marks_Entry'
 import Marks_entry2 from './Pages/Manage_Exam/Marks_entry2'
 import PDF_Viewer from './Components/Page_Forms/PDF_Viewer'
 import ProtectedRoutes from './Pages/ProtectedRoutes/ProtectedRoutes'
+import EnquiryPrint from './Pages/Student_Master/EnquiryPrint'
+import Create_Student_Print from './Pages/Student_Master/Create_Student_Print'
+import Fee_Receipt_Print from './Pages/Reports/Student/Fee_Receipt_Print'
+import Transport_Fee_Receipt_Print from './Pages/Reports/Student/Transport_Fee_Receipt_Print'
+import Hostel_Receipt_Print from './Pages/Reports/Student/Hostel_Receipt_Print'
+import Due_Fee_Print from './Pages/Reports/Transaction/Due_Fee_Print'
+import Due_Fee_Summary_Print from './Pages/Reports/Transaction/Due_Fee_Summary_Print'
+import Transport_Due_Fee_Summary_Print from './Pages/Reports/Transaction/Transport_Due_Fee_Summary_Print'
+import Transport_Due_Fee_Print from './Pages/Reports/Transaction/Transport_Due_Fee_Print'
+import Hostel_Due_Fee_Print from './Pages/Reports/Transaction/Hostel_Due_Fee_Print'
+import Hostel_Due_Fee_Summary_Print from './Pages/Reports/Transaction/Hostel_Due_Fee_Summary_Print'
+import Other_Due_Fee_Summary_Print from './Pages/Reports/Transaction/Other_Due_Fee_Summary_Print'
+// import EnquiryPDF from './Pages/Student_Master/EnquiryPDF'
 
 
 function App() {
@@ -168,9 +181,12 @@ function App() {
       <Route element={<Layout />}>
           <Route path='/Home' element={<Home />}/>
           <Route path='/Enquiry' element={<Enquiry />}/>
+          <Route path='/Enquiry-print' element={<EnquiryPrint />}/>
+          {/* <Route path='/Enquiry-pdf' element={<EnquiryPDF />}/> */}
           <Route path='/AddEnquiry' element={<Add_Enquiry />}/>
           <Route path='/Create' element={<Create_Student />}/>
           <Route path='/Create-Student' element={<Create_Student2 />}/>
+          <Route path='/Create-Student-Print' element={<Create_Student_Print />}/>
           <Route path='/Sibling' element={<Add_Sibling />}/>
           <Route path='/AddSibling' element={<Add_Sibling2 />}/>
           <Route path='/Summary' element={<Student_Summary />}/>
@@ -245,10 +261,13 @@ function App() {
             <Route path='/Details' element={<Students_Details />}/>
             <Route path='/Sibling-Details' element={<Sibling_Details />}/>
             <Route path='/Fee-Details' element={<Fee_Details />}/>
+            <Route path='/Fee-Receipt-Print' element={<Fee_Receipt_Print />}/>
             <Route path='/Transport-Details' element={<Transport_Details />}/>
             <Route path='/Transport-Fee-Details' element={<Transport_Fee_Details />}/>
+            <Route path='/Transport-Fee-Receipt-Print' element={<Transport_Fee_Receipt_Print />}/>
             <Route path='/Hostel-Stud-Details' element={<Hostel_Stud_Details />}/>
             <Route path='/Hostel-Fee-Details' element={<Hostel_fee_Details />}/>
+            <Route path='/Hostel-Receipt-Print' element={<Hostel_Receipt_Print />}/>
             <Route path='/Student-TC-Details' element={<Student_TC_Details />}/>
             <Route path='/Enquiry-Details' element={<Enquiry_Details />}/>
             <Route path='/Caste-Wise-Report' element={<Caste_Wise_Report />}/>
@@ -261,9 +280,16 @@ function App() {
             <Route path='/Day-Summary-Book' element={<Day_Summary_Book />}/>
             {/* Transaction */}
             <Route path='/Due-Report' element={<Due_Report />}/>
+            <Route path='/Due-Fee-Print' element={<Due_Fee_Print />}/>
+            <Route path='/Due-Fee-Summary-Print' element={<Due_Fee_Summary_Print />}/>
             <Route path='/Transport-Due-Report' element={<Transport_Due_Report />}/>
+            <Route path='/Transport-Due-Print' element={<Transport_Due_Fee_Print />}/>
+            <Route path='/Transport-Due-Summary-Print' element={<Transport_Due_Fee_Summary_Print />}/>
             <Route path='/Hostel-Due-Report' element={<Hostel_Due_Fees />}/>
+            <Route path='/Hostel-Due-Print' element={<Hostel_Due_Fee_Print />}/>
+            <Route path='/Hostel-Due-Summary-Print' element={<Hostel_Due_Fee_Summary_Print />}/>
             <Route path='/Other-Fee-Due-Report' element={<Other_Fee_Due_Report />}/>
+            <Route path='/Other-Due-Summary-Print' element={<Other_Due_Fee_Summary_Print />}/>
             <Route path='/Student-Ledger-Details' element={<Student_Ledger_Details />}/>
             <Route path='/Ledger-Details' element={<Ledger_Details />}/>
             <Route path='/Profit-And-Loss' element={<Profit_And_Loss />}/>

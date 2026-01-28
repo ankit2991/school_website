@@ -397,6 +397,7 @@ function Vehicle_Provider() {
 
                         <FormInput 
                             label="Name" value={form.name} error={errors.name} 
+                            placeholder={"Enter Name"} 
                             onChange={(e) => { 
                                 setForm((prev) => ({ 
                                     ...prev, name: e.target.value 
@@ -412,6 +413,7 @@ function Vehicle_Provider() {
                         
                         <FormInput 
                             label="Contact No" value={form.contact} error={errors.contact} 
+                            placeholder={" Enter Contact No."} 
                             onChange={(e) => { 
                                 setForm((prev) => ({ 
                                     ...prev, contact: e.target.value 
@@ -428,14 +430,12 @@ function Vehicle_Provider() {
                     </div>
 
                     <FormInput
-                        label="Address"
-                        value={form.address}
+                        label="Address" value={form.address} placeholder={" Enter Address"} 
                         onChange={(e) => setForm({ ...form, address: e.target.value })}
                     />
 
                     <FormInput
-                        label="Email"
-                        value={form.email}
+                        label="Email" value={form.email} placeholder={" Enter Email"} 
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
                     />
 

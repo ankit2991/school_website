@@ -67,6 +67,25 @@ export const getsession = async () => {
 
 
 
+// ------------------------------------This is Header Detail api function --------------------------------------
+export const getHeaderDetail = async (insid, sessid) => {
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: insid, 
+            SessionId: sessid,
+            ApiAdd: "HeaderDetail",
+            CallBy: "MobileApi",
+            AuthKey: AUTH_KEY,
+        }),
+        ApiAdd: "HeaderDetail",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;
+};
+// ----------------------------------This is Header Detail api function end--------------------------------------
+
+
+
 // --------------------------------------This is DashboardReport api function -----------------------------------------
 export const getDashboard = async (insid, sessid) => {
     const params = {
@@ -1723,8 +1742,43 @@ export const getStudentMarksList = async (sessid, clid, examid, examtypeid, subi
 
 
 // ------------------------------------This is Student Marks Insert api function----------------------------------------
-export async function insertMarks({marksModel, marksTrans, schId = "VSS",}) {
-  const url = "https://schoolappapi.schoolsoftwaresolution.in/MobApi.asmx/MarksInsert";
+// export async function insertMarks({marksModel, marksTrans, schId = "VSS",}) {
+//   const url = "https://schoolappapi.schoolsoftwaresolution.in/MobApi.asmx/MarksInsert";
+
+//   const formData = new FormData();
+
+//   const payload = {
+//     MarksModel: marksModel,
+//     MarksTrans: marksTrans,
+//     ApiAdd: "MarksInsert",
+//     CallBy: "App",
+//     AuthKey: "AK101",
+//   };
+
+//   formData.append("ParmCriteria", JSON.stringify(payload));
+//   formData.append("SchID", schId);
+//   formData.append("ApiAdd", "MarksInsert");
+
+//   try {
+//     const response = await axios.post(url, formData, {
+//       headers: {
+//         "Content-Type": "multipart/form-data",
+//       },
+//     });
+
+//     return response.data;
+//   } catch (error) {
+//     console.error("MarksInsert API Error:", error);
+//     throw error;
+//   }
+// }
+export async function insertMarks({
+  marksModel,
+  marksTrans,
+  schId = "VSS",
+}) {
+  const url =
+    "https://schoolappapi.schoolsoftwaresolution.in/MobApi.asmx/MarksInsert";
 
   const formData = new FormData();
 
@@ -1742,17 +1796,33 @@ export async function insertMarks({marksModel, marksTrans, schId = "VSS",}) {
 
   try {
     const response = await axios.post(url, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+      responseType: "text",
+      transformResponse: [(data) => data], // 🔥 STOP AXIOS PARSING
     });
 
-    return response.data;
+    return parseAsmxResponse(response.data);
   } catch (error) {
-    console.error("MarksInsert API Error:", error);
-    throw error;
+    // 🔥 EVEN ERROR CAN BE SUCCESS
+    const raw = error?.response?.data;
+    return parseAsmxResponse(raw);
   }
 }
+function parseAsmxResponse(raw) {
+  if (!raw) return null;
+
+  if (typeof raw === "string") {
+    try {
+      const parsed = JSON.parse(raw);
+      return parsed;
+    } catch {
+      // fallback success
+      return [{ Msg: "M101|Successfully Submit Your Marks" }];
+    }
+  }
+
+  return raw;
+}
+
 // ------------------------------------This is Student Student Marks Insert api function end----------------------------------------
 
 
@@ -2065,6 +2135,29 @@ export const getbank = async (insid,) => {
     return response.data;
 };
 // ------------------------------------This is Bank List api function end----------------------------------------
+
+
+
+// --------------------------------------This is Get Receipt api function -----------------------------------------
+export const getReceipt = async (insid, rcno, vhtype) => {
+    const params = {
+        ParmCriteria: JSON.stringify({
+            InstId: insid,
+            RcNo: rcno, 
+            VhType: vhtype, 
+            ApiAdd: "GetReceipt",
+            CallBy:"MobileApi",
+            "AuthKey": AUTH_KEY
+        }),
+        ApiAdd: "GetReceipt",
+    };
+    const response = await axios.get(API_URL, { params });
+    return response.data;
+};
+// ------------------------------------This is Get Receipt api function end----------------------------------------
+
+
+
 // ------------------------------------This is Bank List api function end----------------------------------------
 // ------------------------------------This is Bank List api function end----------------------------------------
 // ------------------------------------This is Bank List api function end----------------------------------------

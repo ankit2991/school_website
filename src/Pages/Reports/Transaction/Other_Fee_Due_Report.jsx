@@ -204,7 +204,19 @@ const handleClear = () => {
           
           <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5"> 
             <Buttons click={""} label={"Clear"} /> 
-            <Buttons label="Summary Print" click={() => { window.open("/pdf/Summary.pdf", "_blank"); }}  /> 
+            {/* <Buttons label="Summary Print" click={() => { window.open("/pdf/Summary.pdf", "_blank"); }}  />  */}
+            <Buttons
+  label="Summary Print"
+  click={() => {
+    navigate("/Other-Due-Summary-Print", {
+  state: {
+    classId: selectedClassId || "0",
+    ledgerId: selectedLedgerId || 0,
+  },
+});
+
+  }}
+/>
           </div> 
         </> 
       )} 

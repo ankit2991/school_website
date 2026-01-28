@@ -866,7 +866,7 @@ const handleSearch = () => {
       
       <div className="flex justify-between sm:justify-end space-x-0 sm:space-x-10 pt-2"> 
         <Buttons label={"Clear"} click={handleClear} /> 
-        <Buttons label={"Print"} /> 
+        <Buttons label={"Process"} /> 
       </div> 
       </>
       )}

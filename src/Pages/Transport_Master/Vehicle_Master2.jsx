@@ -206,17 +206,17 @@ function Vehicle_Master2() {
 
           <FormInput 
             label="Vehicle Number" name="vehicleNo" value={formData.vehicleNo} 
-            onChange={handleChange} error={errors.vehicleNo} 
+            placeholder={" Enter Vehicle Number"} onChange={handleChange} error={errors.vehicleNo} 
           /> 
 
           <FormInput 
             label="Number Of Seat" name="noOfSeat" value={formData.noOfSeat} 
-            onChange={handleChange} error={errors.noOfSeat} 
+            placeholder={" Enter Number Of Seat"} onChange={handleChange} error={errors.noOfSeat} 
           /> 
 
           <FormInput 
             label="Strength" name="strength" value={formData.strength} 
-            onChange={handleChange} 
+            placeholder={" Enter Strength"} onChange={handleChange} 
           /> 
 
           <FormInput 
@@ -235,24 +235,26 @@ function Vehicle_Master2() {
           /> 
 
           <FormInput 
-            label="Driver Name" name="driverName" 
+            label="Driver Name" placeholder={" Enter Driver Name"} name="driverName" 
             value={formData.driverName} onChange={handleChange} 
           /> 
 
           <FormInput 
-            label="Contact Number" name="contactNo" 
-            value={formData.contactNo} onChange={handleChange} 
+            label="Contact Number" placeholder={" Enter Contact Number"} 
+            name="contactNo" value={formData.contactNo} onChange={handleChange} 
           /> 
 
           <FormInput 
-            label="Driver License Number" name="licenceNo" 
+            label="Driver Licence Number" name="licenceNo" 
+            placeholder={" Enter Driver Licence Number"} 
             value={formData.licenceNo} onChange={handleChange} 
           /> 
         </div> 
         
         <FormInput 
           label="Address" name="address" value={formData.address} 
-          onChange={handleChange} inputStyle="mb-5" 
+          placeholder={" Enter Address"} onChange={handleChange} 
+          inputStyle="mb-5" 
         /> 
 
         <div className="flex justify-end space-x-6">

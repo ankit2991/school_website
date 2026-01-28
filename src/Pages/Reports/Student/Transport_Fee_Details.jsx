@@ -223,7 +223,25 @@ function Transport_Fee_Details() {
          <Loader show={searched} />
          <div className="flex justify-between items-center mb-5">
             <Heading label="Transport Fee Details" />
-            <Buttons label="Print" click={() => { window.open("/pdf/4TransportReportViewer.pdf", "_blank"); }}  />
+            {/* <Buttons label="Print" click={() => { window.open("/pdf/4TransportReportViewer.pdf", "_blank"); }}  /> */}
+            <Buttons
+  label="Print"
+  click={() => {
+    const selectedData = feeData.filter((r) =>
+      selectedRows.includes(r.id)
+    );
+
+    if (!selectedData.length) {
+      alert("Please select at least one record");
+      return;
+    }
+
+    navigate("/Transport-Fee-Receipt-Print", {
+      state: { receipts: selectedData },
+    });
+  }}
+/>
+
          </div>
 
          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[200px_1fr_200px_1fr] gap-6 mb-5">

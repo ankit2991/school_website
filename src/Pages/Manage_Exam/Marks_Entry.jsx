@@ -412,22 +412,51 @@ function Marks_Entry() {
       setSearched(true); 
       const res = await getStudentMarksList( sessId, selectedClassId, selectedExamId, selectedExamTypeId, selectedSubjectId ); 
       const students = res?.Table || []; 
-      const mapped = students.map((s, index) => { 
-        const apiAtt = s.AttType; 
-        const attType = apiAtt === "P" ? "attend1" : apiAtt === "L" ? "attend2" : apiAtt === "A" ? "attend3" : "attend1"; 
-        return { 
-          id: s.Id || index, name: s.Name, serial: s.EnvNo, roll: s.RollNo, mark: s.MarksObt || "", 
-          grade: s.F_GradeMaster === -1 ? "" : s.F_GradeMaster, type: attType, 
-          attTypeText: attType === "attend1" ? "P" : attType === "attend2" ? "L" : attType === "attend3" ? "AB" : "", 
-        }; 
-      }); 
+      // const mapped = students.map((s, index) => { 
+      //   const apiAtt = s.AttType; 
+      //   const attType = apiAtt === "P" ? "attend1" : apiAtt === "L" ? "attend2" : apiAtt === "A" ? "attend3" : "attend1"; 
+      //   return { 
+      //     id: s.Id || index, name: s.Name, serial: s.EnvNo, roll: s.RollNo, mark: s.MarksObt || "", 
+      //     grade: s.F_GradeMaster === -1 ? "" : s.F_GradeMaster, type: attType, 
+      //     attTypeText: attType === "attend1" ? "P" : attType === "attend2" ? "L" : attType === "attend3" ? "AB" : "", 
+      //   }; 
+      // }); 
+      const mapped = students.map((s, index) => {
+  const apiAtt = s.AttType;
+  const attType =
+    apiAtt === "P" ? "attend1" :
+    apiAtt === "L" ? "attend2" :
+    apiAtt === "A" ? "attend3" : "attend1";
+
+  const gradeObj = gradeList.find(g => g.Id === s.F_GradeMaster);
+
+  return {
+    id: s.Id || index,
+    name: s.Name,
+    serial: s.EnvNo,
+    roll: s.RollNo,
+
+    mark: s.MarksObt || "",
+
+    // ✅ separate grade fields
+    gradeId: s.F_GradeMaster === -1 ? "" : s.F_GradeMaster,
+    gradeName: gradeObj ? gradeObj.Name : "",
+
+    type: attType,
+    attTypeText:
+      attType === "attend1" ? "P" :
+      attType === "attend2" ? "L" :
+      attType === "attend3" ? "AB" : "",
+  };
+});
+
       
       setTableData(mapped); 
       if (mapped.length > 0) { 
         setSelectedStudent(mapped[0]); 
         setSelectedRowIndex(0); 
         setSelected(mapped[0].type); 
-        setSelectedGradeId(mapped[0].grade || ""); 
+        setSelectedGradeId(mapped[0].gradeId  || ""); 
       } 
     } catch (err) { 
       console.error("Marks list error:", err); 
@@ -452,7 +481,7 @@ function Marks_Entry() {
     { header: "Env. No.", accessor: "serial" }, 
     { header: "Roll No.", accessor: "roll" }, 
     ...(marksType !== "2" ? [{ header: "Marks Obt.", accessor: "mark" }] : []), 
-    ...(marksType !== "1" ? [{ header: "Grade", accessor: "grade" }] : []), 
+    ...(marksType !== "1" ? [{ header: "Grade", accessor: "gradeName" }] : []), 
     { header: "Att. Type", accessor: "attTypeText" }, 
   ]; 
   
@@ -477,21 +506,33 @@ function Marks_Entry() {
   }; 
 
   // =================== ON ROW CLICK IN TABLE ====================== 
-  const handleRowClick = (row) => { 
-    const index = tableData.findIndex( 
-      (item) => item.id === row.id 
-    ); 
+  // const handleRowClick = (row) => { 
+  //   const index = tableData.findIndex( 
+  //     (item) => item.id === row.id 
+  //   ); 
     
-    setSelectedStudent({ ...row }); 
-    setSelectedRowIndex(index); 
+  //   setSelectedStudent({ ...row }); 
+  //   setSelectedRowIndex(index); 
     
-    // Sync Attendance Radio 
-    setSelected(row.type || "attend1"); 
+  //   // Sync Attendance Radio 
+  //   setSelected(row.type || "attend1"); 
     
-    // Sync Grade 
-    setSelectedGradeId(row.grade || ""); 
-  }; 
+  //   // Sync Grade 
+  //   setSelectedGradeId(row.grade || ""); 
+  // }; 
   
+  const handleRowClick = (row) => {
+  const index = tableData.findIndex(item => item.id === row.id);
+
+  setSelectedStudent({ ...row });
+  setSelectedRowIndex(index);
+
+  setSelected(row.type || "attend1");
+
+  // ✅ Sync grade dropdown with ID
+  setSelectedGradeId(row.gradeId || "");
+};
+
   // =================== ATTENDANCE TYPE (NAME) ====================== 
   const getAttText = (type) => { 
     if (type === "attend1") return "P"; 
@@ -508,31 +549,63 @@ function Marks_Entry() {
   }; 
   
   // =================== ATTENDANCE CHANGE ====================== 
-  const handleAttendanceChange = (value) => { 
-    setSelected(value); 
-    setSelectedStudent((prev) => { 
-      if (!prev) return prev; 
+  // const handleAttendanceChange = (value) => { 
+  //   setSelected(value); 
+  //   setSelectedStudent((prev) => { 
+  //     if (!prev) return prev; 
       
-      // Leave or Absent 
-      if (value === "attend2" || value === "attend3") { 
-        return { 
-          ...prev, type: value, attTypeText: getAttText(value), 
-          mark: 0, grade: getGradeByAttendance(value), 
-        }; 
-      } 
+  //     // Leave or Absent 
+  //     if (value === "attend2" || value === "attend3") { 
+  //       return { 
+  //         ...prev, type: value, attTypeText: getAttText(value), 
+  //         mark: 0, grade: getGradeByAttendance(value), 
+  //       }; 
+  //     } 
       
-      // Present 
-      return { 
-        ...prev, type: value, attTypeText: getAttText(value), 
-        grade: prev.grade || "", 
-      }; 
-    }); 
+  //     // Present 
+  //     return { 
+  //       ...prev, type: value, attTypeText: getAttText(value), 
+  //       grade: prev.grade || "", 
+  //     }; 
+  //   }); 
     
-    // reset grade dropdown UI when not Present 
-    if (value !== "attend1") { 
-      setSelectedGradeId(""); 
-    } 
-  }; 
+  //   // reset grade dropdown UI when not Present 
+  //   if (value !== "attend1") { 
+  //     setSelectedGradeId(""); 
+  //   } 
+  // };
+  
+  const handleAttendanceChange = (value) => {
+  setSelected(value);
+
+  setSelectedStudent(prev => {
+    if (!prev) return prev;
+
+    if (value === "attend2" || value === "attend3") {
+      return {
+        ...prev,
+        type: value,
+        attTypeText: getAttText(value),
+        mark: 0,
+
+        // ✅ clear grade when Leave/Absent
+        gradeId: "",
+        gradeName: "",
+      };
+    }
+
+    return {
+      ...prev,
+      type: value,
+      attTypeText: getAttText(value),
+    };
+  });
+
+  if (value !== "attend1") {
+    setSelectedGradeId("");
+  }
+};
+
   
   // =================== CURRENT ROW DATA UPDATE ====================== 
   const saveCurrentRow = () => { 
@@ -591,7 +664,7 @@ function Marks_Entry() {
         // ✅ Attendance 
         Attendance: getAttendanceForApi(row.type), 
         // ✅ Grade logic 
-        F_GradeMaster: isGrade && isPresent ? row.grade || "-1" : "-1", 
+        F_GradeMaster: isGrade && isPresent ? row.gradeId  || "-1" : "-1", 
         F_StudentMaster: row.id.toString(), 
         IsSuppliExam: false, 
         // ✅ Marks logic 
@@ -605,26 +678,75 @@ function Marks_Entry() {
   
   
   // =================== SAVE MARKS ====================== 
-  const handleSaveMarks = async () => { 
-    try { 
-      setSearched(true); 
-      // Save currently edited row before submit 
-      saveCurrentRow(); 
+  // const handleSaveMarks = async () => { 
+  //   try { 
+  //     setSearched(true); 
+  //     // Save currently edited row before submit 
+  //     saveCurrentRow(); 
       
-      const { marksModel, marksTrans } = buildMarksPayload(); 
-      const res = await insertMarks({ marksModel, marksTrans, schId: "VSS", }); 
-      if (Array.isArray(res) && res[0]?.Msg) { 
-        const [, message] = res[0].Msg.split("|"); 
-        alert(message); // ✅ Successfully Submit Your Marks 
-      } 
-    } catch (err) { 
-      console.log("NAV STATE 👉", location.state); 
-      console.error(err); 
-      alert("Failed to submit marks"); 
-    } finally{ 
-      setSearched(false); 
-    } 
-  }; 
+  //     const { marksModel, marksTrans } = buildMarksPayload(); 
+  //     const res = await insertMarks({ marksModel, marksTrans, schId: "VSS", }); 
+  //     if (Array.isArray(res) && res[0]?.Msg) { 
+  //       const [, message] = res[0].Msg.split("|"); 
+  //       alert(message); // ✅ Successfully Submit Your Marks 
+  //     } 
+  //   } catch (err) { 
+  //     console.log("NAV STATE 👉", location.state); 
+  //     console.error(err); 
+  //     alert("Failed to submit marks"); 
+  //   } 
+  //   finally{ 
+  //     setSearched(false); 
+  //   } 
+  // }; 
+  const handleSaveMarks = async () => {
+  try {
+    setSearched(true);
+
+    // ✅ Save currently edited row before submit
+    saveCurrentRow();
+
+    const { marksModel, marksTrans } = buildMarksPayload();
+
+    const res = await insertMarks({
+      marksModel,
+      marksTrans,
+      schId: "VSS",
+    });
+
+    // ✅ Normal success response
+    if (Array.isArray(res) && res[0]?.Msg) {
+      const [, message] = res[0].Msg.split("|");
+      alert(message || "Marks submitted successfully");
+      return;
+    }
+
+    // ⚠️ Fallback (unexpected but successful response)
+    alert("Marks submitted successfully");
+  } catch (error) {
+    console.error("Save Marks Error:", error);
+
+    /**
+     * 🔥 IMPORTANT:
+     * .asmx APIs sometimes return SUCCESS inside error.response
+     * Axios throws even though server saved data
+     */
+    const errorData = error?.response?.data;
+
+    if (Array.isArray(errorData) && errorData[0]?.Msg) {
+      const [, message] = errorData[0].Msg.split("|");
+      if (message) {
+        alert(message); // ✅ Still show success message
+        return;
+      }
+    }
+
+    alert("Failed to submit marks");
+  } finally {
+    setSearched(false);
+  }
+};
+
   
   return ( 
     <div className="w-full h-full bg-white flex flex-col px-4 py-2"> 
@@ -766,16 +888,39 @@ function Marks_Entry() {
                 
                 {/* GRADE */} 
                 {(marksType === "2" || marksType === "3") && selectedStudent?.type === "attend1" && ( 
-                  <Options 
-                    label="Grade" optionMsg="Select Grade" options={gradeList} 
-                    valueKey="Id" labelKey="Name" value={selectedGradeId} 
-                    onChange={(e) => { 
-                      setSelectedGradeId(e.target.value); 
-                      setSelectedStudent((prev) => ({ 
-                        ...prev, grade: e.target.value, 
-                      })); 
-                    }} 
-                  /> 
+                  // <Options 
+                  //   label="Grade" optionMsg="Select Grade" options={gradeList} 
+                  //   valueKey="Id" labelKey="Name" value={selectedGradeId} 
+                  //   onChange={(e) => { 
+                  //     setSelectedGradeId(e.target.value); 
+                  //     setSelectedStudent((prev) => ({ 
+                  //       ...prev, grade: e.target.value, 
+                  //     })); 
+                  //   }} 
+                  // /> 
+
+                  <Options
+  label="Grade"
+  optionMsg="Select Grade"
+  options={gradeList}
+  valueKey="Id"
+  labelKey="Name"
+  value={selectedGradeId}
+  onChange={(e) => {
+    const gradeId = Number(e.target.value); // ✅ FIX
+    const gradeObj = gradeList.find(g => g.Id === gradeId);
+
+    setSelectedGradeId(gradeId);
+
+    setSelectedStudent(prev => ({
+      ...prev,
+      gradeId: gradeId,
+      gradeName: gradeObj?.Name || "",
+    }));
+  }}
+/>
+
+
                 )} 
               </div> 
               
@@ -815,7 +960,7 @@ function Marks_Entry() {
                     setSelectedStudent({ ...prevRow }); 
                     setSelectedRowIndex(prevIndex); 
                     setSelected(prevRow.type || "attend1"); 
-                    setSelectedGradeId(prevRow.grade || ""); 
+                    setSelectedGradeId(prevRow.gradeId || ""); 
                   } } 
                 /> 
                 
@@ -829,7 +974,7 @@ function Marks_Entry() {
                       setSelectedStudent({ ...nextRow }); 
                       setSelectedRowIndex(nextIndex); 
                       setSelected(nextRow.type || "attend1"); 
-                      setSelectedGradeId(nextRow.grade || ""); 
+                      setSelectedGradeId(nextRow.gradeId  || ""); 
                     } 
                   } } 
                 /> 

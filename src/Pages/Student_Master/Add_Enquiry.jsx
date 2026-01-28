@@ -32,6 +32,11 @@ function Add_Enquiry() {
   /* ================= VALIDATION ================= */ 
   const validate = () => { 
     const newErrors = {}; 
+
+    if (!formData.classId) { 
+      newErrors.classId = "Class is required"; 
+    } 
+
     if (!formData.name.trim()) { 
       newErrors.name = "First name is required"; 
     } 
@@ -64,6 +69,10 @@ function Add_Enquiry() {
     
     if (!formData.lastschool.trim()) { 
       newErrors.lastschool = "Last school name is required"; 
+    } 
+
+    if (!formData.lastclass) { 
+      newErrors.lastclass = "Last Class is required"; 
     } 
     
     setErrors(newErrors); 
@@ -166,11 +175,12 @@ function Add_Enquiry() {
     return `${year}-${month}-${day}`; 
   }; 
   
+  /* ================= PASS PARAMETER EMPTY OR ZERO ================= */ 
+  const emptyToZero = (v) => v === "" || v === null || v === undefined ? "0" : v; 
+  
   /* ================= SAVE ================= */ 
   const handleSave = async () => { 
-    if (!validate()) { 
-      return; 
-    } 
+    if (!validate()) return; 
     
     if (!instId || !userId || !sessId) { 
       alert("Session expired"); 
@@ -179,15 +189,23 @@ function Add_Enquiry() {
     
     setPageLoading(true); 
     try { 
-      const res = await getEnquiryInsert({ 
+      const payload = { 
         instId, sessId, userId, ...formData, 
-        enqDate: formatDateForApi(formData.enqDate), dob: formatDateForApi(formData.dob), 
-      }); 
+        // ✅ DATE FORMAT 
+        enqDate: formatDateForApi(formData.enqDate), 
+        dob: formatDateForApi(formData.dob), 
+        // ✅ EMPTY → ZERO FIXES 
+        AadharNo: emptyToZero(formData.AadharNo), 
+        casteId: emptyToZero(formData.casteId), 
+        ffees: emptyToZero(formData.ffees), 
+      }; 
       
+      const res = await getEnquiryInsert(payload); 
       const msg = res?.Table?.[0]?.Msg || ""; 
       if (msg.startsWith("M101")) { 
         alert( 
-          formData.eqid ? "Enquiry updated successfully ✅" 
+          formData.eqid 
+          ? "Enquiry updated successfully ✅" 
           : "Enquiry inserted successfully ✅" 
         ); 
         clearForm(); 
@@ -198,7 +216,7 @@ function Add_Enquiry() {
       setPageLoading(false); 
     } 
   }; 
-  
+
   return ( 
     <> 
       {pageLoading && ( 
@@ -221,9 +239,17 @@ function Add_Enquiry() {
           <Options 
             label="Class" optionMsg="Select Class" value={formData.classId} 
             options={classList} valueKey="Id" labelKey="ClassName" 
-            onChange={(e) => setFormData(p => ({ ...p, classId: e.target.value })) } 
+            // onChange={(e) => setFormData(p => ({ ...p, classId: e.target.value })) } 
+            onChange={(e) => { 
+              const value = e.target.value; 
+              setFormData((p) => ({ ...p, classId: value })); 
+              if (errors.classId) { 
+                setErrors((p) => ({ ...p, classId: "" })); 
+              } 
+            }} 
+            error={errors.classId}
           /> 
-          
+
           <FormInput 
             label="Enquiry Number" value={EnqNo?.MaxEnquireNo || ""} disabled 
           /> 
@@ -388,11 +414,24 @@ function Add_Enquiry() {
             value={formData.lastschool} onChange={handleChange} error={errors.lastschool} 
           /> 
           
-          <FormInput 
+          {/* <FormInput 
             label={"Last Class"} placeholder={"Enter Class"} name={"lastclass"} 
             value={formData.lastclass} onChange={handleChange} 
+          />  */}
+          <Options 
+            label="Last Class" optionMsg="Select Class" value={formData.lastclass} 
+            options={classList} valueKey="Id" labelKey="ClassName" 
+            // onChange={(e) => setFormData(p => ({ ...p, lastclass: e.target.value })) } 
+            onChange={(e) => { 
+              const value = e.target.value; 
+              setFormData((p) => ({ ...p, lastclass: value })); 
+              if (errors.classId) { 
+                setErrors((p) => ({ ...p, lastclass: "" })); 
+              } 
+            }}
+            error={errors.lastclass}
           /> 
-          
+
           <FormInput 
             label={"Percentage"} placeholder={"Enter Percentage"} 
             name={"percent"} value={formData.percent} onChange={handleChange} 

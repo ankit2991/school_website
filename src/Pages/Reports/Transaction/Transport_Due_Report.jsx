@@ -123,16 +123,16 @@ function Transport_Due_Report() {
   
   // =================== DUE REPORT ====================== 
   const handleSearch = async () => { 
-    if (!selectedClassId) { 
-      alert("Please select class"); 
-      return; 
-    } 
+    // if (!selectedClassId) { 
+    //   alert("Please select class"); 
+    //   return; 
+    // } 
     
     try { 
       setSearched(true); 
       setShowTable(false); 
       const res = await getDueReport( 
-        instId, sessId, selectedClassId, agree ? 1 : 0, selectedMonthId || "", selectedLedgerId || "", 1 
+        instId, sessId, selectedClassId || "0", agree ? 1 : 0, selectedMonthId || "", selectedLedgerId || "", 1 
       ); 
       
       if (res?.Table) { 
@@ -159,9 +159,9 @@ function Transport_Due_Report() {
   }; 
 
   useEffect(() => {
-  if (selectedClassId) {
+  // if (selectedClassId) {
     handleSearch(); // 👈 auto call
-  }
+  // }
   // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [selectedClassId]);
 
@@ -233,12 +233,44 @@ function Transport_Due_Report() {
           /> 
           
           <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5"> 
-            <Buttons 
+            {/* <Buttons 
               label="Summary Print" click={() => { window.open("/pdf/4TransportReportViewer.pdf", "_blank"); }} 
-            /> 
-            <Buttons 
+            />  */}
+
+            <Buttons
+  label="Summary Print"
+  click={() => {
+    navigate("/Transport-Due-Summary-Print", {
+  state: {
+    classId: selectedClassId || "0",
+    monthId: selectedMonthId,
+    ledgerId: selectedLedgerId,
+    lastBalance: agree ? 1 : 0,
+  },
+});
+
+  }}
+/>
+            {/* <Buttons 
               label="Print" click={() => { window.open("/pdf/4TransportReportViewer.pdf", "_blank"); }} 
-            /> 
+            />  */}
+
+            <Buttons
+  label="Print"
+  click={() => {
+    const selected = dueData.filter(d =>
+      selectedStudents.includes(d.id)
+    );
+
+    // ✅ if nothing selected → send ALL data
+    const dataToPrint = selected.length ? selected : dueData;
+
+    navigate("/Transport-Due-Print", {
+      state: { receipts: dataToPrint },
+    });
+  }}
+  style="whitespace-nowrap h-10"
+/>
           </div> 
         </>
       )} 

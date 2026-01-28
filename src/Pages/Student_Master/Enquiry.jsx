@@ -250,7 +250,7 @@ import { useNavigate } from "react-router-dom";
 import Table from "../../Components/Page_Forms/Table";
 import Options from "../../Components/Page_Forms/Options";
 import Loader from "../../Components/Page_Forms/Loader";
-import { getEnquiry } from "../../services/api";
+import { getEnquiry, getinstitute, getsession } from "../../services/api";
 import useClassList from "../../hooks/useClassList";
 
 function Enquiry() {
@@ -261,6 +261,9 @@ function Enquiry() {
   const [studentName, setStudentName] = useState("");
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
+  // const [instituteName, setInstituteName] = useState(""); 
+  const [sessionName, setSessionName] = useState("");
+
 
   const [restored, setRestored] = useState(false); // ✅ ADDED
 
@@ -271,6 +274,35 @@ function Enquiry() {
     { header: "Name", shortHeader: "Name", accessor: "name" },
     { header: "Class", shortHeader: "Class", accessor: "className" },
   ];
+
+  // ======================= INSTITUTE NAME AND SESSION NAME ======================= 
+  useEffect(() => {
+  // const instId = Number(localStorage.getItem("InstituteID"));
+  const sesId = Number(localStorage.getItem("SessionID"));
+
+  const loadInstituteAndSession = async () => {
+    try {
+      // Institute
+      // const instRes = await getinstitute();
+      // const inst = instRes?.Table1?.find(
+      //   (i) => Number(i.Id) === instId
+      // );
+      // setInstituteName(inst?.Name || "");
+
+      // Session
+      const sesRes = await getsession();
+      const ses = sesRes?.Table1?.find(
+        (s) => Number(s.Id) === sesId
+      );
+      setSessionName(ses?.Session || "");
+
+    } catch (err) {
+      console.error("Institute/Session load error", err);
+    }
+  };
+
+  loadInstituteAndSession();
+}, []);
 
   // ======================= RESTORE STATE =======================
   useEffect(() => {
@@ -420,13 +452,27 @@ function Enquiry() {
                   }
                 />
 
-                <Buttons
+                {/* <Buttons
                   label="Print"
                   style="hidden sm:inline"
                   click={() =>
                     window.open("/pdf/1EnqReportViewer.pdf", "_blank")
                   }
-                />
+                /> */}
+                <Buttons
+  label="Print"
+  click={() =>
+    navigate("/Enquiry-print", {
+      state: {
+        eqId: row.id,              // selected student
+        // instituteName,             // 👈 from API
+        sessionName,               // 👈 from API
+      },
+    })
+  }
+/>
+
+
               </>
             )}
           />

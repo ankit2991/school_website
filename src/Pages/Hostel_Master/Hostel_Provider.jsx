@@ -357,9 +357,8 @@ function Hostel_Provider() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5">
 
                         <FormInput
-                            label="Name"
-                            value={form.name}
-                            error={errors.name}
+                            label="Name" placeholder={"Enter Name"} 
+                            value={form.name} error={errors.name}
                             onChange={(e) => {
                                 setForm(prev => ({ ...prev, name: e.target.value }))
                                 if (errors.name) setErrors(prev => ({ ...prev, name: "" }))
@@ -367,9 +366,8 @@ function Hostel_Provider() {
                         />
 
                         <FormInput
-                            label="Contact No"
-                            value={form.contact}
-                            error={errors.contact}
+                            label="Contact Number" placeholder={"Enter Contact No."} 
+                            value={form.contact} error={errors.contact} 
                             onChange={(e) => {
                                 setForm(prev => ({ ...prev, contact: e.target.value }))
                                 if (errors.contact) setErrors(prev => ({ ...prev, contact: "" }))
@@ -378,14 +376,12 @@ function Hostel_Provider() {
                     </div>
 
                     <FormInput
-                        label="Address"
-                        value={form.address}
+                        label="Address" placeholder={"Enter Address"} value={form.address} 
                         onChange={(e) => setForm({ ...form, address: e.target.value })}
                     />
 
                     <FormInput
-                        label="Email"
-                        value={form.email}
+                        label="Email" placeholder={"Enter Email"} value={form.email} 
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
                     />
 

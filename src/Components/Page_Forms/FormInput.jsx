@@ -1,73 +1,4 @@
-// import React from "react";
-
-// function FormInput({ label, labelStyle = "", type = "text", as = "input", // new prop — allows "input" or "textarea"
-//   name, placeholder, inputStyle = "", value, onChange, rows = 4, // for textarea height
-// }) {
-//   return (
-//     <div className="flex flex-col w-full">
-//       {/* Label */}
-//       {label && (
-//         <h2 className={`cursor-default text-md font-medium mb-1 ${labelStyle} text-gray-700`} >
-//           {label}
-//         </h2>
-//       )}
-
-//       <div className="relative w-full">
-//         {as === "textarea" ? (
-//           <textarea
-//             name={name}
-//             value={value}
-//             onChange={onChange}
-//             placeholder={placeholder}
-//             rows={rows}
-//             className={`w-full bg-gray-100 border border-gray-400 p-2 rounded-lg shadow-md resize-y
-//               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-//               text-start align-top ${inputStyle}`
-//             }
-//           />
-//         ) : (
-//           <input
-//             type={type}
-//             placeholder={placeholder}
-//             name={name}
-//             value={value}
-//             onChange={onChange}
-//             required
-//             className={`w-full bg-gray-100 border border-gray-400 p-2 rounded-lg shadow-md 
-//               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-//               ${type === "date" ? "pr-10" : ""} ${inputStyle}`
-//             }
-//           />
-//         )}
-
-//         {/* Custom calendar icon for date type (mobile only) */}
-//         {type === "date" && as === "input" && (
-//           <span className="md:hidden absolute inset-y-0 right-3 flex items-center text-gray-500 pointer-events-none">
-//             📅
-//           </span>
-//         )}
-//       </div>
-
-//       {/* Hide browser default date icon on small screens */}
-//       <style jsx>{`
-//         @media (max-width: 767px) {
-//           input[type="date"]::-webkit-calendar-picker-indicator {
-//             display: none;
-//             -webkit-appearance: none;
-//           }
-//           input[type="date"]::-moz-calendar-picker-indicator {
-//             display: none;
-//           }
-//         }
-//       `}</style>
-//     </div>
-//   );
-// }
-
-// export default FormInput;
-
-
-
+import { useRef } from "react";
 
 function FormInput({
   label,
@@ -80,8 +11,19 @@ function FormInput({
   value,
   onChange,
   rows = 4,
-  error, // ✅
+  error,
 }) {
+  const inputRef = useRef(null);
+
+  const openPicker = () => {
+    if (
+      (type === "date" || type === "time") &&
+      inputRef.current?.showPicker
+    ) {
+      inputRef.current.showPicker();
+    }
+  };
+
   return (
     <div className="flex flex-col w-full">
       {label && (
@@ -90,7 +32,10 @@ function FormInput({
         </h2>
       )}
 
-      <div className="relative w-full">
+      <div
+        className="relative w-full"
+        onClick={openPicker}   // ✅ click anywhere
+      >
         {as === "textarea" ? (
           <textarea
             name={name}
@@ -108,40 +53,40 @@ function FormInput({
           />
         ) : (
           <input
+            ref={inputRef}     // ✅ attach ref
             type={type}
             name={name}
             value={value ?? ""}
             onChange={onChange}
             placeholder={placeholder}
+            onFocus={openPicker} // ✅ keyboard & focus support
             className={`
               w-full p-1 rounded-lg shadow-md bg-gray-100
               border-2 ${error ? "border-red-500" : "border-gray-400"}
               focus:outline-none
               ${error ? "focus:ring-2 focus:ring-red-400" : "focus:ring-2 focus:ring-blue-500"}
-              ${type === "date" ? "pr-10" : ""}
+              ${type === "date" || type === "time" ? "cursor-pointer" : ""}
               ${inputStyle}
             `}
           />
         )}
 
-        {type === "date" && (
+        {(type === "date" || type === "time") && (
           <span className="md:hidden absolute inset-y-0 right-3 flex items-center text-gray-500 pointer-events-none">
-            📅
+            {type === "date" ? "📅" : "⏰"}
           </span>
         )}
       </div>
 
-      {/* 🔴 ERROR TEXT */}
       {error && (
-        <span className="text-red-500 text-xs mt-1">
-          {error}
-        </span>
+        <span className="text-red-500 text-xs mt-1">{error}</span>
       )}
     </div>
   );
 }
 
 export default FormInput;
+
 
 
 
@@ -158,12 +103,12 @@ export default FormInput;
 //   value,
 //   onChange,
 //   rows = 4,
-//   error,
+//   error, // ✅
 // }) {
 //   return (
 //     <div className="flex flex-col w-full">
 //       {label && (
-//         <h2 className={`cursor-default text-md font-medium mb-1 ${labelStyle} text-gray-700`}>
+//         <h2 className={`text-md font-medium mb-1 text-gray-700 ${labelStyle}`}>
 //           {label}
 //         </h2>
 //       )}
@@ -176,9 +121,13 @@ export default FormInput;
 //             onChange={onChange}
 //             placeholder={placeholder}
 //             rows={rows}
-//             className={`w-full bg-gray-100 border border-gray-400 p-1 rounded-lg shadow-md resize-y
-//               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-//               text-start align-top ${inputStyle}`}
+//             className={`
+//               w-full p-1 rounded-lg shadow-md resize-y bg-gray-100
+//               border-2 ${error ? "border-red-500" : "border-gray-400"}
+//               focus:outline-none
+//               ${error ? "focus:ring-2 focus:ring-red-400" : "focus:ring-2 focus:ring-blue-500"}
+//               ${inputStyle}
+//             `}
 //           />
 //         ) : (
 //           <input
@@ -187,9 +136,14 @@ export default FormInput;
 //             value={value ?? ""}
 //             onChange={onChange}
 //             placeholder={placeholder}
-//             className={`w-full bg-gray-100 border border-gray-400 p-1 rounded-lg shadow-md
-//               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-//               ${type === "date" ? "pr-10" : ""} ${inputStyle}`}
+//             className={`
+//               w-full p-1 rounded-lg shadow-md bg-gray-100
+//               border-2 ${error ? "border-red-500" : "border-gray-400"}
+//               focus:outline-none
+//               ${error ? "focus:ring-2 focus:ring-red-400" : "focus:ring-2 focus:ring-blue-500"}
+//               ${type === "date" ? "pr-10" : ""}
+//               ${inputStyle}
+//             `}
 //           />
 //         )}
 
@@ -199,7 +153,8 @@ export default FormInput;
 //           </span>
 //         )}
 //       </div>
-//       {/* ✅ ERROR MESSAGE */}
+
+//       {/* 🔴 ERROR TEXT */}
 //       {error && (
 //         <span className="text-red-500 text-xs mt-1">
 //           {error}
@@ -210,3 +165,4 @@ export default FormInput;
 // }
 
 // export default FormInput;
+

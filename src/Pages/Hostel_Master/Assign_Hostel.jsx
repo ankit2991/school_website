@@ -152,7 +152,7 @@ useEffect(() => {
             <Buttons 
               label={"Add"} 
               click={() => { if (!isAssigned) 
-                {navigate("/Assign-Hostel", { state: row.Id, replace: true });} 
+                {navigate("/Assign-Hostel", { state: row.Id, replace: true });}
               }} 
               disabled={isAssigned} 
               style={`hidden sm:inline ${isAssigned ? "opacity-50 cursor-not-allowed" : ""}`} 

@@ -123,16 +123,16 @@ function Due_Report() {
 
   // =================== SEARCH ====================== 
   const handleSearch = async () => { 
-    if (!selectedClassId) { 
-      alert("Please select class"); 
-      return; 
-    } 
+    // if (!selectedClassId) { 
+    //   alert("Please select class"); 
+    //   return; 
+    // } 
     
     try { 
       setSearched(true); 
       setShowTable(false); 
       const res = await getDueReport(
-        instId, sessId, selectedClassId, agree ? 1 : 0, selectedMonthId || "", selectedLedgerId || "", 0
+        instId, sessId, selectedClassId || "0", agree ? 1 : 0, selectedMonthId || "", selectedLedgerId || "", 0
       ); 
       if (res?.Table) { 
         const mappedData = res.Table.map((item, index) => ({ 
@@ -156,9 +156,7 @@ function Due_Report() {
     } 
   }; 
   useEffect(() => {
-  if (selectedClassId) {
-    handleSearch(); // 👈 auto call
-  }
+   handleSearch();
   // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [selectedClassId]);
   
@@ -229,14 +227,59 @@ function Due_Report() {
           /> 
           
           <div className="flex justify-between sm:justify-end sm:gap-x-5 mt-5"> 
-            <Buttons 
+            {/* <Buttons 
               click={() => { window.open("/pdf/feedue.pdf", "_blank"); }} label={"Summary Print"} 
-            /> 
+            />  */}
+
+            {/* <Buttons
+  label="Summary Print"
+  click={() => {
+    navigate("/Due-Fee-Summary-Print", {
+      state: { receipts: dueData }, // 👈 ALL rows
+    });
+  }}
+/> */}
+            <Buttons
+  label="Summary Print"
+  click={() => {
+    navigate("/Due-Fee-Summary-Print", {
+  state: {
+    classId: selectedClassId || "0",
+    monthId: selectedMonthId,
+    ledgerId: selectedLedgerId,
+    lastBalance: agree ? 1 : 0,
+  },
+});
+
+  }}
+/>
+
+
+
             
-            <Buttons 
+            {/* <Buttons 
               label="Print" click={() => { window.open("/pdf/feedue.pdf", "_blank"); }} 
               style="whitespace-nowrap h-10" 
-            /> 
+            />  */}
+            <Buttons
+  label="Print"
+  click={() => {
+    const selected = dueData.filter(d =>
+      selectedStudents.includes(d.id)
+    );
+
+    // ✅ if nothing selected → send ALL data
+    const dataToPrint = selected.length ? selected : dueData;
+
+    navigate("/Due-Fee-Print", {
+      state: { receipts: dataToPrint },
+    });
+  }}
+  style="whitespace-nowrap h-10"
+/>
+
+
+
           </div> 
         </> 
       )} 
